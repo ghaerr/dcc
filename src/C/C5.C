@@ -103,7 +103,7 @@ heir24(node)				/* operater is prefix (* & - ! ++ --) */
 					}
 				node[1]=bptr;
 				if (*bptr == ARRAY) return 0;
-				nodeo[0]=IND+typeof(bptr);
+				nodeo[0]=IND+xtypeof(bptr);
 				nodeo[1]=node[0];
 				if (nodeo[1] == 0) nooper();
 				node[0]=tree2(nodeo);
@@ -222,10 +222,10 @@ heir24(node)				/* operater is prefix (* & - ! ++ --) */
 heir25(node)					/* look for a primary */
 	int  node[]; {
 	char lval,*bptr,really_stru;
-	int  node2[2],nodeo[3],scal,struct_len;
+	int  node2[2],nodeo[4],scal,struct_len; //FIXME bug was nodeo[3]!!!
 
 	lval=heir26(node);
-	if (heir == 25 && *node[1] == CSTRUCT) {	/* need offset of struct */
+	if (heir == 25 && FIX(node[1]) == CSTRUCT) {	/* need offset of struct */
 		node2[1]=node[0];
 		node2[0]=TA+(is_big ? (PTRTO << 8) : (CUNSG << 8));
 		node[0]=tree2(node2);
@@ -236,7 +236,7 @@ heir25(node)					/* look for a primary */
 		if (ifch('[')) {
 			heir11(node2);
 			if (node2[0] == 0) nooper();
-			if (is_big && *node2[1] == PTRTO) error("illegal index");
+			if (is_big && FIX(node2[1]) == PTRTO) error("illegal index");
 			if (notch(']')) return 0;
 			bptr=node[1];
 			if ((scal=scaled(bptr)) != 1) scale(node2,scal);
@@ -254,7 +254,7 @@ heir25(node)					/* look for a primary */
 			lval=0;
 			really_stru=0;
 			if (*bptr != ARRAY && *bptr != CSTRUCT) {
-				nodeo[0]=IND+typeof(bptr);
+				nodeo[0]=IND+xtypeof(bptr);
 				nodeo[1]=node[0];
 				node[0]=tree2(nodeo);
 				lval=1;
@@ -263,28 +263,28 @@ heir25(node)					/* look for a primary */
 			}
 		else if (heir == 25) {
 			tokit();
-			if (is_big && *node[1] != PTRTO && *node[1] != CSTRUCT)
+			if (is_big && FIX(node[1]) != PTRTO && FIX(node[1]) != CSTRUCT)
 				error("illegal indirection");
 			if(!find_member(node[1]))
 				return 0;
-			if (heir != OPERAND || nameat->nstor != SMEMBER)
+			if (heir != OPERAND || m_operand(nameat)->nstor != SMEMBER)
 				{ error("need member"); return 0;}
-			if (nameat->noff) {
-				nodeo[1]=oconst(nameat->noff);
+			if (m_operand(nameat)->noff) {
+				nodeo[1]=oconst(m_operand(nameat)->noff);
 				nodeo[0]=ADD;
 				nodeo[2]=node[0];
 				node[0]=tree3(nodeo);
 				}
 			lval=0;
 			really_stru=0;
-			if (nameat->ntype[0] != ARRAY && nameat->ntype[0] != CSTRUCT) {
-				nodeo[0]=IND+typeof(&nameat->ntype[0]);
+			if (m_operand(nameat)->ntype[0] != ARRAY && m_operand(nameat)->ntype[0] != CSTRUCT) {
+				nodeo[0]=IND+xtypeof(&m_operand(nameat)->ntype[0]);
 				nodeo[1]=node[0];
 				node[0]=tree2(nodeo);
 				lval=1;
 				}
-			else if (nameat->ntype[0] == CSTRUCT) really_stru=1;
-			node[1]=&nameat->ntype[0];
+			else if (m_operand(nameat)->ntype[0] == CSTRUCT) really_stru=1;
+			node[1]=&m_operand(nameat)->ntype[0];
 			tokit();
 			}
 		else if (curch == '(') {
@@ -295,9 +295,9 @@ heir25(node)					/* look for a primary */
 				if (is_big) error("illegal indirection");
 				else warning("indirect call");
 				}
-			nodeo[0]=CALL+typeof(bptr);
+			nodeo[0]=CALL+xtypeof(bptr);
 			nodeo[1]=node[0];
-			for(wp=protohash[nameat&31]; wp; wp=*wp)
+			for(wp=protohash[(int)nameat&31]; wp; wp=*wp)
 				if(*(wp+1)==nameat) {
 					nodeo[2]=args(*(wp+2));
 					goto pfmt;
@@ -347,12 +347,12 @@ args(struct pargs *ap) {
 			return 0;
 			}
 		if(ap != -1) {
-			if(typeof(ap->ptype) != typeof(node[1])
+			if(xtypeof(ap->ptype) != xtypeof(node[1])
 			&& ap->ptype[0] < ARRAY && *((char*)node[1]) < ARRAY) {
 				if(wopt) warning("argument type conversion");
 				ntype=node[1];
 				node[1]=node[0];
-				node[0]=CAST+typeof(ap->ptype);
+				node[0]=CAST+xtypeof(ap->ptype);
 				if (is_big && val) {
 				
 					if (node[0] == CAST+(PTRTO << 8) && *ntype != PTRTO &&
@@ -416,9 +416,9 @@ heir26(node)					/* operand or constant or string */
 /*	dont allow a cast of a logical expression	*/
 			lval=heir24(node);
 			if (node[0] == 0) nooper();
-			tp=*node[1];
+			tp=FIX(node[1]);
 			node[1]=node[0];
-			node[0]=CAST+typeof(save);
+			node[0]=CAST+xtypeof(save);
 			if (is_big && lval) {
 				
 				if (node[0] == CAST+(PTRTO << 8) && tp != PTRTO &&
@@ -449,31 +449,31 @@ heir26(node)					/* operand or constant or string */
 			error("undefined variable");
 			}
 		else if (curch == '(') {
-			addstor=nameat->nstor=SEXTERN;
+			addstor=m_operand(nameat)->nstor=SEXTERN;
 			addat=nameat;
-			addat->ntype[0]=FUNCTION;
+			m_operand(addat)->ntype[0]=FUNCTION;
 			addtype=CINT;
-			addloc=&nameat->ntype[1];
+			addloc=&m_operand(nameat)->ntype[1];
 			atype(addtype);
 #if	CHECK
-			if (copt) objtype(OPTYPE,addat->noff);
+			if (copt) objtype(OPTYPE,m_operand(addat)->noff);
 #endif
 			}
 		else {			/* must be a local integer */
 			warning("undefined variable");
-			nameat->nstor=SAUTO;
+			m_operand(nameat)->nstor=SAUTO;
 			locoff-=2;
-			nameat->noff=locoff;
-			nameat->ntype[0]=CINT;
-			mfree=&nameat->ntype[1];
+			m_operand(nameat)->noff=locoff;
+			m_operand(nameat)->ntype[0]=CINT;
+			mfree=&m_operand(nameat)->ntype[1];
 			}
 		goto nowop;
 		}
-	if (heir == OPERAND && nameat->nstor != STYPEDEF) {
+	if (heir == OPERAND && m_operand(nameat)->nstor != STYPEDEF) {
 nowop:	nodeo[1]=nodeo[2]=nodeo[3]=0;
-		if (nameat->nstor < SAUTO) nodeo[1]=nameat->noff;
-		else nodeo[2]=nameat->noff;
-		typad=&nameat->ntype[0];
+		if (m_operand(nameat)->nstor < SAUTO) nodeo[1]=m_operand(nameat)->noff;
+		else nodeo[2]=m_operand(nameat)->noff;
+		typad=&m_operand(nameat)->ntype[0];
 		if (toked == 0) tokit();
 		while (curch == '.' || curch == '[') {
 			if (curch == '.') {
@@ -483,20 +483,21 @@ nowop:	nodeo[1]=nodeo[2]=nodeo[3]=0;
 					}
 				tokit();
 				find_member(typad);
-				if (heir != OPERAND || nameat->nstor != SMEMBER) {
+				if (heir != OPERAND || m_operand(nameat)->nstor != SMEMBER) {
 					error("need member");
 					return 0;
 					}
 				/* if a zero offset, set flag for could be member of union */
-				if (nameat->noff)
-					nodeo[2]+=nameat->noff;
+				if (m_operand(nameat)->noff)
+					nodeo[2]+=m_operand(nameat)->noff;
 				else nodeo[3]=1;
-				typad=&nameat->ntype[0];
+				typad=&m_operand(nameat)->ntype[0];
 				tokit();
 				}
 			else {
 				if (*typad != ARRAY) break;
 				while (*cur == LF && cur > savEnd) {
+                    OS("--NESTED called");   //FIXME
 					cur=nestfrom[--nested];
 					whitesp();
 					}
@@ -520,7 +521,7 @@ nowop:	nodeo[1]=nodeo[2]=nodeo[3]=0;
 				break;
 				}
 			}
-		nodeo[0]=OPND+typeof(typad);
+		nodeo[0]=OPND+xtypeof(typad);
 		node[0]=tree4(nodeo);
 		node[1]=typad;
 		if (*typad < BITS) {
@@ -538,7 +539,7 @@ nowop:	nodeo[1]=nodeo[2]=nodeo[3]=0;
 	if (heir == LCONSTANT) {
 		nodeo[0]=CONST+(CLONG<<8);
 		nodeo[1]=dvalue;
-		nodeo[2]=((void *)&dvalue)->hiword;
+		nodeo[2]=LONG(&dvalue)->hiword;
 		node[0]=tree3(nodeo);
 		node[1]=l_type;
 		tokit();
@@ -603,15 +604,15 @@ abstract(oldtype)
 	oldloc=addloc;
 	oldt=addtype;
 	oldat=addat;
-	mfree->word=0;
-	(mfree+2)->byte=0;			/* null name */
+	WORD(mfree)->word=0;
+	WORD(mfree+2)->byte=0;			/* null name */
 	addat=mfree+3;
-	addat->opcl=OPERAND;
-	addat->nchain=0;
-	addat->nlen=1;
-	addat->nstor=addstor=SUNSTOR;
-	addat->noff=0;
-	addloc=&addat->ntype[0];
+	m_operand(addat)->opcl=OPERAND;
+	m_operand(addat)->nchain=0;
+	m_operand(addat)->nlen=1;
+	m_operand(addat)->nstor=addstor=SUNSTOR;
+	m_operand(addat)->noff=0;
+	addloc=&m_operand(addat)->ntype[0];
 	if (oldtype) {
 		*addloc++=PTRTO;
 		addtype=oldtype;
@@ -626,10 +627,10 @@ abstract(oldtype)
 	addtype=oldt;
 	absat=addat;
 	addat=oldat;
-	return (&absat->ntype[0]);
+	return (&m_operand(absat)->ntype[0]);
 	}
 
-getab(char lvl) {
+getab(int lvl) {
 	char *otype;
 
 	while (1) {
@@ -666,7 +667,7 @@ getab(char lvl) {
 			tokit();
 			notch(']');
 			*addloc++=ARRAY;
-			addloc->word=wvalue;
+			WORD(addloc)->word=wvalue;
 			addloc+=2;
 			}
 		else return;
@@ -686,10 +687,10 @@ oconst(con)
 lookup_member(char * mptr) {
 
 	while (mptr) {
-		char *nptr = mptr - mptr->nlen;
+		char *nptr = mptr - m_operand(mptr)->nlen;
 		if (strcmp(nptr, string) == 0)
 			return heir=*(nameat=mptr);
-		mptr=mptr->schain;
+		mptr=m_stag(mptr)->schain;
 		}
 	return 0;
 	}
@@ -707,7 +708,7 @@ find_member(typeat)
 		if (*typeis == CSTRUCT) {
 			struct_type=typeis;
 			memat=struct_type->ststagat;		  /* address of stag */
-			memat=memat->schain;			   /* address of first member */
+			memat=m_stag(memat)->schain;		  /* address of first member */
 			if(lookup_member(memat))
 				return 1;
 			}
@@ -716,7 +717,7 @@ find_member(typeat)
 			while(wp) {
 				struct_type = wp+1;
 				memat=struct_type->ststagat;		  /* address of stag */
-				memat=memat->schain;			   /* address of first member */
+				memat=m_stag(memat)->schain;		  /* address of first member */
 				if(lookup_member(memat))
 					return 1;
 				wp = *wp;

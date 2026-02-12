@@ -366,7 +366,7 @@ heir12(node)				/* operater is assignment */
 			}
 		nodeo[0]=bvalue;
 		addop=0;
-		ltype=((char *)node[1])->byte;
+		ltype=WORD((char *)(node[1]))->byte;
 		if (ltype == PTRTO && ((bvalue == AADD) || (bvalue == ASUB)))
 			addop=1;
 		nodeo[1]=node[0];
@@ -409,8 +409,8 @@ heir13(node)				/* operater is conditional (? :) */
 		nodeo[3]=node3[0];
 		if (nodeo[1] == 0 || nodeo[2] == 0 || nodeo[3] == 0) nooper();
 		node[1]=maxtype(node2[1],node3[1]);
-		if (*node[1] >= BITS && *node[1] < FUNCTION) node[1]=u_type;
-		typ=typeof(node[1]);
+		if (FIX(node[1]) >= BITS && FIX(node[1]) < FUNCTION) node[1]=u_type;
+		typ=xtypeof(node[1]);
 		if (typ == (ARRAY<<8) || typ == (CSTRUCT<<8))
 			typ=is_big ? (PTRTO<<8) : (CUNSG<<8);
 		nodeo[0]+=typ;
@@ -602,9 +602,9 @@ addptr(addop,node,noder)
 		}
 	else if (sizer == 1 && sizel > 1) scale(noder,sizel);
 	/*	if subtracting pointers, change to offset only	*/
-	if (is_big && *noder[1] >= FUNCTION &&
+	if (is_big && FIX(noder[1]) >= FUNCTION &&
 		(addop == SUB || addop == ASUB)) {	
-		if (*node[1] < FUNCTION ) error("illegal arithmetic");
+		if (FIX(node[1]) < FUNCTION ) error("illegal arithmetic");
 		node[1]=node[0];
 		node[0]=CAST+(CUNSG<<8);
 		node[0]=tree2(node);

@@ -15,6 +15,20 @@
  */
 /*	PASS1.H			INCLUDE FOR PASS1	*/
 
+#define char        unsigned char
+#define FIX(node)   (*(char *)(node))
+#define HEAP        10000
+
+/* --- ELKS changes --- */
+char *mstart;
+#define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)
+
+#define OS(str)             os(str)
+#define xalloc(n)           0   /* FIXME */
+#define _lmove(count, from_offset, from_seg, to_offset, to_seg)
+#define _setsp(sp)              /* FIXME */
+/* ------------------- */
+
 #define	CHECK	1			/*	true if generating checkout compiler */
 #define LIMITED 0
 
@@ -33,22 +47,27 @@
 /*	symbol table types	*/
 
 #define RESERVED	1		/* BYTE CONTAINING RESERVED VALUE */
-	struct {char rescl,rvalue;};
+	struct st_reserved {char rescl,rvalue;};
 
 #define STAG		2		/* forward chain, size of structure */
-	struct {char stagcl; int schain,staglen;};
+	struct st_stag {char stagcl; int schain,staglen;};
 
 #define DEFINED		3		/* #args, (arg # or DEFSTR chars... LF)
 								...DEFEND	*/
-	struct {char defcl, *dchain, dnlen, dargs, dval;};
+	struct st_defined {char defcl, *dchain, dnlen, dargs, dval;};
 
 #define DEFPARM		4		/* number of argument	*/
-	struct {char dpcl,dpnum;};
+	struct st_defparm {char dpcl,dpnum;};
 
 #define OPERAND		26		/* op class, forward chain of members,
 							 length of name, storage, offset or ordinal */
-	struct {char opcl, *nchain, nlen, nstor; int noff; char ntype[1];};
+	struct st_operand {char opcl, *nchain, nlen, nstor; int noff; char ntype[1];};
 
+#define m_reserved(v)	((struct st_reserved *)(v))
+#define m_stag(v)		((struct st_stag     *)(v))
+#define m_defined(v)	((struct st_defined *)(v))
+#define m_defparm(v)	((struct st_defparm *)(v))
+#define m_operand(v)	((struct st_operand *)(v))
 
 /*	named heir values */
 
@@ -176,7 +195,7 @@ unsigned lastline;
 
 #define MAXINC	20
 	unsigned incPara[MAXINC];
-	char incnext;
+	unsigned incnext;
 
 #define MAXNEST 60
 	int  nestfrom[MAXNEST];
@@ -184,8 +203,10 @@ unsigned lastline;
 	struct stag {char cstype, *stat; int staglen;} stagat;
 	struct {char sttype; struct stag *ststagat;} *struct_type;
 
-	union  { char byte; int word; } ;
-	struct { unsigned loword,hiword; } ;
+	union  un_word { char byte; int word; } ;
+	struct st_long { unsigned loword,hiword; } ;
+	#define WORD(v)		((union un_word *)(v))
+	#define LONG(v)		((struct st_long *)(v))
 
 char mdate[12], mtime[9], mactokn, *macname[MAXNEST], *macfrom[MAXNEST],
 	*machash[32], macOp, blevel, *anon;

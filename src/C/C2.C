@@ -21,7 +21,7 @@
 #include "OBJ.H"
 #endif
 
-dolf(char skipit) {
+dolf(int skipit) {
 	char *memchr(), *mcp;
 	int lsiz;
 
@@ -110,8 +110,11 @@ dolf(char skipit) {
 			lineBeg=&fileBuf[lineBeg-bufEnd];
 			if(addparm)addparm=&fileBuf[-lsiz];
 			else if(addproto)addproto=&fileBuf[-lsiz];
+#if 0
 			if (see_exit && incnext == 0) bufEnd = fileBuf + see_call(0,fileBuf,2048);
-			else bufEnd = fileBuf + read(file, fileBuf, 2048);
+			else 
+#endif
+			bufEnd = fileBuf + read(file, fileBuf, 2048);
 			if(bufEnd < fileBuf)
 				error("file read error");
 			if(bufEnd < savEnd) {
@@ -242,7 +245,7 @@ ifproc:					mactokn=1;
 								error_l("cannot #undef predefined names");
 							else if (heir != DEFINED)
 								error_l("#undef identifier not defined");
-							else (nameat-2)->byte=' ';
+							else WORD(nameat-2)->byte=' ';
 							}
 						goto ppexit;
 						}
@@ -251,7 +254,7 @@ ifproc:					mactokn=1;
 	error_l("bad control");
 	}
 
-skipsome(char elifOK) {
+skipsome(int elifOK) {
 	char ifnest, eltype;
 	ifnest=1;
 	while (ifnest) {
@@ -325,16 +328,16 @@ adddef() {
 	while(*nameat++=*newdef++) j++;
 	defat=nameat;
 
-	defat->defcl=DEFINED;
-	defat->dnlen=j+1;
+	m_defined(defat)->defcl=DEFINED;
+	m_defined(defat)->dnlen=j+1;
 	if(blevel) {
-		defat->dchain=hash[32];
+		m_defined(defat)->dchain=hash[32];
 		hash[32]=defat;
 		}
-	defat->dargs=255;
-	newdef=&defat->dval;
+	m_defined(defat)->dargs=255;
+	newdef=&m_defined(defat)->dval;
 	if (*cur == '(' && *(cur-1) != ' ' && *(cur-1) != '\11') {
-		defat->dargs=0;
+		m_defined(defat)->dargs=0;
 		cur++;
 		whitesp();
 		if (*cur == ')') {
@@ -342,7 +345,7 @@ adddef() {
 			whitesp();
 			goto no_args;
 			}
-		if (maxmem-mfree < 1200) {
+		if (maxmem-(unsigned)mfree < 1200) {
 			error("out of memory");
 			real_exit(2);
 			}
@@ -359,8 +362,8 @@ adddef() {
 				goto cleanup;
 				}
 			newname();
-			nameat->defcl=DEFPARM;
-			nameat->dpnum=++defat->dargs;
+			m_defparm(nameat)->dpcl=DEFPARM;
+			m_defparm(nameat)->dpnum=++m_defined(defat)->dargs;
 			mfree=nameat+2;
 			}
 		while (*cur++==',');
@@ -402,7 +405,7 @@ no_args:
 		switch(ltype[curch=*cur++]) {
 			case LETTER: find(1);
 						if (heir == DEFPARM) {
-							*newdef++=nameat->dpnum;
+							*newdef++=m_defparm(nameat)->dpnum;
 							lastdef=DEFPARM;
 							continue;
 							}
@@ -458,7 +461,7 @@ cleanup:
 	*newdef=DEFEND;
 	mfree=newdef+1;
 	for (i=0; i < 32; i++)
-		while (hash[i] > mfree) hash[i]=hash[i]->word;
+		while (hash[i] > mfree) hash[i]=WORD(hash[i])->word;
 	}
 
 
@@ -471,9 +474,9 @@ add_define() {
 	tokit();			/*	name of variable	*/
 	newname();
 	defat=nameat;
-	defat->defcl=DEFINED;
-	defat->dargs=255;
-	newdef=&defat->dval;
+	m_defined(defat)->defcl=DEFINED;
+	m_defined(defat)->dargs=255;
+	newdef=&m_defined(defat)->dval;
 	*newdef++=DEFSTR;
 	if (*cur == 0) {		/* if no value, assume 1	*/
 		*newdef++='1';
@@ -489,6 +492,7 @@ add_define() {
 	mfree=newdef+1;
 	}
 
+#if 0
 xsetblock(){
 #asm
 	dseg
@@ -498,17 +502,17 @@ oldbp	rw	1
 	cseg
 	mov	oldsp,sp
 	mov	oldbp,bp
-	mov	ax,_pcb_
+	mov	ax,_pcb_	; our PSP segment
 	cli
 	mov	ss,ax
-	mov	sp,100H
+	mov	sp,100H		; temp SS:SP = PSP:100
 	sti
 	mov	bx,ds
-	add	bx,1000H
-	mov	es,ax
-	sub	bx,es:[2CH]
-	mov	ah,4AH
-	int	21H
+	add	bx,1000H	; BX = DS + 64K
+	mov	es,ax		; ES = PSP
+	sub	bx,es:[2CH]	; BX -= ENVIRON segment (keep environment)
+	mov	ah,4AH		; modify allocated memory to ES:BX
+	int	21H		; now have max memory and environment
 	mov	ax,ds
 	cli
 	mov	ss,ax
@@ -521,17 +525,18 @@ oldbp	rw	1
 
 xalloc(int size){
 #asm
-	mov	ah,48H
-	mov	bx,#size
+	mov	ah,48H		; allocate memory
+	mov	bx,#size	; bytes
 	add bx,15
 	mov	cl,4
-	shr	bx,cl
+	shr	bx,cl		; paras
 	int	21H
 	jnc	ok
 	xor	ax,ax
-ok:
+ok:				; returns segment
 #
 	}
+#endif
 
 doinc() {
 	int  i, ifd;
@@ -583,13 +588,14 @@ inc_nest:
 		strcat(string,&string[100]);/*	add name to end */
 		}
 
+#if 0
 /*	if MS-DOS V2.0 and use include= to find file */
 	extern char _msdos2;
 	if (inc_search && _msdos2) {
 		findfile(string,inctemp);
 		strcpy(string,inctemp);
 		}
-
+#endif
 	if ((ifd=open(string,0)) == -1) {
 		os("cannot open ");
 		os(string);
@@ -618,38 +624,38 @@ doinit() {
 	int  value;
 
 	value=0;
-	if (addat->nstor == STYPEDEF || original) {
+	if (m_operand(addat)->nstor == STYPEDEF || original) {
 		original=0;
 		return 0;
 		}
-	isstatic=addat->nstor <= SEXTERN;
+	isstatic=m_operand(addat)->nstor <= SEXTERN;
 	if (isstatic) {
 		ctlb(1);
 		if (is_big) {
-			if ((was_ext || addat->nstor == SEXTERN || addat->nstor == SEXTONLY) && 
-				(addat->ntype[0] == CSTRUCT || addat->ntype[0] == ARRAY))
-				ctlb(addat->nstor + 128);
-			else ctlb(addat->nstor);
+			if ((was_ext || m_operand(addat)->nstor == SEXTERN || m_operand(addat)->nstor == SEXTONLY) && 
+				(m_operand(addat)->ntype[0] == CSTRUCT || m_operand(addat)->ntype[0] == ARRAY))
+				ctlb(m_operand(addat)->nstor + 128);
+			else ctlb(m_operand(addat)->nstor);
 			}
-		else ctlb(addat->nstor);
-		ctlw(addat->noff);
+		else ctlb(m_operand(addat)->nstor);
+		ctlw(m_operand(addat)->noff);
 
 /*	make the names of statics within functions distinct	*/
-		if (addat->nstor == SSTATIC && funname) {
+		if (m_operand(addat)->nstor == SSTATIC && funname) {
 			bptr=funname;
 			while (*bptr) ctlb(*bptr++);
 			ctlb('_');
 			}
-		ctls(addat-addat->nlen);
+		ctls(addat-m_operand(addat)->nlen);
 		}
-	varis=&addat->ntype[0];
+	varis=&m_operand(addat)->ntype[0];
 	locplus=0;	/* local offset from locoff */
 	if (ifch('=')) {
 		if (*varis == CSTRUCT && curch != '{') {
 			error("need '{' for STRUCT initilization");
 			return 0;
 			}
-		if (addat->nstor == SEXTONLY) {
+		if (m_operand(addat)->nstor == SEXTONLY) {
 			error("cannot initilize EXTERN");
 			return 0;
 			}
@@ -657,8 +663,8 @@ doinit() {
 		if (isstatic) ctlb(INITEND);
 		}
 	else {
-		if (isstatic && addat->nstor != SEXTONLY) {
-			if (addat->ntype[0] != FUNCTION) {
+		if (isstatic && m_operand(addat)->nstor != SEXTONLY) {
+			if (m_operand(addat)->ntype[0] != FUNCTION) {
 				ctlb(INITRB);
 				ctlw(dsize(varis));
 				}
@@ -676,31 +682,31 @@ initsome(varis,num,isstatic,initnode)
 
 	do {
 		if (*varis == ARRAY) {
-			asize=(varis+1)->word;
+			asize=WORD(varis+1)->word;
 			if (asize < 0 && num < 0) {
 				error("missing dimension");
 				return 0;
 				}
 			if (ifch('{')) {
 				/*	allow the improper braces if string init of char */
-				if (heir == STRNG && ((varis+3)->byte == CCHAR || (varis+3)->byte == CSCHAR))
+				if (heir == STRNG && (WORD(varis+3)->byte == CCHAR || WORD(varis+3)->byte == CSCHAR))
 					initsome(varis,1,isstatic,initnode);
 				else initnode=initsome(varis+3,asize,isstatic,initnode);
 				notch('}');
 				}
-			else if (heir == STRNG && ((varis+3)->byte == CCHAR || (varis+3)->byte == CSCHAR)) {
+			else if (heir == STRNG && (WORD(varis+3)->byte == CCHAR || WORD(varis+3)->byte == CSCHAR)) {
 				if (isstatic == 0) {
 					error("sorry, no string initilization of AUTO");
 					return 0;
 					}
 				if (asize < 0)
-					(varis+1)->word = 0;
+					WORD(varis+1)->word = 0;
 concatstring:
 				ctlb(INITSTR);
 				sis=0;
 				while(string[sis]) sis++;
 				if (asize < 0) {
-					(varis+1)->word+=sis;
+					WORD(varis+1)->word+=sis;
 					swant=sis;
 					}
 				else swant=asize-1;
@@ -719,13 +725,13 @@ concatstring:
 				if(heir==STRNG) goto concatstring;
 				ctlb(0xFF);
 				if (asize < 0)
-					(varis+1)->word++; // trailing zero
+					WORD(varis+1)->word++; // trailing zero
 				}
 			else {
 				if (curch == ',' || curch == '}' || curch == ';') {
 					if (num < 0) {
 						bptr=varis-3;
-						(bptr+1)->word=-1-num;
+						WORD(bptr+1)->word=-1-num;
 						}
 					else {
 						asize=dsize(varis)*num;
@@ -741,17 +747,17 @@ concatstring:
 				}
 			}
 		else if (*varis == CSTRUCT) {
-			memat=(varis+1)->word;
-			memat=memat->schain;
+			memat=WORD(varis+1)->word;
+			memat=m_stag(memat)->schain;
 			sinit=ifch('{');
 			if ((curch == '}' || curch == ';') && num < 0) {
 				bptr=varis-3;
-				(bptr+1)->word=-1-num;
+				WORD(bptr+1)->word=-1-num;
 				return initnode;
 				}
 			while (memat) {
-				initnode=initsome(&memat->ntype[0],1,isstatic,initnode);
-				memat=memat->nchain;
+				initnode=initsome(&m_operand(memat)->ntype[0],1,isstatic,initnode);
+				memat=m_operand(memat)->nchain;
 				ifch(',');
 				}
 			if (sinit) notch('}');
@@ -763,7 +769,7 @@ concatstring:
 					bptr=varis-3;
 					while (*bptr != ARRAY)
 						bptr--;
-					(bptr+1)->word=-1-num;
+					WORD(bptr+1)->word=-1-num;
 					}
 				else {
 					asize=dsize(varis)*num;
@@ -794,7 +800,7 @@ concatstring:
 				ntree=lasttree;	/*	chop of the tree	*/
 				}
 			else {
-				nodeo[0]=typeof(varis);
+				nodeo[0]=xtypeof(varis);
 				nodeo[1]=0;
 				nodeo[2]=locoff+locplus;
 				locplus+=dsize(varis);
@@ -818,6 +824,7 @@ concatstring:
 	}
 
 
+#if 0
 
 /*	FINDFILE.C	*/
 /*
@@ -967,3 +974,4 @@ outer_next:
 	jmp		outer_next
 #
 }
+#endif

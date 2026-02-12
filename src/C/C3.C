@@ -91,9 +91,9 @@ dogoto() {
 	int  nodeo[4];
 	tokit();
 	deflab();
-	if (nameat->ntype[0] != CLABEL) { error("need label"); return 0;}
+	if (m_operand(nameat)->ntype[0] != CLABEL) { error("need label"); return 0;}
 	nodeo[0]=CLABEL<<8;
-	nodeo[1]=nameat->noff;
+	nodeo[1]=m_operand(nameat)->noff;
 	nodeo[2]=nodeo[3]=0;
 	nodeo[1]=tree4(nodeo);
 	nodeo[0]=GOTOS;
@@ -188,10 +188,10 @@ dofor() {
 dolabel() {
 	int  nodeo[3];
 	deflab();
-	if (nameat->nstor != SUNSTOR) { error("duplicate label"); return 0; }
+	if (m_operand(nameat)->nstor != SUNSTOR) { error("duplicate label"); return 0; }
 	nodeo[0]=LAB;
-	nameat->nstor=SSTATIC;
-	nodeo[2]=nameat->noff;
+	m_operand(nameat)->nstor=SSTATIC;
+	nodeo[2]=m_operand(nameat)->noff;
 	tokit();
 	tokit();
 	nodeo[1]=statement();
@@ -216,13 +216,13 @@ deflab() {
 	nameat=wp+1;
 	bptr=string;
 	while(*nameat++=*bptr++) ;
-	nameat->nchain=hash[32];	/* keep labels	*/
+	m_operand(nameat)->nchain=hash[32];	/* keep labels	*/
 	hash[32]=nameat;
-	nameat->opcl=OPERAND;
-	nameat->nlen=bptr-string;
-	nameat->nstor=SUNSTOR;
-	nameat->noff=++ordinal;
-	nameat->ntype[0]=CLABEL;
+	m_operand(nameat)->opcl=OPERAND;
+	m_operand(nameat)->nlen=bptr-string;
+	m_operand(nameat)->nstor=SUNSTOR;
+	m_operand(nameat)->noff=++ordinal;
+	m_operand(nameat)->ntype[0]=CLABEL;
 	ctlb(1);
 	ctlb(SSTATIC);
 	ctlw(ordinal);
@@ -232,7 +232,7 @@ deflab() {
 	ctlb('_');
 	ctls(mfree+2);
 	ctlb(INITFUN);
-	mfree=&nameat->ntype[1];
+	mfree=&m_operand(nameat)->ntype[1];
 	}
 
 doswitch() {
@@ -349,8 +349,8 @@ putwrd:			wp=cur;
 					}
 				cur+=2;
 				find(1);
-				if(heir == DEFINED && nameat->dargs == 255) {
-					char *dp = &nameat->dval+1, suffix = 0;
+				if(heir == DEFINED && m_defined(nameat)->dargs == 255) {
+					char *dp = &m_defined(nameat)->dval+1, suffix = 0;
 
 					while(*dp != LF) {
 						char c;
@@ -383,16 +383,16 @@ putwrd:			wp=cur;
 						}
 					goto putloc;
 					}
-				if(heir != OPERAND && nameat->nstor != SAUTO) {
+				if(heir != OPERAND && m_operand(nameat)->nstor != SAUTO) {
 					cur=ep;
 					goto putwrd;
 					}
 				locname[n++] = '[';
 				locname[n++] = 'B';
 				locname[n++] = 'P';
-				if(nameat->noff >= 0)
+				if(m_operand(nameat)->noff >= 0)
 				locname[n++] = '+';
-				itoa(nameat->noff, &locname[n], 10);
+				itoa(m_operand(nameat)->noff, &locname[n], 10);
 				while(locname[++n]) ;
 				locname[n++] = ']';
 putloc:			if(n&1)
@@ -438,7 +438,7 @@ compound(oldfree,isproc)
 		list[0]=LST+n;
 		value=treev(n+1,list);
 		}
-	if (mfree > oldfree) {
+	if ( mfree > oldfree) {
 		if (mfree >= maxmem) {
 			error("out of memory");
 			real_exit(2);
@@ -454,42 +454,42 @@ compound(oldfree,isproc)
 			}
 		lastfun=hash[32];
 		/* clean off the function chain */
-		while (hash[32] > oldfree) hash[32]=hash[32]->nchain;
+		while (hash[32] > oldfree) hash[32]=m_operand(hash[32])->nchain;
 		while (lastfun > oldfree) {
 			wp=&lastfun;
-			while (((char *)*wp)->nchain > oldfree)
-				wp=&((char *)*wp)->nchain;
+			while (m_operand(*wp)->nchain > oldfree)
+				wp=&m_operand(*wp)->nchain;
 			if ((lowfun=*wp) == 0) break;
 			*wp=0;
 			/* abandon labels if exiting a procedure	*/
-			if (isproc && lowfun->ntype[0] == CLABEL) {
-				if (lowfun->nstor == SUNSTOR) {
-					strcpy(&undef_msg[12],lowfun-lowfun->nlen);
+			if (isproc && m_operand(lowfun)->ntype[0] == CLABEL) {
+				if (m_operand(lowfun)->nstor == SUNSTOR) {
+					strcpy(&undef_msg[12],lowfun-m_operand(lowfun)->nlen);
 					error(undef_msg);
 					}
 				continue;
 				}
-			i=lowfun->nlen;
+			i=m_operand(lowfun)->nlen;
 			wp=oldfree+2+i;			/* where OPERAND will go */
 			hashno=i-1;
 			bptr=lowfun-1;
 			while (--i) hashno+=*--bptr;
 			hashno&=31;
-			if(lowfun->opcl == DEFINED) {
-				oldfree->word=machash[hashno];
+			if(m_operand(lowfun)->opcl == DEFINED) {
+				WORD(oldfree)->word=machash[hashno];
 				machash[hashno]=oldfree;
 				}
-			else if(lowfun->ntype[0] == CLABEL) {
-				oldfree->word=labhash[hashno];/* rebuild label chain */
+			else if(m_operand(lowfun)->ntype[0] == CLABEL) {
+				WORD(oldfree)->word=labhash[hashno];/* rebuild label chain */
 				labhash[hashno]=oldfree;
 				}
 			else {
-				oldfree->word=hash[hashno];/* rebuild hash chain */
+				WORD(oldfree)->word=hash[hashno];/* rebuild hash chain */
 				hash[hashno]=oldfree;
 				}
 			oldfree+=2;
-			last_move=&lowfun->ntype[0];
-			if(lowfun->opcl == DEFINED) while(*last_move != DEFEND) last_move++;
+			last_move=&m_operand(lowfun)->ntype[0];
+			if(m_operand(lowfun)->opcl == DEFINED) while(*last_move != DEFEND) last_move++;
 			else while (*last_move >= FUNCTION) {
 				if (*last_move == ARRAY || *last_move == CSTRUCT)
 					last_move+=3;
@@ -497,7 +497,7 @@ compound(oldfree,isproc)
 				}
 			while (bptr <= last_move)
 				*oldfree++=*bptr++;
-			((void *)wp)->nchain=hash[32];	/* rebuild function hash chain */
+			m_operand(wp)->nchain=hash[32];	/* rebuild function hash chain */
 			hash[32]=wp;
 			}
 		mfree=oldfree;
@@ -523,26 +523,26 @@ allocloc() {
 			return 0;
 			}
 		addproto=addparm=0;
-		if (addat->ntype[0] == FUNCTION) {
+		if (m_operand(addat)->ntype[0] == FUNCTION) {
 			realstor=addstor;	/* remember real storage but fix function */
-			if (addstor != SSTATIC) addstor=addat->nstor=SEXTERN;
+			if (addstor != SSTATIC) addstor=m_operand(addat)->nstor=SEXTERN;
 			atype(addtype);
 			addstor=realstor;
 #if CHECK
-			if (copt) objtype(OPTYPE,addat->noff);
+			if (copt) objtype(OPTYPE,m_operand(addat)->noff);
 #endif
 			}
 		else {
 			was_ext=0;
 			atype(addtype);
 			if (islocal) {
-				locoff-=dsize(&addat->ntype[0]);
-				addat->noff=locoff;
+				locoff-=dsize(&m_operand(addat)->ntype[0]);
+				m_operand(addat)->noff=locoff;
 				}
 #if CHECK
 			if (copt) {
 				if (addstor == SEXTERN || addstor == SSTATIC)
-					objtype(OPTYPE,addat->noff);
+					objtype(OPTYPE,m_operand(addat)->noff);
 				else if (islocal) {
 					objtype(OLTYPE,locoff);
 					}

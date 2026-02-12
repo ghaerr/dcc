@@ -117,8 +117,10 @@ init(argc,argv)
 		}
 /*	install the reserved words	*/
 
-	mfree=_memory();
-	maxmem=_showsp()-1224;
+	mstart=mfree=sbrk(HEAP);    //FIXME needs dynamic grow heap to max function
+	maxmem=mfree+HEAP;
+	//maxmem=_showsp()-1224;
+
 	addres(0,"auto.break.case.char.const.continue.default.do.double.else.");
 	addres(10,"enum.extern.float.for.goto.if.int.long.noalias.register.return.short.");
 	addres(22,"signed.sizeof.static.struct.switch.typedef.union.unsigned.");
@@ -129,13 +131,11 @@ init(argc,argv)
 
 	add_define(cur="__DESMET__");
 
-	xsetblock();
-
 	macxp=macExp;
 
-	times(mtime);
+	//times(mtime);         //FIXME
 	mtime[2]=mtime[5]=':';
-	dates(mdate);
+	//dates(mdate);         //FIXME
 	mdate[10]=mdate[7];
 	mdate[9]=mdate[6];
 	mdate[8]='9';
@@ -337,7 +337,7 @@ next_arg:;
 
 #if CHECK
 		if (copt) {
-			if ((objnum=creat(objname)) == -1) {
+			if ((objnum=creat(objname, 0666)) == -1) {
 				os("cannot create ");
 				os(objname);
 				real_exit(2);
@@ -354,7 +354,7 @@ next_arg:;
 		intname="A:CTEMP2";
 		if (topt) *intname=topt;
 		else intname+=2;
-		if ((tree=creat(intname)) == -1) {
+		if ((tree=creat(intname, 0666)) == -1) {
 			os("cannot create CTEMP2");
 			real_exit(2);
 			}
@@ -363,7 +363,7 @@ next_arg:;
 		intname="A:CTEMP1";
 		if (topt) *intname=topt;
 		else intname+=2;
-		if ((control=creat(intname)) == -1) {
+		if ((control=creat(intname, 0666)) == -1) {
 			os("cannot create CTEMP1");
 			real_exit(2);
 			}
@@ -399,7 +399,7 @@ endit() {
 
 	for (i=0; i < 32; i++) {
 		char *p;
-		for(p=hash[i]; p; p = p->word) {
+		for(p=hash[i]; p; p = WORD(p)->word) {
 			char *q = p+2;
 			while(*q++) ;
 			if(*q == STREF) {
@@ -436,14 +436,14 @@ endit() {
 				}
 			close(control);
 			isize=intree;
-			if (write(tree,treebuf,isize-treebuf) == -1) {
+			if (write(tree,treebuf,isize-(unsigned)treebuf) == -1) {
 				os("cannot write temporary");
 				real_exit(2);
 				}
 			close(tree);
 
 /*	if x option is off, use _chain to trigger gen.	*/
-
+#if 0
 			if (xopt == 0) {
 				if (have_asm == 0 && aopt == 0) {
 					strcat(nextpgm," Z");
@@ -451,6 +451,7 @@ endit() {
 				if (nextpgm[0] == 'Z') _chain(&nextpgm[2]);
 				else _chain(nextpgm);
 				}
+#endif
 			real_exit(0);					/* otherwise just EXIT	*/
 			}
 		else {
@@ -497,15 +498,15 @@ global() {
 		atype(addtype);
 #if CHECK
 		if (copt && addstor != STYPEDEF)
-			objtype(OPTYPE,addat->noff);
+			objtype(OPTYPE,m_operand(addat)->noff);
 #endif
 		if (copt) funline=cline; else funline=0;
-		if (addat->ntype[0] == FUNCTION) {
+		if (m_operand(addat)->ntype[0] == FUNCTION) {
 			fundef=addat;
-			funtype=addat->ntype[1];		/* needed to force ret type */
+			funtype=m_operand(addat)->ntype[1];		/* needed to force ret type */
 			fun_ret_len=0;
 			if (funtype == CSTRUCT) {
-				struct_type=&addat->ntype[1];
+				struct_type=&m_operand(addat)->ntype[1];
 				fun_ret_len=struct_type->ststagat->staglen;
 				pbytes=is_big ? 4: sizeof(char *);
 				}
@@ -513,8 +514,8 @@ global() {
 			if (is_big && funtype == PTRTO) ;
 			else if (funtype > CDOUBLE) funtype=CUNSG;
 			oldfree=mfree;
-			funord=addat->noff;
-			funname=addat-addat->nlen;
+			funord=m_operand(addat)->noff;
+			funname=addat-m_operand(addat)->nlen;
 			gotlname=0;
 			if ((addparm || addproto) && nested > pNest) {
 				macxp = macfrom[pNest + 1];
@@ -542,8 +543,8 @@ global() {
 				oldcur=cur;
 				oldch=curch;
 				wp=mfree;
-				*wp=protohash[addat&31];
-				protohash[addat&31]=wp;
+				*wp=protohash[(int)addat&31];
+				protohash[(int)addat&31]=wp;
 				*(wp+1)=addat;
 				*(lp=wp+2)=pp=wp+3;
 				if(macproto) {
@@ -575,7 +576,7 @@ global() {
 								}
 							} while (typb >= FUNCTION);
 						if (typb == CSTRUCT) {
-							addloc->word=addtype->word;
+							WORD(addloc)->word=WORD(addtype)->word;
 							addloc+=2;
 							}
 						}
@@ -614,22 +615,22 @@ eliparg:		oldfree=mfree=pp;
 							if (addat > mfree) mfree=addat;
 							break;
 							}
-						addat->noff=poff+4+(is_big+is_big); /* 4 or 6 bytes from bp */
+						m_operand(addat)->noff=poff+4+(is_big+is_big); /* 4 or 6 bytes from bp */
 						atype(addtype);
 						poff+=2;
-						if (addat->ntype[0] == CLONG) poff+=2;
+						if (m_operand(addat)->ntype[0] == CLONG) poff+=2;
 
 /*	could be a structure	*/
-						else if (addat->ntype[0] == CSTRUCT) {
-							struct_type=addat->ntype;
+						else if (m_operand(addat)->ntype[0] == CSTRUCT) {
+							struct_type=m_operand(addat)->ntype;
 							poff+=struct_type->ststagat->staglen-2;
 							if (wopt) warning("structure argument");
 							}
-						else if (is_big && addat->ntype[0] == PTRTO) poff+=2;
+						else if (is_big && m_operand(addat)->ntype[0] == PTRTO) poff+=2;
 /*	a FLOAT is really a DOUBLE	*/
 						else {
-							if (addat->ntype[0] == CFLOAT) addat->ntype[0]=CDOUBLE;
-							if (addat->ntype[0] == CDOUBLE) poff+=6;
+							if (m_operand(addat)->ntype[0] == CFLOAT) m_operand(addat)->ntype[0]=CDOUBLE;
+							if (m_operand(addat)->ntype[0] == CDOUBLE) poff+=6;
 							}
 						} while (ifch(','));
 voidspec:			notch(')');
@@ -675,15 +676,15 @@ doparms() {
 		newname();
 		if (pchain) *pchain=nameat;
 		else fchain=nameat;
-		pchain=&nameat->nchain;
-		nameat->opcl=OPERAND;
-		nameat->nstor=SAUTO;
-		nameat->noff=pbytes+4+(is_big+is_big); /* 4 or 6 bytes from bp */
+		pchain=&m_operand(nameat)->nchain;
+		m_operand(nameat)->opcl=OPERAND;
+		m_operand(nameat)->nstor=SAUTO;
+		m_operand(nameat)->noff=pbytes+4+(is_big+is_big); /* 4 or 6 bytes from bp */
 		pbytes+=2;					/* assume parms are two bytes each */
-		nameat->ntype[0]=CINT;		/* assume parm is integer */
+		m_operand(nameat)->ntype[0]=CINT;		/* assume parm is integer */
 		for (i=1; i <= 10; i++)		/* but leave room to grow */
-			nameat->ntype[i]=0xff;
-		mfree=&nameat->ntype[11];
+			m_operand(nameat)->ntype[i]=0xff;
+		mfree=&m_operand(nameat)->ntype[11];
 		tokit();
 		}
 	while (ifch(','));
@@ -704,27 +705,27 @@ doparms() {
 /*	if parm is not 2 bytes long, must adjust offsets	*/
 
 			bigger=0;
-			if (addat->ntype[0] == CLONG) bigger=2;
+			if (m_operand(addat)->ntype[0] == CLONG) bigger=2;
 
 /*	could be a structure	*/
-			else if (addat->ntype[0] == CSTRUCT) {
-				struct_type=addat->ntype;
+			else if (m_operand(addat)->ntype[0] == CSTRUCT) {
+				struct_type=m_operand(addat)->ntype;
 				bigger=struct_type->ststagat->staglen-2;
 				if (wopt) warning("structure argument");
 				}
-			else if (is_big && addat->ntype[0] == PTRTO) bigger=2;
+			else if (is_big && m_operand(addat)->ntype[0] == PTRTO) bigger=2;
 
 /*	a FLOAT is really a DOUBLE	*/
 			else {
-				if (addat->ntype[0] == CFLOAT) addat->ntype[0]=CDOUBLE;
-				if (addat->ntype[0] == CDOUBLE) bigger=6;
+				if (m_operand(addat)->ntype[0] == CFLOAT) m_operand(addat)->ntype[0]=CDOUBLE;
+				if (m_operand(addat)->ntype[0] == CDOUBLE) bigger=6;
 				}
 			if (bigger) {
 				pbytes+=bigger;
-				next=addat->nchain;
+				next=m_operand(addat)->nchain;
 				while (next) {
-					next->noff+=bigger;
-					next=next->nchain;
+					m_operand(next)->noff+=bigger;
+					next=m_operand(next)->nchain;
 					}
 				}
 			}
@@ -736,8 +737,8 @@ doparms() {
 	if (copt) {
 		while (fchain) {
 			addat=fchain;
-			objtype(OLTYPE,addat->noff);
-			fchain=((void *)fchain)->nchain;
+			objtype(OLTYPE,m_operand(addat)->noff);
+			fchain=m_operand(fchain)->nchain;
 			}
 		}
 #endif
@@ -862,9 +863,9 @@ specs(defstor)
 				}
 			tokit();
 			}
-		else if (heir == OPERAND && nameat->nstor==STYPEDEF) {
+		else if (heir == OPERAND && m_operand(nameat)->nstor==STYPEDEF) {
 			got=1;
-			addtype=&nameat->ntype[0];
+			addtype=&m_operand(nameat)->ntype[0];
 			tokit();
 			}
 		else return got;
@@ -896,7 +897,7 @@ addvar(found)
 				if (nameat > findover) heir=UNDEF;
 				}
 			else if (in_stru || nameat < findover || addstor == SEXTONLY ||
-				nameat->nstor == SEXTONLY || nameat->ntype[0] == FUNCTION) {
+				m_operand(nameat)->nstor == SEXTONLY || m_operand(nameat)->ntype[0] == FUNCTION) {
 				if (addstor == SEXTERN || addstor == SEXTONLY || 
 					(addstor == SSTATIC && funname == 0)) original=nameat;
 				newname();
@@ -906,8 +907,8 @@ addvar(found)
 		if (heir == UNDEF) {
 			addat=nameat;
 			*nameat=OPERAND;
-			addat->nstor=(addstor == SPARM) ? SAUTO : addstor;
-			addloc=&nameat->ntype[0];
+			m_operand(addat)->nstor=(addstor == SPARM) ? SAUTO : addstor;
+			addloc=&m_operand(nameat)->ntype[0];
 			found=1;
 			tokit();
 			}
@@ -919,7 +920,7 @@ addvar(found)
 				addparm=cur;
 				macproto=addproto=0;
 				tokit();
-				if((heir==OPERAND && nameat->nstor==STYPEDEF)
+				if((heir==OPERAND && m_operand(nameat)->nstor==STYPEDEF)
 					|| (heir!=UNDEF && heir!=OPERAND)) {
 					addproto=addparm;
 					addparm=0;
@@ -947,20 +948,20 @@ addvar(found)
 				if (heir == CONSTANT || heir == LCONSTANT || curch == '('
 				    || (heir == RESERVED && bvalue == RSIZEOF)) val=constexp();
 				else val=-1;
-				if (addstor == SPARM && addloc == &addat->ntype[0]) {
+				if (addstor == SPARM && addloc == &m_operand(addat)->ntype[0]) {
 					*addloc++=PTRTO;
 					}
 				else {
 					*addloc++=ARRAY;
 					if (val != -1) {
-						addloc->word=val;
+						WORD(addloc)->word=val;
 						}
 					else {
 						if (addstor <= SEXTERN || addstor == STYPEDEF)
-							addloc->word=-1;
+							WORD(addloc)->word=-1;
 						else {
 							error("sorry, must have dimension for locals");
-							addloc->word=1;
+							WORD(addloc)->word=1;
 							}
 						}
 					addloc+=2;
@@ -977,7 +978,7 @@ atype(addtype)			/* add type byte(s) to end of operand types */
 	char i,typb;
 
 	if (addtype > 255) {
-		if (addstor == SPARM && *addtype==ARRAY && addloc==&addat->ntype[0]){
+		if (addstor == SPARM && *addtype==ARRAY && addloc==&m_operand(addat)->ntype[0]){
 			addtype+=3;
 			*addloc++=PTRTO;
 			}
@@ -990,7 +991,7 @@ atype(addtype)			/* add type byte(s) to end of operand types */
 			}
 		while (typb >= FUNCTION);
 		if (typb == CSTRUCT) {
-			addloc->word=addtype->word;
+			WORD(addloc)->word=WORD(addtype)->word;
 			addloc+=2;
 			}
 		}
@@ -1000,11 +1001,11 @@ atype(addtype)			/* add type byte(s) to end of operand types */
 		if (addstor <= SEXTERN) {
 			if (original) {
 							/* have older definition */
-				addat->noff=original->noff;
+				m_operand(addat)->noff=m_operand(original)->noff;
 				i=0;			/* types must agree	*/
 				while (1) {
-					typb=original->ntype[i];
-					if (typb != addat->ntype[i]) {
+					typb=m_operand(original)->ntype[i];
+					if (typb != m_operand(addat)->ntype[i]) {
 						warning("conflicting types");
 						break;
 						}
@@ -1012,27 +1013,27 @@ atype(addtype)			/* add type byte(s) to end of operand types */
 					else if (typb != FUNCTION && typb != PTRTO) break;
 					i++;
 					}
-				if (addat->ntype[0] == FUNCTION) original=0;
+				if (m_operand(addat)->ntype[0] == FUNCTION) original=0;
 				else {
 					if (addstor != SEXTONLY) {
 						original=0;
-						addat->nstor=SSTATIC;
+						m_operand(addat)->nstor=SSTATIC;
 						was_ext=1;
 						}
 					}
 				}
 			else {
-				addat->noff=++ordinal;
+				m_operand(addat)->noff=++ordinal;
 
-				if (addat->ntype[0] == FUNCTION) {
-					while (addloc <= &addat->ntype[10])
+				if (m_operand(addat)->ntype[0] == FUNCTION) {
+					while (addloc <= &m_operand(addat)->ntype[10])
 						*addloc++=0xff;
-					addat->nchain=hash[32];
+					m_operand(addat)->nchain=hash[32];
 					hash[32]=addat;
 					ctlb(1);
 					ctlb(addstor == SEXTONLY ? SEXTERN: addstor);
-					ctlw(addat->noff);
-					ctls(addat-addat->nlen);
+					ctlw(m_operand(addat)->noff);
+					ctls(addat-m_operand(addat)->nlen);
 					ctlb(INITFUN);
 					}
 				}
@@ -1074,10 +1075,10 @@ gotSTAG:
 		}
 	else {
 		if (heir != UNDEF) {	/* create dummy stag	*/
-			mfree->word=anon;
+			WORD(mfree)->word=anon;
 			anon=mfree;
-			(mfree+2)->byte=CSTRUCT;
-			(mfree+3)->word=mfree+5;
+			WORD(mfree+2)->byte=CSTRUCT;
+			WORD(mfree+3)->word=mfree+5;
 			memchain=struat=nameat=mfree+5;
 			}
 		else {
@@ -1088,8 +1089,8 @@ gotSTAG:
 			memchain=struat=nameat;
 			tokit();
 			}
-		nameat->stagcl=STREF;
-		mfree=&nameat->staglen;
+		m_stag(nameat)->stagcl=STREF;
+		mfree=&m_stag(nameat)->staglen;
 		mfree+=2;
 		}
 
@@ -1097,8 +1098,8 @@ gotSTAG:
 		if(*struat != STREF && wopt)
 			warning("structure redefinition");
 		*struat = STAG;
-		struat->schain=struat->staglen=0;
-		if (is_stru == 0) struat->staglen=2;
+		m_stag(struat)->schain=m_stag(struat)->staglen=0;
+		if (is_stru == 0) m_stag(struat)->staglen=2;
 		bitsin=0;
 		do {
 			if (specs(SMEMBER) == 0) {
@@ -1117,7 +1118,7 @@ gotSTAG:
 						return struat;
 						}
 					if (wvalue == 0 || wvalue+bitsin > 16) {
-						if (is_stru && bitsin) struat->staglen+=2;
+						if (is_stru && bitsin) m_stag(struat)->staglen+=2;
 						bitsin=wvalue;
 						}
 					else bitsin+=wvalue;
@@ -1127,7 +1128,7 @@ gotSTAG:
 				if (addvar(0) == 0) {
 					/* allow stags in unions	*/
 					if (!is_stru && addtype == &stagat) {
-						sesize=stagat.stat->staglen;
+						sesize=m_stag(stagat.stat)->staglen;
 						if (sesize == 0) error("undefined structure");
 						goto got_size;
 						}
@@ -1135,7 +1136,7 @@ gotSTAG:
 					return struat;
 					}
 				addparm=0;
-				((void *)memchain)->nchain=addat;
+				m_operand(memchain)->nchain=addat;
 				memchain=addat;
 				if (ifch(':')) {
 					if (heir != CONSTANT || wvalue > 16 || wvalue == 0) {
@@ -1143,36 +1144,36 @@ gotSTAG:
 						return struat;
 						}
 					if (wvalue+bitsin > 16) {
-						if (is_stru) struat->staglen+=2;
+						if (is_stru) m_stag(struat)->staglen+=2;
 						bitsin=0;
 						}
 					addtype=BITS+(wvalue-1)*16+bitsin;
 					bitsin+=wvalue;
-					if (is_stru) addat->noff=struat->staglen;
-					else addat->noff=0;
-					addloc=&addat->ntype[0];	/* forget real type */
+					if (is_stru) m_operand(addat)->noff=m_stag(struat)->staglen;
+					else m_operand(addat)->noff=0;
+					addloc=&m_operand(addat)->ntype[0];	/* forget real type */
 					atype(addtype);
 					tokit();
 					}
 				else {
 					if (bitsin) {
-						if (is_stru) struat->staglen+=2;
+						if (is_stru) m_stag(struat)->staglen+=2;
 						bitsin=0;
 						}
 					atype(addtype);
 #if CHECK
 					if (copt) {
-						objtype(OMTYPE,is_stru ? struat->staglen: 0);
+						objtype(OMTYPE,is_stru ? m_stag(struat)->staglen: 0);
 						}
 #endif
-					sesize=dsize(&addat->ntype[0]);
+					sesize=dsize(&m_operand(addat)->ntype[0]);
 got_size:			if (is_stru) {
-						addat->noff=struat->staglen;
-						struat->staglen+=sesize;
+						m_operand(addat)->noff=m_stag(struat)->staglen;
+						m_stag(struat)->staglen+=sesize;
 						}
 					else {
-						if (sesize > struat->staglen) struat->staglen=sesize;
-						addat->noff=0;
+						if (sesize > m_stag(struat)->staglen) m_stag(struat)->staglen=sesize;
+						m_operand(addat)->noff=0;
 						}
 					}
 				addtype=real_type;
@@ -1181,7 +1182,7 @@ got_size:			if (is_stru) {
 			notch(';');
 			}
 		while (! ifch('}'));
-		if (bitsin && is_stru) struat->staglen+=2;
+		if (bitsin && is_stru) m_stag(struat)->staglen+=2;
 		}
 	return struat;
 	}
@@ -1210,9 +1211,9 @@ newenum() {
 			defat=nameat;
 			tokit();
 			if (ifch('=')) enumnum=constexp();
-			defat->defcl=DEFINED;
-			defat->dargs=255;
-			defat=&defat->dval;
+			m_defined(defat)->defcl=DEFINED;
+			m_defined(defat)->dargs=255;
+			defat=&m_defined(defat)->dval;
 			*defat++=DEFSTR;
 			/*	add number of the enum	*/
 			num=enumnum++;

@@ -16,6 +16,8 @@
 /*	TYPES GO INTO THE DTYP FIELD OF NODES THAT NEED A TYPE */
 
 
+#define char        unsigned char
+
 #define CCHAR		1
 #define CINT		2
 #define CUNSG		3

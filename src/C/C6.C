@@ -24,8 +24,9 @@ tokit() {
 		while (tokone());
 	}
 
-strngcpy(char *cp, char qs){
+strngcpy(char *cp, int qs){
 
+	OS("NESTED++ called"); //FIXME
 	whitesp();
 	nestfrom[nested++]=cur;
 	cur=macfrom[nested]=macxp;
@@ -57,7 +58,7 @@ builtinMac(){
 
 
 tokone() {
-	char macOK;
+	int macOK;
 
 	tokat=cur;
 	if(!(macOK = ((curch=*cur++) != '$')))
@@ -226,7 +227,7 @@ tokone() {
 /*	if reserved, set bvalue to rvalue. */
 
 
-find(char macOK) {
+find(int macOK) {
 	cur--;
 	i=hashno=0;
 	while ((ltype[*cur] <= DIGIT) && i < 31) {
@@ -244,7 +245,7 @@ find(char macOK) {
 	search(macOK);
 	}
 
-search(char macOK) {
+search(int macOK) {
 
 	if(macOK) {
 		bptr=machash[hashno];
@@ -278,7 +279,7 @@ recur:
 			nameat=wp;
 			nameat+=i+3;
 			heir=*nameat;
-			if (heir == RESERVED) bvalue=nameat->rvalue;
+			if (heir == RESERVED) bvalue=m_reserved(nameat)->rvalue;
 			return;
 			}
 		bptr=*wp;
@@ -299,10 +300,10 @@ newname() {
 		*nameat++=string[j++];
 	while (j <= i);
 	heir=UNDEF;
-	nameat->opcl=OPERAND;
-	nameat->nchain=0;
-	nameat->nlen=i+1;
-	nameat->ntype[0]=CINT;
+	m_operand(nameat)->opcl=OPERAND;
+	m_operand(nameat)->nchain=0;
+	m_operand(nameat)->nlen=i+1;
+	m_operand(nameat)->ntype[0]=CINT;
 	}
 
 opeq(val)
@@ -358,7 +359,7 @@ addnest() {
 	narg=inquote=plevel=0;
 
 /*	dargs of 255 means none. 0 means need empty parens. more is count.	*/
-	if (defat->dargs != 255) {
+	if (m_defined(defat)->dargs != 255) {
 		whitesp();
 		if(cur > argstk) {
 			curch = *cur++;
@@ -387,10 +388,10 @@ addnest() {
 			}
 		if (*cur == ')') {	/* empty arg case	*/
 			tokit();
-			if(defat->dval == DEFEND)
+			if(m_defined(defat)->dval == DEFEND)
 				return;
 			}
-		else if(defat->dval == DEFEND) {
+		else if(m_defined(defat)->dval == DEFEND) {
 			skipa();
 			return;
 			}
@@ -443,13 +444,14 @@ setarg:				if (++narg == MAXNEST) {
 				if(ltype[*cur]==SPACE) *sp++=' ';
 				}
 			}
-xpand:	if (narg != defat->dargs) {
+xpand:	if (narg != m_defined(defat)->dargs) {
 			error("wrong number of arguments");
 			return;
 			}
 		}
-	if(defat->dval == DEFEND)
+	if(m_defined(defat)->dval == DEFEND)
 		return;
+error("No define nesting for now"); //FIXME
 	_setsp(ap-1);
 	nestfrom[nested]=cur;
 	if (nested+1 >= MAXNEST) { 
@@ -461,7 +463,7 @@ xpand:	if (narg != defat->dargs) {
 #ifdef MacHiWater
 	if(nested > maxNest) maxNest=nested;
 #endif
-	defstr=&defat->dval;
+	defstr=&m_defined(defat)->dval;
 	*macxp++=LF;
 	macname[nested]=mname;
 	while ((curch=*defstr) != DEFEND) {
@@ -734,18 +736,18 @@ whitesp() {
 	while (1) {
 		if (ltype[*cur] == SPACE)
 			cur++;
-		else if (*cur == '/' && (cur+1)->byte == '/') {
+		else if (*cur == '/' && WORD(cur+1)->byte == '/') {
 			cur=lineEnd-1;
 			dolf(1);
 			}
-		else if (*cur == '/' && (cur+1)->byte == '*') {
+		else if (*cur == '/' && WORD(cur+1)->byte == '*') {
 			cur+=2;
 			while(1) {
 				ch=*cur;
 				while (ch != LF && ch != '*' && ch != 26)
 					ch=*++cur;
 				if (ch == LF) dolf(1);
-				else if (ch == 26) {
+				else if (ch == 26) {    //FIXME
 					cur--;
 					ltoa((long)bline, &eoferr[37], 10);
 					error(eoferr);

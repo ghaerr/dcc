@@ -96,7 +96,7 @@ warning(str)
 	nwarn++;
 	}
 
-typeof(ptr)
+xtypeof(ptr)
 	char *ptr; {
 	int  val;
 	if (*ptr == PTRTO && is_big == 0) val=CUNSG;
@@ -119,7 +119,7 @@ unsigned dsize(ptr)
 	else if (*ptr == CSTRUCT) {
 		wp=ptr+1;
 		wp=*wp;
-		tot=((void *)wp)->staglen;
+		tot=m_stag(wp)->staglen;
 		if (tot == 0) error("undefined structure");
 		}
 	else if (is_big && *ptr == PTRTO) tot=4;
@@ -162,6 +162,7 @@ see_hex(ptrptr)
 
 /*	SEE_CALL  --	SEE interface routine.	*/
 
+#if 0
 see_call(p1,p2,p3)
 	int p1,p2,p3; {
 #asm
@@ -172,12 +173,14 @@ see_call(p1,p2,p3)
 	push	word see_bp_
 #
 	}
+#endif
 
 /*	REAL_EXIT  --	do an exit or a return to SEE.	*/
 
 real_exit(cc)
 	int  cc; {
 
+#if 0
 	if (see_exit) {
 		see_call(2);
 		if (cc) {
@@ -185,6 +188,7 @@ real_exit(cc)
 			see_call(-1,see_msg,incnext ? lastline : cline);
 			}
 		}
+#endif
 	exit(cc);
 	}
 
@@ -204,15 +208,20 @@ dumpsym() {
 	char ch,*lastt;
 	int  num;
 
-	bptr=_memory();
+	bptr = mstart;
 	while (bptr < mfree) {
 		ohw(bptr);
 		oc(' ');
-		ohw(bptr->word);
+		ohw(WORD(bptr)->word);
 		oc(' ');
 		bptr+=2;
-		while (*bptr)
-			oc(*bptr++ & 0x7f);
+		while (*bptr) {
+			if (*bptr < ' ' || *bptr > 126) {
+				ohb(*bptr++);
+				oc(' ');
+			} else
+				oc(*bptr++ & 0x7f);
+		}
 		oc(' ');
 		lastt=++bptr;
 		switch (*bptr) {
@@ -222,44 +231,53 @@ dumpsym() {
 							break;
 			case STREF:
 			case STAG:		os("STAG ");
-							ohw(bptr->schain);
+							ohw(m_stag(bptr)->schain);
 							oc(' ');
-							onum(bptr->staglen);
+							onum(m_stag(bptr)->staglen);
 							bptr+=5;
 							break;
 			case DEFINED:	os("DEFINED ");
-							bptr+=2;
+							ohw(m_defined(bptr)->dchain);
+							oc(' ');
+							onum(m_defined(bptr)->dnlen);
+							oc(' ');
+							onum(m_defined(bptr)->dargs);
+							oc(' ');
+							bptr+=5;
 							while (*bptr != DEFEND) {
 								if (*bptr != DEFSTR) {
-									oc(' ');
 									onum(*bptr++);
 									oc(' ');
 									}
 								else {
 									bptr++;
+									oc('\'');
 									do
 										if (*bptr >= ' ') oc(*bptr);
 									while (*bptr++ != LF);
+									oc('\'');
 									}
 								}
 							bptr++;
 							break;
 			case OPERAND:	os("OPERAND ");
-							ohw(bptr->nchain);
+							ohw(m_operand(bptr)->nchain);
 							oc(' ');
-							onum(bptr->nlen);
+							onum(m_operand(bptr)->nlen);
 							oc(' ');
-							onum(bptr->nstor);
+							onum(m_operand(bptr)->nstor);
 							oc(' ');
-							onum(bptr->noff);
+							onum(m_operand(bptr)->noff);
 							bptr+=7;
 							listtype();
 							break;
-			default:		os("Mystery Symbol ");
-							ohw(bptr->word);
+			default:		os("Mystery Symbol (");
+							ohb(*bptr);
+							os(") ");
+							ohw(WORD(bptr)->word);
 			}
 		ocrlf();
-		if (bptr->word == 0xffff) bptr=lastt+18;
+		if (WORD(bptr)->word == 0xffff) bptr=lastt+18;
 		}
 
 	os("Normal End");
@@ -290,13 +308,13 @@ listtype() {
 			case CLABEL:	os("CLABEL");
 							break;
 			case CSTRUCT:	os("CSTRUCT ");
-							ohw(bptr->word);
+							ohw(WORD(bptr)->word);
 							bptr+=2;
 							break;
 			case FUNCTION:	os("FUNCTION");
 							break;
 			case ARRAY:		os("ARRAY ");
-							onum(bptr->word);
+							onum(WORD(bptr)->word);
 							bptr+=2;
 							break;
 			case PTRTO:		os("PTRTO");
@@ -315,10 +333,13 @@ listtype() {
 oc(ch)
 	char ch; {
 
+#if 0
 	if (see_exit) {
 		if (see_index < 78 && ch != '\n') see_msg[see_index++]=ch;
 		}
 	else putchar(ch);
+#endif
+	write(1, &ch, 1);
 	}
 
 os(str)
@@ -336,7 +357,7 @@ onum(num)
 	oc(num % 10 +'0');
 	}
 
-obnum(bnum)
+obnum(bnum)         //FIXME same as onum
 	char bnum; {
 	int  num;
 	onum(num=bnum);
@@ -347,13 +368,13 @@ ohb(bnum)
 	char temp;
 	temp=bnum;
 	temp>>=4;
-	oc(temp >= 10 ? temp+'7' : temp+'0');
+	oc(temp >= 10 ? temp+'A'-10 : temp+'0');
 	bnum&=15;
-	oc(bnum >= 10 ? bnum+'7' : bnum+'0');
+	oc(bnum >= 10 ? bnum+'A'-10 : bnum+'0');
 	}
 
 ohw(num)
-	int  num; {
+	unsigned int  num; {
 	ohb(num>>8);
 	ohb(num);
 	}
@@ -456,7 +477,7 @@ tree5(branch)
 	}
 
 treev(num,branch)
-	int  branch[],num; {
+	int  num,branch[]; {
 	int  at;
 	char i;
 	at=ntree;
@@ -512,15 +533,15 @@ objtype(otype,num)
 	char *bp,shorter,ttyp,*sptr,*bptr;
 
 	/*	must say if in data or code for statics	*/
-	if (addat->ntype[0] == FUNCTION) {
+	if (m_operand(addat)->ntype[0] == FUNCTION) {
 		if (last_seg != OCSEG) objb(last_seg=OCSEG);
 		}
 	else if (last_seg != ODSEG) objb(last_seg=ODSEG);
 	objb(otype);
-	bp=addat-addat->nlen;
+	bp=addat-m_operand(addat)->nlen;
 	if (otype != OPTYPE) objs(bp);
 	else {
-		if (addat->nstor == SSTATIC && funname) {
+		if (m_operand(addat)->nstor == SSTATIC && funname) {
 			bptr=funname;
 			while (*bptr) objb(*bptr++);
 			objb('_');
@@ -534,7 +555,7 @@ objtype(otype,num)
 /*	get the length of the type info and output first	*/
 
 	len=1;
-	bp=addat->ntype;
+	bp=m_operand(addat)->ntype;
 	shorter=0;
 	while (*bp >= FUNCTION) {
 		if (len >= 9) {
@@ -552,7 +573,7 @@ objtype(otype,num)
 		len+=2;
 		}
 	objb(len+shorter);
-	bp=addat->ntype;
+	bp=m_operand(addat)->ntype;
 	while (len--) {
 		objb(ttyp=*bp++);
 		if (ttyp == ARRAY) {
@@ -561,9 +582,9 @@ objtype(otype,num)
 			len-=2;
 			}
 		if (ttyp == CSTRUCT) {
-			sptr=bp->word;
+			sptr=WORD(bp)->word;
 			bp+=2;
-			objw(sptr->staglen);
+			objw(m_stag(sptr)->staglen);
 			len-=2;
 			}
 		}
