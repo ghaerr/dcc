@@ -15,9 +15,16 @@
  */
 /*	ASM88.H		include file for ASM88	*/
 
+/* --- ELKS changes --- */
+#define char        unsigned char
+#define HEAP        10000
+char *mstart;
+#define _setmem(addr,count,byte)    memset(addr,byte,count)
+/* ------------------- */
+
 #define DEBUG	0
-#define	X8087	1
-#define CHECK	1
+#define	X8087	0       /* FIXME was 1 */
+#define CHECK	0       /* FIXME was 1 */
 #define LIMITED	0
 
 /*	data types	*/
@@ -138,7 +145,8 @@ ILLV								illegal.
 
 /*	symbol table element classification	*/
 
-struct	{char sheir; char sclass; char svalue; char stype; int snum;};
+struct	st_sym {char sheir; char sclass; char svalue; char stype; int snum;};
+#define m_sym(v)	((struct st_sym *)(v))
 
 #define MNUM		1	/* mnumonic. sclass is type, svalue is element */
 #define FMNUM		2	/* floating mnumonic. same as MNUM. */
@@ -206,10 +214,12 @@ char *freem,*memend,*memover;
 unsigned util,listnum,curcol;
 extern unsigned maxcol,maxrow,currow,line_ordinal;
 
-struct {char regis; char rmwas; char rmis;};
+struct st_reg {char regis; char rmwas; char rmis;};
+#define m_reg(v)	((struct st_reg *)(v))
 char rmto[36];
 
-union {int word; char byte;};
+union un_word {int word; char byte;};
+#define WORD(v)		((union un_word *)(v))
 
 char Xflag;		/* 186/v20 flag */
 #define	X186	0x01	/* 186 opcodes allowed */

@@ -27,8 +27,8 @@ dofinst() {
 	int  vleft[6],vright[6];
 	char type,class;
 
-	type=wvalue->svalue;
-	class=wvalue->sclass;
+	type=m_sym(wvalue)->svalue;
+	class=m_sym(wvalue)->sclass;
 	tokit();
 
 	vleft[VIS]=vright[VIS]=ILLV;
@@ -427,7 +427,7 @@ ldoline() {
 	if (curch == CONTZ) return;
 	nest_cur=0;		/* chop off any equates	*/
 	if (heir == RESERVED) {
-		switch (wvalue->sclass) {
+		switch (m_sym(wvalue)->sclass) {
 			case RDSEG:		curseg=0;
 							break;
 			case RCSEG:		curseg=1;

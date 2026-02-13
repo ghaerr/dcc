@@ -128,8 +128,10 @@ init(argc,argv)
 		}
 	not_done=1;
 	errline=-1;
-	freem=_memory();
-	memend=_showsp()-512;
+	//freem=_memory();
+	//memend=_showsp()-512;
+	mstart=freem=sbrk(HEAP);    //FIXME needs dynamic grow heap to max function
+	memend=freem+HEAP;
 	curseg=ODSEG;				/* first stuff is in DSEG */
 	inpipe=pipe;				/* pipe is empty */
 	codeat=0;					/* points to code fragment (if last)in pipe*/
@@ -242,7 +244,7 @@ init(argc,argv)
 	while (name[i] && name[i] != '.') {
 		i++;
 		}
-	if (name[i] == 0 && killopt == 0) strcat(name,".A");
+	if (name[i] == 0 && killopt == 0) strcat(name,".a");
 	if ((infile=open(name,0)) == -1) {
 		os("cannot open ");
 		ferror(name);
@@ -263,7 +265,7 @@ init(argc,argv)
 		}
 
 	objname[i]='.';
-	objname[i+1]='O';
+	objname[i+1]='o';
 	objname[i+2]=0;
 
 	if (lopt) {
@@ -274,14 +276,14 @@ init(argc,argv)
 				i++;
 				}
 			outname[i]='.';
-			outname[i+1]='L';
+			outname[i+1]='l';
 			outname[i+2]=0;
 			}
 		strcpy(lstname,tempname);
 		i=0;
 		while (lstname[++i]) ;
 		lstname[i-1]='5';
-		if ((lst=creat(lstname)) == -1) {
+		if ((lst=creat(lstname, 0666)) == -1) {
 			os("cannot create ");
 			ferror(lstname);
 			}
@@ -305,7 +307,7 @@ init(argc,argv)
 		strcat(nextpgm,objname);
 		strcpy(objname,tempname6);
 		}
-	if ((obj=creat(objname)) == -1) {
+	if ((obj=creat(objname, 0666)) == -1) {
 		os("cannot create ");
 		ferror(objname);
 		}
@@ -484,10 +486,12 @@ endit() {
 #if LIMITED
 	puts("\n");
 #endif
+#if 0
 	if (nerr == 0 && mopt) {
 		if (nextpgm[0] != 'Z') _chain(nextpgm);	/* execute toobj	*/
 		else _chain(&nextpgm[2]);
 		}
+#endif
 	exit(nerr ? 2:zflag ? 1:0);
 	}
 
@@ -502,25 +506,25 @@ doline() {
 	labat=0;
 	while (heir == NAME) {
 		labat=wvalue;
-		if ((labat->sclass)&1) error("duplicate label");
-		if (copt && (wvalue->sclass & 0x80) == 0) {
+		if ((m_sym(labat)->sclass)&1) error("duplicate label");
+		if (copt && (m_sym(wvalue)->sclass & 0x80) == 0) {
 			if (string[0] != '_' || (string[1] != 'L' && string[1] != '_')) {
 				objb(OSTATIC);
 				objs(string);
-				objw(labat->snum);
+				objw(m_sym(labat)->snum);
 				}
 			}
-		labat->sclass|=1;
-		if (labat->svalue != curseg)
+		m_sym(labat)->sclass|=1;
+		if (m_sym(labat)->svalue != curseg)
 			error("label in wrong segment");
 		tokit();
 		if (curch == ':') {
 			tokit();
-			if (heir != RESERVED || (wvalue->sclass < REQU ||
-			wvalue->sclass > RDQ)) 	label(labat->snum);
+			if (heir != RESERVED || (m_sym(wvalue)->sclass < REQU ||
+			m_sym(wvalue)->sclass > RDQ)) 	label(m_sym(labat)->snum);
 			}
-		else if (heir != RESERVED || (wvalue->sclass < REQU ||
-			wvalue->sclass > RDQ)) 	error("missing ':'");
+		else if (heir != RESERVED || (m_sym(wvalue)->sclass < REQU ||
+			m_sym(wvalue)->sclass > RDQ)) 	error("missing ':'");
 		}
 
 	if (curch == LF || curch == CONTZ || curch == ';') {
@@ -535,7 +539,7 @@ got_pre:
 		else if (heir == FMNUM) dofinst();
 #endif
 		else if (heir == PREFIX) {
-			codeb(wvalue->svalue);
+			codeb(m_sym(wvalue)->svalue);
 			tokit();
 			goto got_pre;
 			}
@@ -590,7 +594,7 @@ dores(labat)
 	char *extat,saveseg,*ptr,ch;
 	int  vtype[6],i,want;
 
-	switch (wvalue->sclass) {
+	switch (m_sym(wvalue)->sclass) {
 		case RINCLUDE:	if (lopt) isinclude();
 						doinc();
 						break;
@@ -615,15 +619,15 @@ dores(labat)
 							else {
 								objb(OPUBLIC);
 								objs(string);
-								objw(wvalue->snum);
-								wvalue->sclass|=0x80;
+								objw(m_sym(wvalue)->snum);
+								m_sym(wvalue)->sclass|=0x80;
 								extat=wvalue;
 								tokit();
 								if (curch == ':') {
 									tokit();
-									if (heir == RESERVED && ( wvalue->sclass
-										>= RBYTE && wvalue->sclass <=RTBYTE))
-										extat->stype=wvalue->sclass-RBYTE+
+									if (heir == RESERVED && ( m_sym(wvalue)->sclass
+										>= RBYTE && m_sym(wvalue)->sclass <=RTBYTE))
+										m_sym(extat)->stype=m_sym(wvalue)->sclass-RBYTE+
 												CCHAR;
 									else error("type not correct");
 									tokit();
@@ -640,9 +644,9 @@ dores(labat)
 						if (vtype[VIS] != CONSTV)error("bad RB value");
 						if (curseg == OCSEG) error("RB must be in DSEG or ESEG");
 						if (labat) {
-							labat->stype=CCHAR;
+							m_sym(labat)->stype=CCHAR;
 							objb(ORESERVE);
-							objw(labat->snum);
+							objw(m_sym(labat)->snum);
 							objw(vtype[VVAL]);
 							offs[curseg == ODSEG ? 2: 4]+=vtype[VVAL];
 							}
@@ -653,16 +657,16 @@ dores(labat)
 						if (vtype[VIS] != CONSTV)error("bad RW value");
 						if (curseg == OCSEG) error("RW must be in DSEG or ESEG");
 						if (labat) {
-							labat->stype=CINT;
+							m_sym(labat)->stype=CINT;
 							objb(ORESERVE);
-							objw(labat->snum);
+							objw(m_sym(labat)->snum);
 							vtype[VVAL]+=vtype[VVAL];
 							objw(vtype[VVAL]);
 							offs[curseg == ODSEG ? 2: 4]+=vtype[VVAL];
 							}
 						else error("RW must have label");
 						break;
-		case RDB:		if (labat) label(labat->snum);
+		case RDB:		if (labat) label(m_sym(labat)->snum);
 						do {
 							tokit();
 							if (heir == SSTRING) {
@@ -680,10 +684,10 @@ dores(labat)
 							}
 						while (curch == ',');
 						if (labat) {
-							labat->stype=CCHAR;
+							m_sym(labat)->stype=CCHAR;
 							}
 						break;
-		case RDW:		if (labat) label(labat->snum);
+		case RDW:		if (labat) label(m_sym(labat)->snum);
 						saveseg=curseg; /* make labels default to CSEG */
 						curseg=OCSEG;
 						tokit();
@@ -702,10 +706,10 @@ dores(labat)
 						while(ifch(','));
 						curseg=saveseg;
 						if (labat) {
-							labat->stype=CINT;
+							m_sym(labat)->stype=CINT;
 							}
 						break;
-		case RDD:		if (labat) label(labat->snum);
+		case RDD:		if (labat) label(m_sym(labat)->snum);
 						saveseg=curseg; /* make labels default to CSEG */
 						curseg=OCSEG;
 						do {
@@ -749,11 +753,11 @@ ishex:							tokit();
 						curseg=saveseg;
 
 						if (labat) {
-							labat->stype=CLONG;
+							m_sym(labat)->stype=CLONG;
 							}
 						break;
 #if X8087
-		case RDQ:		if (labat) label(labat->snum);
+		case RDQ:		if (labat) label(m_sym(labat)->snum);
 						do {
 							cur+=_finput(cur,&floater,30);
 							for (i=0; i < 4; i++)
@@ -764,7 +768,7 @@ ishex:							tokit();
 						while (curch == ',');
 
 						if (labat) {
-							labat->stype=CQWORD;
+							m_sym(labat)->stype=CQWORD;
 							}
 						break;
 #endif
@@ -887,9 +891,9 @@ dumpsym() {
 	int  val,name;
 	char found;
 
-	bptr=_memory();
+	bptr=mstart;
 	while (bptr < freem) {
-		val=bptr->word;
+		val=WORD(bptr)->word;
 		bptr+=2;
 		if (sopt) {
 			ohw(bptr-2);
@@ -939,17 +943,17 @@ dumpsym() {
 							bptr++;
 							break;
 			case NAME:		bptr--;
-							if (bptr->sclass == 0) {
+							if (m_sym(bptr)->sclass == 0) {
 								os("undefined variable - ");
 								os(name);
 								nerr++;
 								ocrlf();
 								}
 							if (sopt) {
-								obnum(bptr->sclass);
-								obnum(bptr->svalue);
-								obnum(bptr->stype);
-								onum(bptr->snum);
+								obnum(m_sym(bptr)->sclass);
+								obnum(m_sym(bptr)->svalue);
+								obnum(m_sym(bptr)->stype);
+								onum(m_sym(bptr)->snum);
 								}
 							bptr+=8;
 							break;

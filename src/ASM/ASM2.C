@@ -28,8 +28,8 @@ doinst() {
 	int  vleft[6],vright[6];
 	char type,class;
 
-	type=wvalue->svalue;
-	class=wvalue->sclass;
+	type=m_sym(wvalue)->svalue;
+	class=m_sym(wvalue)->sclass;
 	tokit();
 
 	switch(class) {
@@ -475,7 +475,7 @@ outtype(vleft,vright)
 
 	if (vright[VIS] == REGV && vright[VVAL] == AX) {
 		if (vleft[VIS] == REGV && vleft[VVAL] == DX && realtype(vleft) == CINT) {
-			codeb(0xee-1+realtype(vright));
+			codeb(0xee - 1+realtype(vright));
 			}
 		else if (vleft[VIS] == CONSTV && (vleft[VVAL] & 0xff00) == 0) {
 			codeb(0xe6-1+realtype(vright));

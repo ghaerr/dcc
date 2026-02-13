@@ -27,8 +27,8 @@ one(vtype)					/* operater is conditional (? :) */
 /* short circuit if only a register	*/
 	if (heir == REG) {
 		vtype[VIS]=REGV;
-		vtype[VT]=wvalue->sclass;
-		vtype[VVAL]=wvalue->svalue;
+		vtype[VT]=m_sym(wvalue)->sclass;
+		vtype[VVAL]=m_sym(wvalue)->svalue;
 		tokit();
 		return;
 		}
@@ -207,7 +207,7 @@ union {long llong; } *ll;
 heir24(vtype) 				/* operator is prefix (& - ! not) */
 	int vtype[]; {
 
-	if (heir == RESERVED && wvalue->sclass == RSEG) {
+	if (heir == RESERVED && m_sym(wvalue)->sclass == RSEG) {
 		tokit();
 		heir24(vtype);
 		if (vtype[VIS] != VARV) badexp();
@@ -216,7 +216,7 @@ heir24(vtype) 				/* operator is prefix (& - ! not) */
 		return;
 		}
 							/* accept either OFFSET or & */
-	if (heir == RESERVED && wvalue->sclass == ROFFSET) {
+	if (heir == RESERVED && m_sym(wvalue)->sclass == ROFFSET) {
 		curch='&';
 		heir=18;
 		}
@@ -278,7 +278,7 @@ heir26(vtype)				/* operand or constant or string */
 		return;
 		}
 	switch (heir) {
-		case RESERVED:	borw=wvalue->sclass;
+		case RESERVED:	borw=m_sym(wvalue)->sclass;
 						if ((borw >= RBYTE && borw <= RTBYTE) ||
 							borw == ROFFSET) {
 							tokit();
@@ -319,7 +319,7 @@ heir26(vtype)				/* operand or constant or string */
 						vtype[VT]=CINT;
 						tokit();
 						break;
-		case SEGREG:	sr=wvalue->sclass;
+		case SEGREG:	sr=m_sym(wvalue)->sclass;
 						tokit();
 						if (ifch(':')) {
 							heir26(vtype);
@@ -334,16 +334,16 @@ heir26(vtype)				/* operand or constant or string */
 							break;
 							}
 		case REG:		vtype[VIS]=REGV;
-						vtype[VT]=wvalue->sclass;
-						vtype[VVAL]=wvalue->svalue;
+						vtype[VT]=m_sym(wvalue)->sclass;
+						vtype[VVAL]=m_sym(wvalue)->svalue;
 						tokit();
 						break;
 		case NAME:		vtype[VIS]=VARV;
 						vtype[VVAL]=8;
-						vtype[VNAME]=wvalue->snum;
+						vtype[VNAME]=m_sym(wvalue)->snum;
 						vtype[VOFF]=0;
-						vtype[VT]=wvalue->stype;
-						vtype[VSEG]=wvalue->svalue == OCSEG ? 1:3;
+						vtype[VT]=m_sym(wvalue)->stype;
+						vtype[VSEG]=m_sym(wvalue)->svalue == OCSEG ? 1:3;
 						tokit();
 						plusaddr(vtype);
 						break;
@@ -385,8 +385,8 @@ plusone(vtype)
 			i=vplus[VVAL];
 			bptr=rmto;
 			for (j=0; j < 12; j++) {
-				if (bptr->regis == i && bptr->rmwas == vtype[VVAL]) {
-					vtype[VVAL]=bptr->rmis;
+				if (m_reg(bptr)->regis == i && m_reg(bptr)->rmwas == vtype[VVAL]) {
+					vtype[VVAL]=m_reg(bptr)->rmis;
 					break;
 					}
 				bptr+=3;

@@ -174,17 +174,17 @@ find() {
 	do
 		*wvalue++=string[j++];
 	while (j <= i);
-	heir=wvalue->sheir=NAME;
-	wvalue->sclass=0;
-	wvalue->svalue=curseg;
-	wvalue->stype=CLABEL;
+	heir=m_sym(wvalue)->sheir=NAME;
+	m_sym(wvalue)->sclass=0;
+	m_sym(wvalue)->svalue=curseg;
+	m_sym(wvalue)->stype=CLABEL;
 	if (string[0] == '_' && string[1] == 'L' && string[2] >= '0' &&
 		string[2] <= '9') {
-		wvalue->snum=++line_ordinal;
+		m_sym(wvalue)->snum=++line_ordinal;
 		if (line_ordinal >= 2000) ferror("too many labels");
 		}
 	else {
-		wvalue->snum=++ordinal;
+		m_sym(wvalue)->snum=++ordinal;
 		if (ordinal >= 1000) ferror("too many labels");
 		}
 	if ((freem=wvalue+8) >= memend) {
@@ -239,8 +239,8 @@ number() {
 
 	i=wvalue=hiword=0;
 	while (ltype[*cur] == DIGIT) {
-		wvalue<<=1;
-		wvalue+=(wvalue<<2)+*cur++-'0';
+        wvalue = (unsigned)wvalue << 1; //FIXME was wvalue<<=1
+		wvalue+=((unsigned)wvalue<<2)+*cur++-'0';
 		i++;
 		}
 	if (ltype[*cur] != LETTER && i <= 4 && *cur !='.') return;
@@ -303,7 +303,8 @@ error(str)
 
 oc(ch)
 	char ch; {
-	putchar(ch);
+    write(1,&ch,1);
+	//putchar(ch);  //FIXME
 	}
 
 os(str)
@@ -385,7 +386,7 @@ flush(eoseg)
 			case OLNAMEREL:	inpipe+=2;
 							break;
 			case OLOCAL:	if (nextlab < 160) {
-								labels[nextlab]=inpipe->word;
+								labels[nextlab]=WORD(inpipe)->word;
 								laboff[nextlab++]=offsett;
 								}
 							inpipe+=2;
@@ -425,7 +426,7 @@ flush(eoseg)
 							inpipe+=2;
 							break;
 			case OJUMP:		jtype=*inpipe;
-							want=(inpipe+1)->word;
+							want=WORD(inpipe+1)->word;
 							if (jtype <= 20) {
 								for (i=0; i < nextlab; i++) {
 									if (want == labels[i]) {
@@ -476,19 +477,19 @@ endpipe2:;	}
 			case OSEGPTR:
 			case OLNAMEREL:
 							dummyb(*(inpipe-1));
-							dummyw(inpipe->word);
+							dummyw(WORD(inpipe)->word);
 							dummyat=0;
 							inpipe+=2;
 							break;
 			case OLOCAL:	if (laboff[mlab++] != offsett)
 							  ferror("internal error in jump optimization");
 							objb(OLOCAL);
-							objw(inpipe->word);
+							objw(WORD(inpipe)->word);
 							inpipe+=2;
 							objw(offsett+offs[curseg-ODSEG]);
 							break;
 			case OJUMP:		jtype=*inpipe++;
-							want=inpipe->word;
+							want=WORD(inpipe)->word;
 							inpipe+=2;
 							if ((jtype & 0x80) == 0) {
 								ldummyb(shortj[jtype]);
@@ -530,7 +531,7 @@ endpipe2:;	}
 							break;
 
 			case OLINE:		dummyb(OLINE);
-							dummyw(inpipe->word);
+							dummyw(WORD(inpipe)->word);
 							inpipe+=2;
 							dummyat=0;
 							break;
@@ -653,7 +654,7 @@ fixup(type, num)
 	if (num) {
 		codeat=0;
 		*inpipe++=type;
-		inpipe->word=num;
+		WORD(inpipe)->word=num;
 		inpipe+=2;
 		}
 	}
@@ -663,7 +664,7 @@ label(num)
 
 	codeat=0;
 	*inpipe++=OLOCAL;
-	inpipe->word=num;
+	WORD(inpipe)->word=num;
 	inpipe+=2;
 	}
 
@@ -674,7 +675,7 @@ jump(jnum,num)
 	codeat=0;
 	*inpipe++=OJUMP;
 	*inpipe++=jnum;
-	inpipe->word=num;
+	WORD(inpipe)->word=num;
 	inpipe+=2;
 	}
 
@@ -701,7 +702,7 @@ linenum(num)
 
 	codeat=0;
 	*inpipe++=OLINE;
-	inpipe->word=num;
+	WORD(inpipe)->word=num;
 	inpipe+=2;
 	}
 
@@ -734,7 +735,7 @@ codew(wrd)
 		*inpipe++=128;
 		}
 	(*codeat)+=2;
-	inpipe->word=wrd;
+	WORD(inpipe)->word=wrd;
 	inpipe+=2;
 	}
 
