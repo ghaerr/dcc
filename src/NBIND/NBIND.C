@@ -18,6 +18,33 @@
  */
 /*	BIND.C		binder for ASM88 and C88	*/
 
+/* --- ELKS changes --- */
+#define char        unsigned char
+#define HEAP        10000
+
+#define _setmem(addr,count,byte)    memset(addr,byte,count)
+#define _move(num,from,to)          memmove((char *)(to), (char *)(from), num)
+ 
+void __far *fmemalloc(unsigned long size);
+void __far *fmemstart;
+
+void __far *fmemcpy(void __far *dst, void __far *src, unsigned n);
+char __far *fstrcpy(char __far *dst, char __far *src);
+int         fstrncmp(char __far *d, char __far *s, unsigned n);
+
+#define _showds()       (FP_SEG(inbuf))
+#define FP_SEG(fp)       ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
+#define FP_OFF(fp)       ((unsigned)(unsigned long)(void __far *)(fp))
+#define MK_FP(seg,off)   ((void __far *)((((unsigned long)(seg)) << 16) | \
+                                           ((unsigned int)(off))))
+#define _lmov(count, from_offset, from_segment, to_offset, to_segment)          \
+    fmemcpy(MK_FP(to_segment,to_offset), MK_FP(from_segment,from_offset), count)
+#define _lcpy(doff, dseg, soff, sseg)    fstrcpy(MK_FP(dseg,doff), MK_FP(sseg,soff))
+#define _lcmp(off1, seg1, off2, seg2, n) fstrncmp(MK_FP(seg1,off1), MK_FP(seg2,off2),n)
+#define _peek(off, seg)                  (*(char __far *)MK_FP(seg, off))
+#define _poke(val, off, seg)            ((*(char __far *)MK_FP(seg, off)) = (val))
+/* ------------------- */
+
 #define IBM		1			/*	true if creating BIND for MS-DOS	*/
 #define OVERLAY	1
 #define LIMITED	0
@@ -86,7 +113,8 @@ typedef	struct sym{
 
 Sym * hash[32];
 
-	union {int word; char byte; };
+	union un_word {int word; char byte; };
+    #define WORD(v)		((union un_word *)(v))
 
 	/*	header for overlays. at start of .OV file. followed by code,data
 		for each overlay except 0 (root).	*/
@@ -141,18 +169,23 @@ init(argc,argv)
 	char *argv[]; {
 	char *argat,*_memory();
 	int  nin,i,ffile;
-	char * _showds();
+	//char * _showds();
 
 #if	IBM==0
 	incode=&codebuf[128];
 	indata=&databuf[256];
 #endif
 
-	inext=memory=_memory();
-	memlast=_showsp()-512;
-	nseg = _showds() + 0x1000;
+	inext=memory=sbrk(HEAP);
+	//memlast=_showsp()-512;
+    memlast=memory+HEAP;
+	//nseg = _showds() + 0x1000;
+    fmemstart = fmemalloc(0x1000);
+    nseg = FP_SEG(fmemstart);
+    printf("fmemstart %04x:%04x, nseg %04x\n", fmemstart, nseg);
+
 	util=argc*3;
-	pname="CON:";
+	pname="CON:";   //FIXME
 	ovnum=0;
 
 /*	create a list fileat of pointers to arguments including arguments in
@@ -169,7 +202,7 @@ init(argc,argv)
 			close(ffile);
 
 			for (i=numab; i < numab+nin;i++) 	/* take care of control Z	*/
-				if (argbuf[i] == CONTZ) nin=i-numab;
+				if (argbuf[i] == CONTZ) nin=i-numab;    //FIXME
 			for (i=numab; i < numab+nin;) {
 				while (iswhite(argbuf[i]))
 					argbuf[i++]=0;	/* turn white space into zeros	*/
@@ -196,7 +229,7 @@ init(argc,argv)
 				case '@':	see_exit=1;
 							break;
 				case 'P':	if (*++argat) pname=argat;
-							if ((pfile=creat(pname)) == -1)
+							if ((pfile=creat(pname, 0666)) == -1)
 								ferror("cannot open ",pname);
 							break;
 				case 'A':	aopt=1;
@@ -250,14 +283,16 @@ init(argc,argv)
 			}
 		}
 	if (copt) {
-		if ((chkfile=creat(chkname)) == -1)
+		if ((chkfile=creat(chkname, 0666)) == -1)
 			ferror("cannot create",chkname);
 		chkat=chkbuf;
 		}
 /*	if MS-DOS V2.0 and no -L option, use path to find CSTDIO.S */
 #if IBM
+#if 0
 
 	if (_msdos2 && libname[6] == '.') findfile("CSTDIO.S",libname);
+#endif
 #endif
 
 	}
@@ -273,7 +308,7 @@ cmdname(name)
 		outname[i++]=*name++;
 		}
 #if	IBM
-	strcpy(&outname[i],".EXE");
+	strcpy(&outname[i],".exe");
 #else
 	strcpy(&outname[i],".CMD");
 #endif
@@ -334,7 +369,7 @@ nextpass(pass)
 		if (gotdot) {
 			inname[i]=0;
 			}
-		else strcpy(&inname[i],".O");
+		else strcpy(&inname[i],".o");
 
 		if (filen == 0) {
 			inin=inbuf;
@@ -433,9 +468,9 @@ pass1() {
 							break;
 			case OSTATIC:	find(3);
 							break;
-			case ORESERVE:	num=inin->word;
+			case ORESERVE:	num=WORD(inin)->word;
 							inin+=2;
-							len=inin->word;
+							len=WORD(inin)->word;
 							inin+=2;
 							if (labis[num] == LPUBLIC) {
 								sp=labat[num];
@@ -465,10 +500,10 @@ pass1() {
 								offs[2]+=len;
 								}
 							break;
-			case OLOCAL:	num=inin->word;
+			case OLOCAL:	num=WORD(inin)->word;
 							if (labis[num] == LPUBLIC) {
 								inin+=2;
-								len=inin->word;
+								len=WORD(inin)->word;
 								inin+=2;
 								if (num >= NUMLAB)
 									ferror("too many labels in ",inname);
@@ -489,7 +524,7 @@ pass1() {
 								}
 							else if (labis[num] == LTYPE) {
 								inin+=2;
-								len=inin->word;
+								len=WORD(inin)->word;
 								inin+=2;
 								sp=labat[num];
 								sp->eov=ovnum;
@@ -502,7 +537,7 @@ pass1() {
 			case OCSEG:		curseg=INCSEG;
 							break;
 			case ONAMEREL:
-			case OJUMPREL:	num=inin->word;
+			case OJUMPREL:	num=WORD(inin)->word;
 							inin+=2;
 							if (needed && labis[num] == LPUBLIC)
 								((Sym*)labat[num])->eused=1;
@@ -564,9 +599,9 @@ pass2() {
 								}
 							break;
 			case ORESERVE:	if (want) {
-								num=inin->word;
+								num=WORD(inin)->word;
 								inin+=2;
-								len=inin->word;
+								len=WORD(inin)->word;
 								inin+=2;
 								if (labis[num] == LOTHER) {
 									labat[num]=offs[3];
@@ -580,10 +615,10 @@ pass2() {
 								}
 							else inin+=4;
 							break;
-			case OLOCAL:	num=inin->word;
+			case OLOCAL:	num=WORD(inin)->word;
 							if (want) {
 								inin+=2;
-								len=inin->word;
+								len=WORD(inin)->word;
 								inin+=2;
 								if (labis[num] == LOTHER || labis[num] == LTYPE) {
 									labis[num]=LOTHER;
@@ -596,13 +631,13 @@ pass2() {
 							break;
 			case OCSEG:		curseg=INCSEG;
 							break;
-			case ONAMEREL:	fix=inin->word;
+			case ONAMEREL:	fix=WORD(inin)->word;
 							inin+=2;
 							if (want)
 							*fixat+=labis[fix] == LPUBLIC ? ((Sym*)labat[fix])->elen:
 								labat[fix];
 							break;
-			case OJUMPREL:	fix=inin->word;
+			case OJUMPREL:	fix=WORD(inin)->word;
 							inin+=2;
 							if (want)
 							*fixat+=(labis[fix] == LPUBLIC? ((Sym*)labat[fix])->elen:
@@ -625,7 +660,7 @@ pass2() {
 									chkb(toupper(*inin));
 									}
 								while (*inin++);
-								chkw(inin->word);
+								chkw(WORD(inin)->word);
 								inin+=2;
 								tlen=*inin;
 								do {
@@ -641,7 +676,7 @@ pass2() {
 							break;
 			case OLINE:		if (copt && want) {
 								chkb(OLINE);
-								chkw(inin->word);
+								chkw(WORD(inin)->word);
 								chkw(offs[curseg]);
 								chkb(0xcc);
 								outchk();
@@ -854,7 +889,7 @@ between() {
 	*next++=over_offs[0][0];
 	*next++=alldata-over_offs[0][0];
 	*next=ovbase;	
-	if ((outfile=creat(outname)) == -1)
+	if ((outfile=creat(outname, 0666)) == -1)
 		ferror("cannot create",outname);
 	thisout=outfile;
 	thisname=outname;
@@ -866,7 +901,7 @@ between() {
 			ovlen[i][2]=over_offs[i][2];
 			}
 		if (mopt == 0) {
-			if ((ovfile=creat(ovname)) == -1)
+			if ((ovfile=creat(ovname, 0666)) == -1)
 				ferror("cannot create",ovname);
 			if (write(ovfile,ovlen,sizeof(ovlen)) == -1)
 				ferror("cannot write",ovname);
@@ -1015,12 +1050,12 @@ printsym(nsym,syms)
 		if(maxover) {
 			if(sp->eov < 10) fputc( '0', pfile);
 			onum(sp->eov, pfile);
-			putc(' ',pfile);
+			fputc(' ',pfile);
 			}
 		if (sp->eseg == INDSEG) fputs("DS:",pfile);
 			else fputs("CS:",pfile);
 		oh(sp->elen);
-		putc(' ',pfile);
+		fputc(' ',pfile);
 		do
 			if (ch != '_' || _peek(n+1, nseg)) fputc(ch, pfile);
 		while (ch=_peek(++n, nseg));
@@ -1045,12 +1080,12 @@ printsym(nsym,syms)
 				}
 			if(sp->eov < 10) fputc( '0', pfile);
 			onum(sp->eov, pfile);
-			putc(' ',pfile);
+			fputc(' ',pfile);
 			}
 		if (sp->eseg == INDSEG) fputs("DS:",pfile);
 			else fputs("CS:",pfile);
 		oh(sp->elen);
-		putc(' ',pfile);
+		fputc(' ',pfile);
 		do 
 			if (ch != '_' || _peek(n+1, nseg)) fputc(ch, pfile);
 		while (ch=_peek(++n, nseg));
@@ -1149,7 +1184,7 @@ find(pass)
 	hashno&=31;
 	num=0;
 				/* get the variable number	*/
-	num=inin->word;
+	num=WORD(inin)->word;
 	inin+=2;
 
 	ssp=&hash[hashno];
@@ -1176,7 +1211,7 @@ find(pass)
 						fputs(name, 2);
 						fputs(" in ", 2);
 						fputs(inname, 2);
-						putchar('\n', 2);
+						fputc('\n', 2);
 						}
 					}
 				}
@@ -1441,7 +1476,7 @@ error(str1,str2)
 	fputs(inname, 2);
 	fputs(" - ", 2);
 	fputs(str1, 2);
-	putchar(' ', 2);
+	fputc(' ', 2);
 	fputs(str2, 2);
 	ocrlf();
 	nerr++;
@@ -1449,14 +1484,14 @@ error(str1,str2)
 
 ocrlf() {
 
-	putchar(10);
+	fputc(10, 2);     //FIXME
 	}
 
 ohn(ch)
 	char ch; {
 
 	ch=(ch&15)+'0';
-	putc(ch > '9' ? ch+7: ch,pfile);
+	fputc(ch > '9' ? ch+7: ch,pfile);
 	}
 
 oh(num)
@@ -1471,9 +1506,10 @@ oh(num)
 onum(nm, ffp)
 int nm, ffp; {
 	if (nm > 9) onum(nm/10, ffp);
-	putc(nm%10+'0', ffp);
+	fputc(nm%10+'0', ffp);
 	}
 
+#if 0
 #if IBM
 
 
@@ -1534,3 +1570,46 @@ findfile(filename, target_buf)
 	}
 
 #endif
+#endif
+
+/* --------- ELKS ---------- */
+
+fputs(char *str, int fd)
+{
+    return write(fd, str, strlen(str));
+}
+
+fputc(int c, int fd)
+{
+    write(fd, &c, 1);
+}
+
+void __far *fmemcpy(void __far *dst, void __far *src, unsigned n)
+{
+    char __far *s1 = dst;
+    char __far *s2 = src;
+
+    for( ; n > 0; n--)
+        *((char __far *)s1++) = *((char __far*)s2++);
+    return dst;
+}
+
+char __far *fstrcpy(char __far *dst, char __far *src)
+{
+    char __far *ret = dst;
+
+    while (*dst++ = *src++)
+        ;
+    return ret;
+}
+
+int fstrncmp(char __far *d, char __far *s, unsigned n)
+{
+#undef char
+    char c1 = 0, c2 = 0;
+    while (n-- > 0) {
+        if ((c1 = *d++) != (c2 = *s++) || c1 == '\0')
+            break;
+    }
+    return c1 - c2;
+}

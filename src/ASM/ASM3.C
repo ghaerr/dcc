@@ -372,7 +372,7 @@ linit() {
 
 /*	open the list output file. use obj and pipe for buffer	*/
 
-	if ((obj=creat(outname)) == -1) {
+	if ((obj=creat(outname, 0666)) == -1) {
 		puts("cannot create ");
 		ferror(outname);
 		}
