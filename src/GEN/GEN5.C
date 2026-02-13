@@ -19,6 +19,9 @@
 #include "NODES.H"
 #include "inst86.h"
 
+union un_cvt3 {double dbl; long lng;};
+#define CVT3(v)		((union un_cvt3 *)(v))
+
 genlab(lab)
 	int  lab; {
 	if (zopt) asm_label(lab);
@@ -129,13 +132,12 @@ forcemul(vtype)
 
 forcef(vtype)
 	int  vtype[]; {
-	union {double dbl; long lng;};
 
 	if (!floater(vtype)) {
 		if (vtype[VIS] == CONSTV) {
 			if (vtype[VT] == CLONG)
-				((char *)(&vtype[VVAL]))->dbl=((char *)(&vtype[VVAL]))->lng;
-			else ((char *)(&vtype[VVAL]))->dbl=vtype[VVAL];
+				CVT3((char *)(&vtype[VVAL]))->dbl=CVT3((char *)(&vtype[VVAL]))->lng;
+			else CVT3((char *)(&vtype[VVAL]))->dbl=vtype[VVAL];
 			vtype[VT]=CDOUBLE;
 			}
 		else loadf(vtype);
@@ -144,11 +146,10 @@ forcef(vtype)
 
 forceint(vtype)
 	int  vtype[]; {
-	union {double dbl; long lng;};
 
 	if (floater(vtype)) {
 		if (vtype[VIS] == CONSTV) {
-			((char *)(&vtype[VVAL]))->lng=((char *)(&vtype[VVAL]))->dbl;
+			CVT3((char *)(&vtype[VVAL]))->lng=CVT3((char *)(&vtype[VVAL]))->dbl;
 			vtype[VT]=CINT;
 			}
 		else {
@@ -282,12 +283,11 @@ forceacx(vtype,lnode)
 forcel(vtype)
 	int  vtype[]; {
 	int  reg2;
-	union {double dbl; long lng;};
 
 	if (floater(vtype)) {
 
 		if (vtype[VIS] == CONSTV) {
-			((char *)(&vtype[VVAL]))->lng=((char *)(&vtype[VVAL]))->dbl;
+			CVT3((char *)(&vtype[VVAL]))->lng=CVT3((char *)(&vtype[VVAL]))->dbl;
 			}
 		else {
 			loadf(vtype);
@@ -1159,10 +1159,12 @@ olow(reg)
 	os(reglow[reg]);
 	}
 
-ohigh(reg)
+#if 0
+ohigh(reg)      //FIXME not used
 	char reg; {
 	os(reghigh[reg]);
 	}
+#endif
 
 freev(vtype)
 	int  vtype[]; {

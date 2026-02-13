@@ -23,6 +23,10 @@
 
 /*	the ES,DS,CS,SS values are different in this module.	*/
 
+#undef ES
+#undef CS
+#undef SS
+#undef DS
 #define ES	0
 #define CS	1
 #define SS	2
@@ -461,7 +465,7 @@ asm_shift_1(type,vtype)
 
 /*	ASM_SHIFT_CL  --	shift by CL type instruction	*/
 
-asm_shift_CL(type,vtype)
+asm_shift_cl(type,vtype)
 	char type,vtype[]; {
 
 	if (zopt) {
@@ -737,7 +741,7 @@ asm_label(num)
 
 	codeat=0;
 	*inpipe++=OLOCAL;
-	inpipe->word=num;
+	WORD(inpipe)->word=num;
 	inpipe+=2;
 	asmext=0;
 	}
@@ -796,7 +800,7 @@ asm_line(lineno)
 	if (zopt) {
 		codeat=0;
 		*inpipe++=OLINE;
-		inpipe->word=lineno;
+		WORD(inpipe)->word=lineno;
 		inpipe+=2;
 		}
 	else {
@@ -1097,7 +1101,7 @@ fixup(type, num)
 	if (num) {
 		codeat=0;
 		*inpipe++=type;
-		inpipe->word=num;
+		WORD(inpipe)->word=num;
 		inpipe+=2;
 		}
 	}
@@ -1109,7 +1113,7 @@ jump(jnum,num)
 	codeat=0;
 	*inpipe++=OJUMP;
 	*inpipe++=jnum;
-	inpipe->word=num;
+	WORD(inpipe)->word=num;
 	inpipe+=2;
 	}
 
@@ -1124,12 +1128,13 @@ codeb(byt)
 	*inpipe++=byt;
 	}
 
-union {char bytes[2];};
+union un_bytes {char bytes[2];};
+#define BYTES(v)	((union un_bytes *)(v))
 
 revcodew(wrd)
 	unsigned wrd; {
 
-	codeb(((char*)(&wrd))->bytes[1]);
+	codeb(BYTES((char*)(&wrd))->bytes[1]);
 	codeb(wrd);
 	}
 
@@ -1141,7 +1146,7 @@ codew(wrd)
 		*inpipe++=128;
 		}
 	(*codeat)+=2;
-	inpipe->word=wrd;
+	WORD(inpipe)->word=wrd;
 	inpipe+=2;
 	}
 
@@ -1184,7 +1189,7 @@ flush(eoseg)
 			case OLNAMEREL:	inpipe+=2;
 							break;
 			case OLOCAL:	if (pipelab < 2048/9) {
-								labels[pipelab]=inpipe->word;
+								labels[pipelab]=WORD(inpipe)->word;
 								laboff[pipelab++]=offsett;
 								}
 							inpipe+=2;
@@ -1222,7 +1227,7 @@ flush(eoseg)
 							inpipe+=2;
 							break;
 			case OJUMP:		jtype=*inpipe;
-							want=(inpipe+1)->word;
+							want=WORD(inpipe+1)->word;
 							if (jtype <= 20) {
 								for (i=0; i < pipelab; i++) {
 									if (want == labels[i]) {
@@ -1271,19 +1276,19 @@ endpipe2:;	}
 			case OSEGPTR:
 			case OLNAMEREL:
 							dummyb(*(inpipe-1));
-							dummyw(inpipe->word);
+							dummyw(WORD(inpipe)->word);
 							dummyat=0;
 							inpipe+=2;
 							break;
 			case OLOCAL:	if (laboff[mlab++] != offsett)
 							  error("internal error in jump optimization");
 							objb(OLOCAL);
-							objw(inpipe->word);
+							objw(WORD(inpipe)->word);
 							inpipe+=2;
 							objw(offsett+offs[curseg-ODSEG]);
 							break;
 			case OJUMP:		jtype=*inpipe++;
-							want=inpipe->word;
+							want=WORD(inpipe)->word;
 							inpipe+=2;
 							if ((jtype & 0x80) == 0) {
 								ldummyb(shortj[jtype]);
@@ -1318,7 +1323,7 @@ endpipe2:;	}
 								}
 							break;
 			case OLINE:		dummyb(OLINE);
-							dummyw(inpipe->word);
+							dummyw(WORD(inpipe)->word);
 							inpipe+=2;
 							dummyat=0;
 							break;

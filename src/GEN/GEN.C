@@ -78,7 +78,7 @@ init() {
 
 	if (zopt == 0) {
 		if (eopt == 0) {
-			if ((output=creat(asmname)) == -1) {
+			if ((output=creat(asmname, 0666)) == -1) {
 				os("Cannot Create ");
 				error(asmname);
 				}
@@ -125,7 +125,7 @@ init() {
 	/* initialize register names */
 	initst(regname,"AX CX DX BX SP BP SI DI ES DS SS CS ");
 	initst(reglow,"AL CL DL BL ");
-	initst(reghigh,"AH CH DH BH ");
+	initst(reglow+4,"AH CH DH BH ");
 
 /*	operator types
 
@@ -224,9 +224,11 @@ initopt(argc,argv)
 
 		while (ch=toupper(*optat++)) {
 			switch (ch) {
+#if 0
 				case '@':	see_addr(optat);
 							*optat=0;
 							break;
+#endif
 				case 'A':	aopt=1;
 							break;
 				case 'B':	nextpgm[17] = 'B';
@@ -267,11 +269,11 @@ initopt(argc,argv)
 	else nextpgm[8]=nextpgm[9]=' ';
 
 	strcpy(asmname,objname);
-	strcat(objname,".O");
+	strcat(objname,".o");
 	strcat(nextpgm,objname);
 	if (copt) strcat(nextpgm," C");
 	if (dopt[2] != 'Z') strcat(nextpgm,dopt);
-	strcat(asmname,".A");
+	strcat(asmname,".a");
 
 	/*	set asmname to name of output file	*/
 
@@ -345,21 +347,25 @@ endit() {
 	current %utilization number.	*/
 
 
+#if 0
 	if (aopt == 0 && zopt == 0) {
 		nextpgm[22]+=util/10;
 		nextpgm[23]+=util%10;
 		if (nextpgm[0] != 'Z') _chain(nextpgm);	/* execute asm88	*/
 		else _chain(&nextpgm[2]);
 		}
+#endif
 	os("End of C88     ");
 	if (zopt) asm_size();
 	os("     ");
 	ounum(util);
 	os("% Utilization   \n");
+#if 0
 	if (mopt && zopt) {
 		if (nextpgm[0] != 'Z') _chain(nextpgm);	/* execute toobj	*/
 		else _chain(&nextpgm[2]);
 		}
+#endif
 	real_exit(warn ? 1:0);
 	}
 
@@ -496,7 +502,8 @@ addext(nested)
 	char extst,ch,typ,slen,i,*bptr,xstring;
 	int	 thisext,vtype[7],oldnode;
 	unsigned len,index;
-	union {double dbl; float flt; unsigned flts[2]; long lng;} cvt;
+	union un_cvt1 {double dbl; float flt; unsigned flts[2]; long lng;} cvt;
+	#define CVT1(v)		((union un_cvt1 *)(v))
 
 	extst=ctlbyte();
 	asmext=thisext=numext=ctlword();
@@ -628,9 +635,9 @@ addext(nested)
 									case CFLOAT:if (vtype[VIS] != CONSTV)
 													ierror();
 												if (vtype[VT] == CDOUBLE)
-													cvt.flt=((char *)(&vtype[VVAL]))->dbl;
+													cvt.flt=CVT1((char *)(&vtype[VVAL]))->dbl;
 												else if (vtype[VT] == CLONG)
-													cvt.flt=((char *)(&vtype[VVAL]))->lng;
+													cvt.flt=CVT1((char *)(&vtype[VVAL]))->lng;
 												else cvt.flt=vtype[VVAL];
 												asm_dw();
 												if (zopt) {
@@ -858,7 +865,7 @@ oc(ch)
 #if OPT
 	if (perfect || xopt) {
 #endif
-		if (ch == LF) oc(CR);
+		//if (ch == LF) oc(CR);
 		if (inout) {
 			if (inout == &outbuf[BUFSIZE]) {
 				if (write(output,outbuf,BUFSIZE) == -1)
@@ -868,10 +875,13 @@ oc(ch)
 			*inout++=ch;
 			}
 		else {
+#if 0
 			if (see_exit) {
 				if (see_index < 78 && ch != '\n') see_msg[see_index++]=ch;
 				}
 			else putchar(ch);
+#endif
+			write(1, &ch, 1);	//FIXME
 			}
 #if OPT
 		}
@@ -996,7 +1006,7 @@ olong(lnum)
 
 /*	stuff for SEE interface.	*/
 
-
+#if 0
 see_addr(ptr)
 	char *ptr; {
 
@@ -1036,12 +1046,14 @@ see_call(p1,p2,p3)
 	push	word see_bp_
 #
 	}
+#endif
 
 /*	REAL_EXIT  --	do an exit or a return to SEE.	*/
 
 real_exit(cc)
 	int  cc; {
 
+#if 0
 	if (see_exit) {
 		see_call(2);
 		if (cc) {
@@ -1049,6 +1061,7 @@ real_exit(cc)
 			see_call(-1,see_msg,line_num ? line_num: 1);
 			}
 		}
+#endif
 	exit(cc);
 	}
 
@@ -1192,14 +1205,15 @@ genopnd(node,vtype)
 			case CLONG:		forcel(vtype);
 							break;
 			case CFLOAT:	{
-								union {float flt; double dbl; long lng;};
+								union un_cvt2 {float flt; double dbl; long lng;};
+								#define CVT2(v)		((union un_cvt2 *)(v))
 
 								if (vtype[VIS] == CONSTV) {
 									if (vtype[VT] == CDOUBLE)
-										((char *)(&vtype[VVAL]))->flt=((char *)(&vtype[VVAL]))->dbl;
+										CVT2((char *)(&vtype[VVAL]))->flt=CVT2((char *)(&vtype[VVAL]))->dbl;
 									else if (vtype[VT] == CLONG)
-										((char *)(&vtype[VVAL]))->flt=((char *)(&vtype[VVAL]))->lng;
-									else ((char *)(&vtype[VVAL]))->flt=vtype[VVAL];
+										CVT2((char *)(&vtype[VVAL]))->flt=CVT2((char *)(&vtype[VVAL]))->lng;
+									else CVT2((char *)(&vtype[VVAL]))->flt=vtype[VVAL];
 									vtype[VT]=CFLOAT;
 									}
 								else loadf(vtype);

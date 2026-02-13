@@ -21,7 +21,7 @@
 
 genstmt(node)
 	int  node; {
-	char type,otype,i,*chasm,before_dirty[8],after_dirty[8];
+	char type,otype,*chasm,before_dirty[8],after_dirty[8];
 	int  before_from[8],after_from[8];
 	int  lab,lab2,vtype[7],i,reg;
 

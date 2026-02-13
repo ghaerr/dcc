@@ -13,6 +13,12 @@
  *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
  *  for more details.
  */
+
+/* --- ELKS changes --- */
+#define char        unsigned char
+#define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)
+/* ------------------- */
+
 #define	OPT		0		/*	on if want optimize code	*/
 #define DEBUG	1		/* on if want debug code		*/
 #define	CHECK	1		/* on if want checkout option	*/
@@ -156,7 +162,7 @@ int  funord,treelen,pstart,pbytes,level;
 #if DEBUG
 int  namet[8],namen[64];
 #endif
-int jumps[11],regname[12],reglow[4],reghigh[4];
+int jumps[11],regname[12],reglow[8];    //FIXME reghigh[4];
 int  *regat[13],bltname[27],numfloat;
 char regused[9],is_big,bltused[27];
 unsigned util,locoff,curoff,line_num;
@@ -197,7 +203,8 @@ char ext[EXTMAX];
 int  numext,asmext;
 char *extat[EXTATMAX];
 
-union {int word; char byte; } ;
+union un_word {int word; char byte; } ;
+#define WORD(v)		((union un_word *)(v))
 
 #define SEXTONLY 0
 #define SSTATIC	1

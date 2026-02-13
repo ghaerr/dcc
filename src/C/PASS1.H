@@ -15,11 +15,11 @@
  */
 /*	PASS1.H			INCLUDE FOR PASS1	*/
 
+/* --- ELKS changes --- */
 #define char        unsigned char
 #define FIX(node)   (*(char *)(node))
 #define HEAP        10000
 
-/* --- ELKS changes --- */
 char *mstart;
 #define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)
 

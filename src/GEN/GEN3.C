@@ -315,7 +315,7 @@ genfcal(node,vtype)
 		vtype[VIS]=OFFV;
 		vtype[VVAL]=6;
 		vtype[VNAME]=0;
-		vtype[VOFF]=-struct_off;
+		vtype[VOFF]=-(unsigned)struct_off;  //FIXME check
 		vtype[VT]=CSTRUCT;
 		vtype[VFROM]=0;
 		}
@@ -376,7 +376,7 @@ getargs(node)
 			/*	clear off any temporaries */
 			if (curoff != cur_loc) {
 				if (vtype[VIS] == VARV & vtype[VVAL] == 6) {
-					if (vtype[VT] == CDOUBLE || vtype == CFLOAT)
+					if (vtype[VT] == CDOUBLE || vtype[VT] == CFLOAT)    //FIXME check
 						loadf(vtype);
 					else forcereg(vtype);
 					}
