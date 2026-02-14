@@ -17,14 +17,13 @@
 
 /* --- ELKS changes --- */
 #define char        unsigned char
-#define FIX(node)   (*(char *)(node))
 #define HEAP        10000
-
 char *mstart;
 #define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)
 
-#define OS(str)             os(str)
-#define xalloc(n)           0   /* FIXME */
+#define FIX(node)   (*(char *)(node))
+#define OS(str)     os(str)
+#define xalloc(n)   0           /* FIXME */
 #define _lmove(count, from_offset, from_seg, to_offset, to_seg)
 #define _setsp(sp)              /* FIXME */
 /* ------------------- */

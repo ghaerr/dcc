@@ -21,7 +21,6 @@
 /* --- ELKS changes --- */
 #define char        unsigned char
 #define HEAP        10000
-char *mstart;
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 /* ------------------- */
 
@@ -636,7 +635,7 @@ endup() {
 		onum(nerr);
 		fputs(" errors", 1);
 		}
-    ocrlf();
+	ocrlf();
 	}
 
 ferror(str1,str2)

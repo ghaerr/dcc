@@ -303,8 +303,7 @@ error(str)
 
 oc(ch)
 	char ch; {
-    write(1,&ch,1);
-	//putchar(ch);  //FIXME
+	write(1,&ch,1); //FIXME
 	}
 
 os(str)

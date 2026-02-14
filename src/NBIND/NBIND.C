@@ -152,7 +152,6 @@ main(argc,argv)
 	while (i < argc) if (*(argv[i++]+1) == '@') see_exit=1;
 	if (see_exit == 0)
 	{
-		fputs("Opennbind v0.3  based on\n",2);
 		fputs("Object Module Linker X3.0b  Copyright Mark DeSmet, 1988\n",2);
 	}
 #endif
@@ -180,9 +179,9 @@ init(argc,argv)
 	//memlast=_showsp()-512;
     memlast=memory+HEAP;
 	//nseg = _showds() + 0x1000;
-    fmemstart = fmemalloc(0x1000);
+    fmemstart = fmemalloc(0x1000);  //FIXME
     nseg = FP_SEG(fmemstart);
-    printf("fmemstart %04x:%04x, nseg %04x\n", fmemstart, nseg);
+    //printf("fmemstart %04x:%04x, nseg %04x\n", fmemstart, nseg);
 
 	util=argc*3;
 	pname="CON:";   //FIXME
@@ -1405,6 +1404,7 @@ endup() {
 		onum(nerr, 2);
 		fputs(" errors", 2);
 		}
+        ocrlf();
 	}
 
 /*	output to .CHK file	*/

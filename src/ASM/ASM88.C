@@ -472,12 +472,12 @@ endit() {
 		os("     ");
 		}
 	ohw(offs[1]);
-	printf("code   ");
+	os("code   ");
 	ohw(offs[0]+offs[2]);
-	printf("data   ");
+	os("data   ");
 	if (is_big) {
 		ohw(offs[3]+offs[4]);
-		printf("extra   ");
+		os("extra   ");
 		}
 	util2=(freem-memover)/((memend-memover)/100)+1;
 	ounum(util2 > util ? util2: util);

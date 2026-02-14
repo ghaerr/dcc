@@ -15,6 +15,12 @@
  */
 /*	TOOBJ.C		converter from .O to .OBJ format for C88	*/
 
+/* --- ELKS changes --- */
+#define char        unsigned char
+#define HEAP        10000
+#define _setmem(addr,count,byte)    memset(addr,byte,count)
+/* ------------------- */
+
 #define IBM		1			/*	true if creating BIND for MS-DOS	*/
 #include "OBJ.H"
 
@@ -34,7 +40,7 @@
 #define INESEG	4
 #define INPTR4	5
 
-#define CONTZ	26
+#define CONTZ	26  //FIXME
 	char inbuf[1024*10+200],*inin,*endin;
 	char coderec[1000],*incode,codefix[1000],datafix[1000],esegfix[1000];
 	char datarec[1000],esegrec[1000],*indata,inname[65],outname[65];
@@ -53,7 +59,8 @@
 	struct sym {int eseg; char edefn,enlen,eisext; int elen,eptr4_at; } *stable;
 	typedef struct sym *sp;
 
-	union {int word; char byte; };
+	union un_word {int word; char byte; };
+    #define WORD(v)		((union un_word *)(v))
 
 
 	char *memory,*memlast;
@@ -75,11 +82,13 @@ main(argc,argv)
 init(argc,argv)
 	int  argc;
 	char *argv[]; {
-	char *argat,i,gotdot;
+	char *argat,gotdot; //FIXME i removed
 	int  nin,i,ffile;
 
-	inext=memory=_memory();
-	memlast=_showsp()-512;
+	inext=memory=sbrk(HEAP);
+	memlast=memory+HEAP;
+	//memlast=_showsp()-512;
+
 
 	argat=argv[1];
 	if (*(argat+1) == ':') argat+=2;		/* see if input is CTEMP6 */
@@ -87,7 +96,7 @@ init(argc,argv)
 		deleteit=1;
 		}
 	else 	{
-		printf("OBJ Converter for C88 and ASM88     V1.4    (c) Mark DeSmet, 1984,85,86,88\n");
+		fputs("OBJ Converter for C88 and ASM88     V1.4    (c) Mark DeSmet, 1984,85,86,88\n");
 		}
 	if (argc == 1) ferror("missing filename","");
 	else if (argc == 2) cmdname(argv[1]);
@@ -128,7 +137,7 @@ cmdname(name)
 		if (*name == '\\' || *name == '/' || *name == ':') namefrom=name+1;
 		outname[i++]=*name++;
 		}
-	strcpy(&outname[i],".OBJ");
+	strcpy(&outname[i],".obj");
 	if ((outfile=creat(outname)) == -1)
 		ferror("cannot create",outname);
 
@@ -200,9 +209,9 @@ pass1() {
 			case OSTATIC:	while(*inin++) ;
 							inin+=2;
 							break;
-			case ORESERVE:	num=inin->word;
+			case ORESERVE:	num=WORD(inin)->word;
 							inin+=2;
-							len=inin->word;
+							len=WORD(inin)->word;
 							inin+=2;
 							if (labis[num] == LPUBLIC) {
 								found=labat[num];
@@ -221,10 +230,10 @@ pass1() {
 								reslen+=len;
 								}
 							break;
-			case OLOCAL:	num=inin->word;
+			case OLOCAL:	num=WORD(inin)->word;
 							if (labis[num] == LPUBLIC) {
 								inin+=2;
-								len=inin->word;
+								len=WORD(inin)->word;
 								inin+=2;
 								if (num >= NUMLAB)
 									ferror("too many labels in ",inname);
@@ -262,7 +271,7 @@ pass1() {
 			case OLNAME:	while (*inin++) ;
 							break;
 
-			case OPTR:		num=inin->word;
+			case OPTR:		num=WORD(inin)->word;
 							inin+=2;
 							if (lab_ptr4[num] == 65535) {
 								if (labis[num] == LPUBLIC) {
@@ -303,9 +312,9 @@ pass2() {
 			case OSTATIC:	while(*inin++) ;
 							inin+=2;
 							break;
-			case ORESERVE:	num=inin->word;
+			case ORESERVE:	num=WORD(inin)->word;
 							inin+=2;
-							len=inin->word;
+							len=WORD(inin)->word;
 							inin+=2;
 							if (labis[num] == LOTHER) {
 								labat[num]=resat;
@@ -313,10 +322,10 @@ pass2() {
 								resat+=len;
 								}
 							break;
-			case OLOCAL:	num=inin->word;
+			case OLOCAL:	num=WORD(inin)->word;
 							if (labis[num] == LOTHER) {
 								inin+=2;
-								len=inin->word;
+								len=WORD(inin)->word;
 								inin+=2;
 								labat[num]=len+offs[curseg];
 								labseg[num]=curseg;
@@ -329,11 +338,11 @@ pass2() {
 							break;
 			case OESEG:		curseg=INESEG;
 							break;
-			case ONAMEREL:	fix=inin->word;
+			case ONAMEREL:	fix=WORD(inin)->word;
 							inin+=2;
 							fixup_off(fix);
 							break;
-			case OJUMPREL:	fix=inin->word;
+			case OJUMPREL:	fix=WORD(inin)->word;
 							inin+=2;
 							if (labis[fix] == LPUBLIC) {
 								if (((sp)labat[fix])->eisext) {
@@ -361,7 +370,7 @@ pass2() {
 			case OLNAME:	while (*inin++) ;
 							break;
 
-			case OPTR:		num=inin->word;
+			case OPTR:		num=WORD(inin)->word;
 							inin+=2;
 							if (lab_ptr4[num] == 65535) {
 								if (labis[num] == LPUBLIC) {
@@ -381,11 +390,11 @@ do_ptr4_fix:
 							*fixat+=lab_ptr4[num];
 							add_fix(0xc4,4,INDSEG,0);
 							break;
-			case OSEGPTR:	fix=inin->word;
+			case OSEGPTR:	fix=WORD(inin)->word;
 							inin+=2;
 							fixup_seg(curseg,fix);
 							break;
-			case OLNAMEREL:	fix=inin->word;
+			case OLNAMEREL:	fix=WORD(inin)->word;
 							inin+=2;
 							fixup_ptr(fix);
 							break;
@@ -632,7 +641,7 @@ find(pass)
 	hashno&=31;
 	num=0;
 				/* get the variable number	*/
-	num=inin->word;
+	num=WORD(inin)->word;
 	inin+=2;
 
 	next=&hash[hashno];
@@ -652,7 +661,7 @@ find(pass)
 		next=*next;
 		}
 	*next=inext;
-	inext->word=0;
+	WORD(inext)->word=0;
 	found=inext+2;
 	mlen=0;
 	do
@@ -705,11 +714,12 @@ endup() {
 		if (unlink(inname) == -1)
 			ferror("cannot delete",inname);
 		}
-	else puts("end of TOOBJ    ");
+	else fputs("end of TOOBJ    ", 1);
 	if (nerr) {
 		onum(nerr);
-		puts(" errors");
+		fputs(" errors", 1);
 		}
+	ocrlf();
 	}
 
 /*	CREATE_byte4  --	create a four byte pointer.	*/
@@ -928,19 +938,19 @@ add_fix(relbyte,ftype,toseg,toext)
 
 	if (curseg == INCSEG) {
 		target=codefix;
-		dro=((int)fixat)-coderec-6;
+		dro=(unsigned)fixat-(unsigned)coderec-6;
 		}
 	else if (curseg == INDSEG) {
 		target=datafix;
-		dro=((int)fixat)-datarec-6;
+		dro=(unsigned)fixat-(unsigned)datarec-6;
 		}
 	else if (curseg == INESEG) {
 		target=esegfix;
-		dro=((int)fixat)-esegrec-6;
+		dro=(unsigned)fixat-(unsigned)esegrec-6;
 		}
 	else {
 		target=byte4fix;
-		dro=((int)fixat)-byte4rec-6;
+		dro=(unsigned)fixat-(unsigned)byte4rec-6;
 		}
 
 	addb(target,relbyte+(dro>>8));
@@ -1007,41 +1017,38 @@ outrec(rec)
 		ferror("cannot write",outname);
 	}
 
-
-	
-
 ferror(str1,str2)
 	char *str1,*str2; {
 
 	ocrlf();
-	puts(str1);
-	puts(str2);
-	puts("     TOOBJ abandoned\n");
+	fputs(str1, 1);
+	fputs(str2, 1);
+	fputs("     TOOBJ abandoned\n", 1);
 	exit(2);
 	}
 
 error(str1,str2)
 	char *str1,*str2; {
 
-	puts(inname);
-	puts(" - ");
-	puts(str1);
-	putchar(' ');
-	puts(str2);
+	fputs(inname, 1);
+	fputs(" - ", 1);
+	fputs(str1, 1);
+	fputc(' ', 1);
+	fputs(str2, 1);
 	ocrlf();
 	nerr++;
 	}
 
 ocrlf() {
 
-	putchar(10);
+	fputc(10, 1);
 	}
 
 ohn(ch)
 	char ch; {
 
 	ch=(ch&15)+'0';
-	putc(ch > '9' ? ch+7: ch,pfile);
+	fputc(ch > '9' ? ch+7: ch,pfile);
 	}
 
 oh(num)
@@ -1056,5 +1063,17 @@ oh(num)
 onum(num)
 	int  num; {
 	if (num > 9) onum(num/10);
-	putchar(num%10+'0');
+	fputc(num%10+'0', 1);
 	}
+
+/* --------- ELKS ---------- */
+        
+fputs(char *str, int fd)
+{
+    return write(fd, str, strlen(str));
+}
+
+fputc(int c, int fd)
+{
+    write(fd, &c, 1);
+}
