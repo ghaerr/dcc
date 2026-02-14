@@ -18,6 +18,13 @@
  */
 /*		Librarian for ASM88 and C88	*/
 
+/* --- ELKS changes --- */
+#define char        unsigned char
+#define HEAP        10000
+char *mstart;
+#define _setmem(addr,count,byte)    memset(addr,byte,count)
+/* ------------------- */
+
 #include "OBJ.H"
 
 #define NUMARG	100
@@ -57,9 +64,11 @@
 	int  pfile=-1,numfile=1;
 	char argbuf[ABSIZE];		/* -f arguments go here	*/
 
-	struct {char got,seg; int mod_number;};		/* follows name in symbol table	*/
+	struct st_mod {char got,seg; int mod_number;};	/* follows name in symbol table	*/
+    #define m_mod(v)	((struct st_mod *)(v))
 
-	union {int word; char byte; };
+	union un_word {int word; char byte; };
+	#define WORD(v)		((union un_word *)(v))
 
 
 
@@ -77,8 +86,8 @@ main(argc,argv)
 	char *argv[]; {
 	int i;
 
-	puts("OpenLib88 v0.3    Based on");
-	puts("Librarian for C88 and ASM88     V2.1A    (c) Mark DeSmet, 1982,83,84,2005");
+	fputs("OpenLib88 v0.3    Based on", 1);
+	fputs("Librarian for C88 and ASM88     V2.1A    (c) Mark DeSmet, 1982,83,84,2005", 1);
 	init(argc,argv);
 	nextpass(1);
 	/*	eliminate modules that depend upon others from list of wanted mods */
@@ -98,15 +107,16 @@ main(argc,argv)
 init(argc,argv)
 	int  argc;
 	char *argv[]; {
-	char *argat,i;
+	char *argat;        //FIXME i removed
 	int  nin,i,ffile;
 
 
-	inext=memory=_memory();
-	memlast=_showsp()-512;
+	inext=memory=sbrk(HEAP);
+	//memlast=_showsp()-512;
+    memlast=memory+HEAP;
 
 	util=argc*3;
-	pname="CON:";
+	pname="CON:";       //FIXME
 
 /*	create a list fileat of pointers to arguments including arguments in
 	-f files.	*/
@@ -154,8 +164,8 @@ init(argc,argv)
 							break;
 				case '_':	under_opt=1;
 							break;
-				default:	puts("bad argument ");
-							puts(argat-1);
+				default:	fputs("bad argument ", 1);
+							fputs(argat-1, 1);
 							ocrlf();
 							nerr++;
 				}
@@ -219,7 +229,7 @@ nextpass(pass)
 		if (gotdot) {
 			inname[i]=0;
 			}
-		else strcpy(&inname[i],".O");
+		else strcpy(&inname[i],".o");
 
 		if (isopen[filen] == FCLOSED) {
 			if (numopen == 4) {
@@ -264,14 +274,14 @@ pass1() {
 
 	old_depnum=depnum;
 	oldext=inext;
-	modsize[nummod]-=inin;
+	modsize[nummod]-=(unsigned)inin;
 	got_big=0;
 
 	while (1) {
 		if (inin+128 > endin && endin >= &inbuf[4096]) {
 			modsize[nummod]+=inin;
 			refill();
-			modsize[nummod]-=inin;
+			modsize[nummod]-=(unsigned)inin;
 			}
 
 		switch (clen=*inin++) {
@@ -301,10 +311,10 @@ pass1() {
 							break;
 			case ORESERVE:	inin+=4;
 							break;
-			case OLOCAL:	num=inin->word;
+			case OLOCAL:	num=WORD(inin)->word;
 							if (labis[num] == LPUBLIC) {
 								found=labat[num];
-								found->got=1;
+								m_mod(found)->got=1;
 								}
 							inin+=4;
 							break;
@@ -377,12 +387,12 @@ printsym() {
 
 	while (nameptr < inext) {
 		while (*found++) ;
-		if (found->got == 0 || found->seg != INCSEG) goto next_print;
+		if (m_mod(found)->got == 0 || m_mod(found)->seg != INCSEG) goto next_print;
 		if (*nameptr == '_' && under_opt == 0) goto next_print;
-		if (wantmod[found->mod_number] == 0) goto next_print;
-		if (found->mod_number != lastmod) {
+		if (wantmod[m_mod(found)->mod_number] == 0) goto next_print;
+		if (m_mod(found)->mod_number != lastmod) {
 			fputs("\r\n-",pfile);
-			lastmod=found->mod_number;
+			lastmod=m_mod(found)->mod_number;
 			column=0;
 			}
 		if (column >= 60) {
@@ -391,22 +401,22 @@ printsym() {
 			}
 		else if (column >= 40) while (column < 60) {
 			column++;
-			putc(' ',pfile);
+			fputc(' ',pfile);
 			}
 		else if (column >= 20) while (column < 40) {
 			column++;
-			putc(' ',pfile);
+			fputc(' ',pfile);
 			}
 		else if (column) while (column < 20) {
 			column++;
-			putc(' ',pfile);
+			fputc(' ',pfile);
 			}
 		if (column+strlen(nameptr) >= 79) {
 			fputs("\r\n ",pfile);
 			column=0;
 			}
 		while (*nameptr) {
-			putc(*nameptr++,pfile);
+			fputc(*nameptr++,pfile);
 			column++;
 			}
 next_print:
@@ -456,15 +466,15 @@ check_mod() {
 					/*	have an older public def	*/
 					ptra++;	/* point to 'have' flag */
 					ptrb++;
-					if (ptra->got) {
-						if (ptrb->got) {
+					if (m_mod(ptra)->got) {
+						if (m_mod(ptrb)->got) {
 							return 0;
 							}
-						add_depen(ptrb->mod_number,ptra->mod_number);
+						add_depen(m_mod(ptrb)->mod_number,m_mod(ptra)->mod_number);
 						}
 					else {
-						if (ptrb->got)
-							add_depen(ptra->mod_number,ptrb->mod_number);
+						if (m_mod(ptrb)->got)
+							add_depen(m_mod(ptra)->mod_number,m_mod(ptrb)->mod_number);
 						}
 					}
 nextm:			match=*match;
@@ -534,7 +544,7 @@ set_wants() {
 		numthis+=tempwant[i];
 		}
 	if (depnum && numthis == 0) {
-		puts("\nwarning: circular dependencies\n");
+		fputs("\nwarning: circular dependencies\n", 1);
 		for (i=0; i < MAXMOD; i++) {
 			numthis+=wantmod[i];
 			}
@@ -573,7 +583,7 @@ add_name(pass)
 	hashno+=nlen;
 	hashno&=(MAXHASH-1);
 				/* get the variable number	*/
-	num=inin->word;
+	num=WORD(inin)->word;
 	inin+=2;
 
 	/*	add to the hash chain	*/
@@ -581,9 +591,9 @@ add_name(pass)
 	hash[hashno]=achain;
 
 	labat[num]=inext;		/*	remember where to patch got byte	*/
-	inext->got=0;			/*	and leave room for it	*/
-	inext->seg=curseg;		/*	remember segment for printing */
-	inext->mod_number=nummod;
+	m_mod(inext)->got=0;			/*	and leave room for it	*/
+	m_mod(inext)->seg=curseg;		/*	remember segment for printing */
+	m_mod(inext)->mod_number=nummod;
 	inext+=4;
 
 	labis[num]=LPUBLIC;
@@ -620,47 +630,48 @@ endup() {
 	max=(inext-memory)/((memlast-memory)/100);
 	if (max > util) util=max;
 	nummod/=3;
-	puts("end of LIB88        ");
+	fputs("end of LIB88        ", 1);
 	onum(util > nummod ? util: nummod);
-	puts("% utilization    ");
+	fputs("% utilization    ", 1);
 	if (nerr) {
 		onum(nerr);
-		puts(" errors");
+		fputs(" errors", 1);
 		}
+    fputc('\n');
 	}
 
 ferror(str1,str2)
 	char *str1,*str2; {
 
 	ocrlf();
-	puts(str1);
-	puts(str2);
-	puts("     LIB88 abandoned\n");
+	fputs(str1, 1);
+	fputs(str2, 1);
+	fputs("     LIB88 abandoned\n", 1);
 	exit(2);
 	}
 
 error(str1,str2)
 	char *str1,*str2; {
 
-	puts(inname);
-	puts(" - ");
-	puts(str1);
-	putchar(' ');
-	puts(str2);
+	fputs(inname, 1);
+	fputs(" - ", 1);
+	fputs(str1, 1);
+	fputc(' ', 1);
+	fputs(str2, 1);
 	ocrlf();
 	nerr++;
 	}
 
 ocrlf() {
 
-	putchar(10);
+	fputc(10, 1);
 	}
 
 ohn(ch)
 	char ch; {
 
 	ch=(ch&15)+'0';
-	putc(ch > '9' ? ch+7: ch,pfile);
+	fputc(ch > '9' ? ch+7: ch,pfile);
 	}
 
 oh(num)
@@ -675,6 +686,18 @@ oh(num)
 onum(num)
 	int  num; {
 	if (num > 9) onum(num/10);
-	putchar(num%10+'0');
+	fputc(num%10+'0', 1);
 	}
 
+
+/* --------- ELKS ---------- */
+
+fputs(char *str, int fd)
+{
+    return write(fd, str, strlen(str));
+}
+
+fputc(int c, int fd)
+{
+    write(fd, &c, 1);
+}
