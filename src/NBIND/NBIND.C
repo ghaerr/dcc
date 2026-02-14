@@ -25,11 +25,10 @@
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 #define _move(num,from,to)          memmove((char *)(to), (char *)(from), num)
  
-void __far *fmemalloc(unsigned long size);
-void __far *fmemstart;
+int        _fmemalloc(int paras, unsigned short *pseg);
 
 void __far *fmemcpy(void __far *dst, void __far *src, unsigned n);
-char __far *fstrcpy(char __far *dst, char __far *src);
+char __far *fxstrcpy(char __far *dst, char __far *src);
 int         fstrncmp(char __far *d, char __far *s, unsigned n);
 
 #define _showds()       (FP_SEG(inbuf))
@@ -39,7 +38,7 @@ int         fstrncmp(char __far *d, char __far *s, unsigned n);
                                            ((unsigned int)(off))))
 #define _lmov(count, from_offset, from_segment, to_offset, to_segment)          \
     fmemcpy(MK_FP(to_segment,to_offset), MK_FP(from_segment,from_offset), count)
-#define _lcpy(doff, dseg, soff, sseg)    fstrcpy(MK_FP(dseg,doff), MK_FP(sseg,soff))
+#define _lcpy(doff, dseg, soff, sseg)    fxstrcpy(MK_FP(dseg,doff), MK_FP(sseg,soff))
 #define _lcmp(off1, seg1, off2, seg2, n) fstrncmp(MK_FP(seg1,off1), MK_FP(seg2,off2),n)
 #define _peek(off, seg)                  (*(char __far *)MK_FP(seg, off))
 #define _poke(val, off, seg)            ((*(char __far *)MK_FP(seg, off)) = (val))
@@ -179,12 +178,11 @@ init(argc,argv)
 	//memlast=_showsp()-512;
     memlast=memory+HEAP;
 	//nseg = _showds() + 0x1000;
-    fmemstart = fmemalloc(0x1000);  //FIXME
-    nseg = FP_SEG(fmemstart);
-    //printf("fmemstart %04x:%04x, nseg %04x\n", fmemstart, nseg);
+    _fmemalloc(0x1000, &nseg);
+    //__dprintf("nseg %04x DS %x\n", nseg, _showds());
 
 	util=argc*3;
-	pname="CON:";   //FIXME
+	pname="/dev/tty";
 	ovnum=0;
 
 /*	create a list fileat of pointers to arguments including arguments in
@@ -634,13 +632,13 @@ pass2() {
 							inin+=2;
 							if (want)
 							*fixat+=labis[fix] == LPUBLIC ? ((Sym*)labat[fix])->elen:
-								labat[fix];
+								(int)labat[fix];
 							break;
 			case OJUMPREL:	fix=WORD(inin)->word;
 							inin+=2;
 							if (want)
 							*fixat+=(labis[fix] == LPUBLIC? ((Sym*)labat[fix])->elen:
-								labat[fix])-offs[curseg];
+								(int)labat[fix])-offs[curseg];
 							break;
 			case OPTYPE:	while (*inin++) ;
 							inin+=2;
@@ -1594,13 +1592,12 @@ void __far *fmemcpy(void __far *dst, void __far *src, unsigned n)
     return dst;
 }
 
-char __far *fstrcpy(char __far *dst, char __far *src)
+/* NOTE: nonstandard return - returns address after copy */
+char __far *fxstrcpy(char __far *dst, char __far *src)
 {
-    char __far *ret = dst;
-
     while (*dst++ = *src++)
         ;
-    return ret;
+    return dst;
 }
 
 int fstrncmp(char __far *d, char __far *s, unsigned n)

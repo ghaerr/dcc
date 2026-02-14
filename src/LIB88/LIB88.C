@@ -114,7 +114,7 @@ init(argc,argv)
     memlast=memory+HEAP;
 
 	util=argc*3;
-	pname="CON:";       //FIXME
+	pname="/dev/tty";
 
 /*	create a list fileat of pointers to arguments including arguments in
 	-f files.	*/

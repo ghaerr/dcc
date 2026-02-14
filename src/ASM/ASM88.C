@@ -282,7 +282,7 @@ init(argc,argv)
 		i=0;
 		while (lstname[++i]) ;
 		lstname[i-1]='5';
-		if ((lst=creat(lstname, 0666)) == -1) {
+		if ((lst=open(lstname, 02|0100, 0666)) == -1) { //FIXME
 			os("cannot create ");
 			ferror(lstname);
 			}
