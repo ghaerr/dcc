@@ -87,7 +87,6 @@ init(argc,argv)
 		deleteit=1;
 		}
 	else 	{
-		printf("OpenOBJ  v0.3  Based on\n");
 		printf("OBJ Converter for C88 and ASM88     V1.4    (c) Mark DeSmet, 1984,85,86,88\n");
 		}
 	if (argc == 1) ferror("missing filename","");

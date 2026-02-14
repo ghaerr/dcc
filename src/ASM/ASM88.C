@@ -117,7 +117,6 @@ init(argc,argv)
 		}
 
 	if (uopt == 0)
-		os("OpenASM88 8088 Assembler  v0.3    Based on\n");
 		os("ASM88     8088 Assembler  V1.5    (c) Mark DeSmet, 1982-86\n");
 
 	/*	if no temp drive, use default.	*/
@@ -470,7 +469,7 @@ endit() {
 			}
 		os("Number of Errors = ");
 		onum(nerr);
-		puts("     ");
+		os("     ");
 		}
 	ohw(offs[1]);
 	printf("code   ");
@@ -482,9 +481,9 @@ endit() {
 		}
 	util2=(freem-memover)/((memend-memover)/100)+1;
 	ounum(util2 > util ? util2: util);
-	puts("% utilization");
+	os("% utilization\n");
 #if LIMITED
-	puts("\n");
+	os("\n");
 #endif
 #if 0
 	if (nerr == 0 && mopt) {

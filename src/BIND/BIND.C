@@ -112,7 +112,6 @@ main(argc,argv)
 	while (i < argc) if (*(argv[i++]+1) == '@') see_exit=1;
 	if (see_exit == 0)
 	{
-		puts("OpenBind v0.3    Based on");
 		puts("Binder for C88 and ASM88     V2.0    (c) Mark DeSmet, 1982-87");
 	}
 #endif

@@ -86,8 +86,7 @@ main(argc,argv)
 	char *argv[]; {
 	int i;
 
-	fputs("OpenLib88 v0.3    Based on", 1);
-	fputs("Librarian for C88 and ASM88     V2.1A    (c) Mark DeSmet, 1982,83,84,2005", 1);
+	fputs("Librarian for C88 and ASM88     V2.1A    (c) Mark DeSmet, 1982,83,84,2005\n", 1);
 	init(argc,argv);
 	nextpass(1);
 	/*	eliminate modules that depend upon others from list of wanted mods */
@@ -155,7 +154,7 @@ init(argc,argv)
 			i=toupper(*++argat);
 			switch (i) {
 				case 'P':	if (*++argat) pname=argat;
-							if ((pfile=creat(pname)) == -1)
+							if ((pfile=creat(pname, 0666)) == -1)
 								ferror("cannot open ",pname);
 							break;
 				case 'O':	cmdname(argat+1);
@@ -180,7 +179,7 @@ init(argc,argv)
 				}
 			}
 		}
-	if ((outfile=creat(outname)) == -1)
+	if ((outfile=creat(outname, 0666)) == -1)
 		ferror("cannot create",outname);
 	}
 
@@ -391,12 +390,12 @@ printsym() {
 		if (*nameptr == '_' && under_opt == 0) goto next_print;
 		if (wantmod[m_mod(found)->mod_number] == 0) goto next_print;
 		if (m_mod(found)->mod_number != lastmod) {
-			fputs("\r\n-",pfile);
+			fputs("\n-",pfile);
 			lastmod=m_mod(found)->mod_number;
 			column=0;
 			}
 		if (column >= 60) {
-			fputs("\r\n ",pfile);
+			fputs("\n ",pfile);
 			column=0;
 			}
 		else if (column >= 40) while (column < 60) {
@@ -412,7 +411,7 @@ printsym() {
 			fputc(' ',pfile);
 			}
 		if (column+strlen(nameptr) >= 79) {
-			fputs("\r\n ",pfile);
+			fputs("\n ",pfile);
 			column=0;
 			}
 		while (*nameptr) {
@@ -623,7 +622,7 @@ endup() {
 		ferror("cannot close ",outname);
 
 	if (pfile != -1) {
-		fputs("\r\n",pfile);
+		fputs("\n",pfile);
 		if (close(pfile) == -1)
 			ferror("cannot close ",pname);
 		}
@@ -637,7 +636,7 @@ endup() {
 		onum(nerr);
 		fputs(" errors", 1);
 		}
-    fputc('\n');
+    ocrlf();
 	}
 
 ferror(str1,str2)

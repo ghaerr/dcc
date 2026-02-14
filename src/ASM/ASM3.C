@@ -357,7 +357,7 @@ linit() {
 /*	rewind the source 	*/
 
 	if (lseek(infile,0l,0) == -1) {
-		puts("cannot seek ");
+		os("cannot seek ");
 		ferror(name);
 		}
 	fill();		/* fill the source buffer	*/
@@ -365,7 +365,7 @@ linit() {
 /*	rewind CTEMP5	*/
 
 	if (lseek(lst,0l,0) == -1) {
-		puts("cannot seek");
+		os("cannot seek");
 		ferror(lstname);
 		}
 	inlst=&lstbuf[512];
@@ -373,7 +373,7 @@ linit() {
 /*	open the list output file. use obj and pipe for buffer	*/
 
 	if ((obj=creat(outname, 0666)) == -1) {
-		puts("cannot create ");
+		os("cannot create ");
 		ferror(outname);
 		}
 	inpipe=pipe;
@@ -386,11 +386,11 @@ lendit() {
 	currow=0;
 	outb('\f');
 	if (write(obj,pipe,inpipe-pipe) == -1) {
-		puts("cannot write ");
+		os("cannot write ");
 		ferror(outname);
 		}
 	if(close(obj) == -1) {
-		puts("cannot close ");
+		os("cannot close ");
 		ferror(outname);
 		}
 	if (close(lst) == -1) {
@@ -551,7 +551,7 @@ lstb() {
 
 	if (inlst == &lstbuf[512]) {
 		if (read(lst,lstbuf,512) == -1) {
-			puts("cannot read ");
+			os("cannot read ");
 			ferror(lstname);
 			}
 		inlst=lstbuf;
@@ -568,7 +568,7 @@ outb(ch)
 
 	if (inpipe == &pipe[2048]) {
 		if (write(obj,pipe,2048) == -1) {
-			puts("cannot write");
+			os("cannot write");
 			ferror(objname);
 			}
 		inpipe=pipe;

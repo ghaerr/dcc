@@ -1,13 +1,18 @@
 /*	DUMPO.C			dump ACTL or AINT or .OBJ file  */
 
+/* --- ELKS changes --- */
+#define char        unsigned char
+/* ------------------- */
+
 #define MODEL	1
 #include "OBJ.H"
-#define EOF	26
+#define EOF	26      //FIXME
 
 int  infile,ofile;
 char inbuf[650],name[20],*inin,*endin,popt;
 
-union {int word; char byte;};
+union un_word {int word; char byte;};
+#define WORD(v)		((union un_word *)(v))
 
 main(argc,argv)
 	int  argc;
@@ -31,12 +36,12 @@ doopen(file)
 	strcpy(name,file);
 	while (*file && *file != '.')
 		name[i++]=*file++;
-	if (*file != '.') strcpy(&name[i],".O");
+	if (*file != '.') strcpy(&name[i],".o");
 	if ((infile=open(name,0)) == -1) {
 		os("Cannot open ");
 		os(name);
 		ocrlf();
-		exit();
+		exit(1);
 		}
 	inin=endin=0;
 	}
@@ -63,23 +68,23 @@ dofile() {
 								oc(*inin++);
 							inin++;
 							os(" number=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							if (temp_popt) ocrlf();
 							popt=temp_popt;
 							break;
 			case ORESERVE:	os("Reserve  Number=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							os(" Bytes=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							break;
 			case OLOCAL:	os("Local  Number=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							os(" Offset=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							break;
 			case ODSEG:		os("In DSEG");
@@ -91,23 +96,23 @@ dofile() {
 			case OBIG:		os("In BIG");
 							break;
 			case ONAMEREL:	os("Namerel=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							break;
 			case OJUMPREL:	os("Jumprel=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							break;
 			case OLNAMEREL:	os("Lnamerel=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							break;
 			case OSEGPTR:	os("Segptr=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							break;
 			case OPTR:		os("Ptr=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							break;
 			case OPTYPE:	os("Ptype=");
@@ -120,7 +125,7 @@ type:
 								oc(*inin++);
 							inin++;
 							oc(' ');
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							oc(' ');
 							inin+=2;
 							tlen=*inin++;
@@ -140,14 +145,14 @@ type:
 									case 6:	os("double");
 											break;
 									case 8:	os("struct ");
-											onum(inin->word);
+											onum(WORD(inin)->word);
 											inin+=2;
 											tlen-=2;
 											break;
 									case 253:os("fun");
 											break;
 									case 254:os("[");
-											onum(inin->word);
+											onum(WORD(inin)->word);
 											os("]");
 											inin+=2;
 											tlen-=2;
@@ -161,7 +166,7 @@ type:
 							break;
 
 			case OLINE:		os("Line=");
-							onum(inin->word);
+							onum(WORD(inin)->word);
 							inin+=2;
 							break;
 			case ONAME:		os("Name=");
@@ -256,5 +261,12 @@ os(str)
 oc(ch)
 	char ch; {
 
-	if (popt == 0) if (ofile) putc(ch,ofile); else putchar(ch);
+	if (popt == 0) if (ofile) fputc(ch,ofile); else fputc(ch, 1);
 	}
+
+/* --------- ELKS ---------- */
+
+fputc(int c, int fd)
+{
+    write(fd, &c, 1);
+}
