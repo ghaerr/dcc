@@ -22,26 +22,14 @@
 #define char        unsigned char
 #define HEAP        10000
 
-#define _setmem(addr,count,byte)    memset(addr,byte,count)
-#define _move(num,from,to)          memmove((char *)(to), (char *)(from), num)
- 
-int        _fmemalloc(int paras, unsigned short *pseg);
-
-void __far *fmemcpy(void __far *dst, void __far *src, unsigned n);
-char __far *fxstrcpy(char __far *dst, char __far *src);
-int         fstrncmp(char __far *d, char __far *s, unsigned n);
-
-#define _showds()       (FP_SEG(inbuf))
 #define FP_SEG(fp)       ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
 #define FP_OFF(fp)       ((unsigned)(unsigned long)(void __far *)(fp))
 #define MK_FP(seg,off)   ((void __far *)((((unsigned long)(seg)) << 16) | \
                                            ((unsigned int)(off))))
-#define _lmov(count, from_offset, from_segment, to_offset, to_segment)          \
-    fmemcpy(MK_FP(to_segment,to_offset), MK_FP(from_segment,from_offset), count)
-#define _lcpy(doff, dseg, soff, sseg)    fxstrcpy(MK_FP(dseg,doff), MK_FP(sseg,soff))
-#define _lcmp(off1, seg1, off2, seg2, n) fstrncmp(MK_FP(seg1,off1), MK_FP(seg2,off2),n)
-#define _peek(off, seg)                  (*(char __far *)MK_FP(seg, off))
-#define _poke(val, off, seg)            ((*(char __far *)MK_FP(seg, off)) = (val))
+
+#define _setmem(addr,count,byte)    memset(addr,byte,count)
+#define _move(num,from,to)          memmove((char *)(to), (char *)(from), num)
+#define _showds()                   (FP_SEG(inbuf))
 /* ------------------- */
 
 #define IBM		1			/*	true if creating BIND for MS-DOS	*/
@@ -176,10 +164,10 @@ init(argc,argv)
 
 	inext=memory=sbrk(HEAP);
 	//memlast=_showsp()-512;
-    memlast=memory+HEAP;
+	memlast=memory+HEAP;
 	//nseg = _showds() + 0x1000;
-    _fmemalloc(0x1000, &nseg);
-    //__dprintf("nseg %04x DS %x\n", nseg, _showds());
+	nseg = xalloc(0);       // 64K
+	//__dprintf("nseg %04x DS %x\n", nseg, _showds());
 
 	util=argc*3;
 	pname="/dev/tty";
@@ -1582,31 +1570,63 @@ fputc(int c, int fd)
     write(fd, &c, 1);
 }
 
-void __far *fmemcpy(void __far *dst, void __far *src, unsigned n)
-{
-    char __far *s1 = dst;
-    char __far *s2 = src;
 
-    for( ; n > 0; n--)
-        *((char __far *)s1++) = *((char __far*)s2++);
-    return dst;
+int _fmemalloc(int paras, unsigned short *pseg);
+
+xalloc(paras)
+    unsigned paras; {
+    unsigned seg;
+
+    if (paras == 0)      // alloc 64K
+        paras = 0x1000;
+    else paras = (paras + 15) >> 4;
+    if (_fmemalloc(paras, &seg))
+        return 0;
+    return seg;
 }
 
-/* NOTE: nonstandard return - returns address after copy */
-char __far *fxstrcpy(char __far *dst, char __far *src)
-{
+/* following routines are in DCC ASM on target */
+int _lmov(count, from_offset, from_segment, to_offset, to_segment)
+    unsigned count, from_offset, from_segment, to_offset, to_segment; {
+    char __far *dst = MK_FP(to_segment, to_offset);
+    char __far *src = MK_FP(from_segment, from_offset);
+
+    for( ; count > 0; count--)
+        *((char __far *)dst++) = *((char __far*)src++);
+    return 0;
+}
+
+int _lcpy(doff, dseg, soff, sseg)
+    unsigned doff, dseg, soff, sseg; {
+    char __far *dst = MK_FP(dseg, doff);
+    char __far *src = MK_FP(sseg, soff);
+
     while (*dst++ = *src++)
         ;
-    return dst;
+    return FP_OFF(dst);
 }
 
-int fstrncmp(char __far *d, char __far *s, unsigned n)
-{
-#undef char
+int _lcmp(off1, seg1, off2, seg2, n)
+    unsigned off1, seg1, off2, seg2, n; {
+    char __far *s1 = MK_FP(seg1, off1);
+    char __far *s2 = MK_FP(seg2, off2);
     char c1 = 0, c2 = 0;
+
     while (n-- > 0) {
-        if ((c1 = *d++) != (c2 = *s++) || c1 == '\0')
+        if ((c1 = *s1++) != (c2 = *s2++) || c1 == '\0')
             break;
     }
     return c1 - c2;
+}
+
+_peek(off, seg)
+    unsigned off, seg; {
+
+    return *(char __far *)MK_FP(seg, off);
+}
+
+_poke(val, off, seg)
+    unsigned val, off, seg; {
+
+    *(char __far *)MK_FP(seg, off) = val;
 }

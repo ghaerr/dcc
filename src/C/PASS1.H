@@ -21,10 +21,14 @@
 char *mstart;
 #define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)
 
+#define FP_SEG(fp)       ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
+#define FP_OFF(fp)       ((unsigned)(unsigned long)(void __far *)(fp))
+#define MK_FP(seg,off)   ((void __far *)((((unsigned long)(seg)) << 16) | \
+                                           ((unsigned int)(off))))
+#define _showds()        (FP_SEG(lineBuf))
+
 #define FIX(node)   (*(char *)(node))
 #define OS(str)     os(str)
-#define xalloc(n)   0           /* FIXME */
-#define _lmove(count, from_offset, from_seg, to_offset, to_seg)
 #define _setsp(sp)              /* FIXME */
 /* ------------------- */
 

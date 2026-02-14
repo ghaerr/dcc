@@ -1227,3 +1227,31 @@ newenum() {
 		while (! ifch('}'));
 		}
 	}
+
+/* --------- ELKS ---------- */
+
+int _fmemalloc(int paras, unsigned short *pseg);
+
+xalloc(paras)
+    unsigned paras; {
+    unsigned seg;
+
+    if (paras == 0)      // alloc 64K
+        paras = 0x1000;
+    else paras = (paras + 15) >> 4;
+    if (_fmemalloc(paras, &seg))
+        return 0;
+    return seg;
+}
+
+/* following routines are in DCC ASM on target */
+int _lmove(count, from_offset, from_segment, to_offset, to_segment)
+    unsigned count, from_offset, from_segment, to_offset, to_segment; {
+    char __far *dst = MK_FP(to_segment, to_offset);
+    char __far *src = MK_FP(from_segment, from_offset);
+
+    for( ; count > 0; count--)
+        *((char __far *)dst++) = *((char __far*)src++);
+    return 0;
+}
+
