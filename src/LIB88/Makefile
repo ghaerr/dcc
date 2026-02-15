@@ -32,6 +32,7 @@ OBJS = $(SRCS:.C=.o)
 
 SRCS = LIB88.C
 PROG = lib88
+LDFLAGS += -maout-heap=10000 -maout-stack=4096
 
 all: $(PROG)
 

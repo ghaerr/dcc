@@ -32,6 +32,7 @@ OBJS = $(SRCS:.C=.o)
 
 SRCS = ASM88.C ASM2.C ASM3.C ASM4.C ASM5.C
 PROG = asm88
+LDFLAGS += -maout-heap=10000 -maout-stack=4096
 
 all: $(PROG)
 
