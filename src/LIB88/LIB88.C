@@ -114,7 +114,7 @@ init(argc,argv)
     memlast=memory+HEAP;
 
 	util=argc*3;
-	pname="/dev/tty";
+	pname="/dev/console";
 
 /*	create a list fileat of pointers to arguments including arguments in
 	-f files.	*/

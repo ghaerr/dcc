@@ -384,7 +384,7 @@ linit() {
 lendit() {
 
 	currow=0;
-	outb('\f');
+	//outb('\f');
 	if (write(obj,pipe,inpipe-pipe) == -1) {
 		os("cannot write ");
 		ferror(outname);
@@ -489,11 +489,11 @@ ldoline() {
 page() {
 
 	curcol=currow=0;
-	objstr("\fASM88 Assembler     ");
-	objstr(name);
-	objstr("\r\n\r\n");
-	objstr(title);
-	objstr("\r\n\r\n");
+	//objstr("\fASM88 Assembler     ");
+	//objstr(name);
+	//objstr("\n\n");
+	//objstr(title);
+	//objstr("\n\n");
 	}
 
 
@@ -576,9 +576,10 @@ outb(ch)
 
 	if (ch == CR) {
 		curcol=0;
-		*inpipe++=ch;
+		//*inpipe++=ch;
 		}
 	else if (ch == LF) {
+		curcol=0;
 		currow++;
 		*inpipe++=ch;
 		}
@@ -590,7 +591,7 @@ outb(ch)
 		}
 	else {
 		if (curcol == maxcol-1)
-			objstr("\r\n                          ");
+			objstr("\n                          ");
 		*inpipe++=ch;
 		curcol++;
 		}

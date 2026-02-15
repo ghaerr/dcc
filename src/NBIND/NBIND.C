@@ -32,7 +32,7 @@
 #define _showds()                   (FP_SEG(inbuf))
 /* ------------------- */
 
-#define IBM		1			/*	true if creating BIND for MS-DOS	*/
+#define IBM		0			/*	true if creating BIND for MS-DOS	*/
 #define OVERLAY	1
 #define LIMITED	0
 
@@ -115,8 +115,21 @@ Sym * hash[32];
 			ihead={0x5a4d,0,1,0,32,0,0xffff,0,0,0,0,0,0};
 
 #else
-	struct {char cform; int clen,cbase,cmin,cmax;
-			char dform; int dlen,dbase,dmin,dmax; char rest[110]; };
+	//struct {char cform; int clen,cbase,cmin,cmax;
+			//char dform; int dlen,dbase,dmin,dmax; char rest[110]; };
+    struct {
+        unsigned    hdr1, hdr2;     // 0x0301, 0x0430
+        char        hlen;           // 0x20
+        char        reserved1;
+        unsigned    version;        // 1
+        unsigned    tseg, thigh;
+        unsigned    dseg, dhigh;
+        unsigned    bseg, bhigh;
+        unsigned    entry, ehigh;
+        unsigned    chmem;
+        unsigned    minstack;
+        unsigned    syms, symshigh;
+    } ihead = { 0x0301, 0x0430, 0x20, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 #endif
 
 #define MAXMOD 700
@@ -158,8 +171,8 @@ init(argc,argv)
 	//char * _showds();
 
 #if	IBM==0
-	incode=&codebuf[128];
-	indata=&databuf[256];
+	//incode=&codebuf[128];
+	//indata=&databuf[256];
 #endif
 
 	inext=memory=sbrk(HEAP);
@@ -170,7 +183,7 @@ init(argc,argv)
 	//__dprintf("nseg %04x DS %x\n", nseg, _showds());
 
 	util=argc*3;
-	pname="/dev/tty";
+	pname="/dev/console";
 	ovnum=0;
 
 /*	create a list fileat of pointers to arguments including arguments in
@@ -295,7 +308,7 @@ cmdname(name)
 #if	IBM
 	strcpy(&outname[i],".exe");
 #else
-	strcpy(&outname[i],".CMD");
+	strcpy(&outname[i],".bin");
 #endif
 	strcpy(&ovname[i],".OV");
 	strcpy(&chkname[i],".CHK");
@@ -331,7 +344,8 @@ nextpass(pass)
 #if	IBM
 	over_offs[0][0]=0;
 #else
-	over_offs[0][0]=256;
+	//over_offs[0][0]=256;
+	over_offs[0][0]=0;  //FIXME?
 #endif
 	over_offs[0][1]=0;
 
@@ -731,17 +745,17 @@ between() {
 		codetot=(codetot+sizeof(ovlen)+511) & 0xffe00;
 		}
 #else
-	datatot=((long)over_offs[0][0]+127)&0xfff80;
-	codetot=((long)over_offs[0][1]+maxof(1)+127)&0xfff80;
+	datatot=((long)over_offs[0][0]+15)&0xffff0;
+	codetot=((long)over_offs[0][1]+maxof(1)+15)&0xffff0;
 	if (mopt) {
 		for (i=1; i <= maxover; i++) {
 			codetot+=over_offs[i][1];
 			}
-		codetot=(codetot+127) & 0xfff80;
+		codetot=(codetot+15) & 0xffff0;
 		}
-	hptr=codebuf;
-	for (i=0; i< 110; i++)
-		hptr->rest[i]=0;
+	//hptr=codebuf;
+	//for (i=0; i< 110; i++)
+		//hptr->rest[i]=0;
 #endif
 
 	/*	allocate reserved in order so public reserved's are in order */
@@ -846,16 +860,26 @@ between() {
 		*incode++=0;
 
 #else
+    ihead.tseg=codetot;
+    ihead.dseg=datatot;
+    ihead.bseg=alldata-datatot;
+    //__dprintf("tseg %x dseg %x bseg %x\n", ihead.tseg, ihead.dseg, ihead.bseg);
+
+	pfrom=&ihead;
+	incode=codebuf;
+	indata=databuf;
+	while (incode < &codebuf[32])
+		*incode++=*pfrom++;
+	codetot+=32;    //FIXME?
+#if 0
 	hptr->cform=1;
 	hptr->cbase=hptr->dbase=0;
 	hptr->clen=hptr->cmin=hptr->cmax=codetot>>4;
 	codetot+=128;
 	hptr->dform=2;
 	hptr->dlen=datatot>>4;
-#endif
 
 
-#if IBM==0
 	hptr->dmin=(alldata+16)>>4;
 
 	/*	if stack not specified, make it the maximum	*/
@@ -863,11 +887,10 @@ between() {
 	if (stacklen) hptr->dmax=hptr->dmin+(stacklen>>4);
 	else hptr->dmax=0xfff;
 	if (hopt) hptr->dmax+=0x4000;
-#endif
 
-#if	IBM==0
 	for (i=0; i < 256; i++)
 		databuf[i]=0;
+#endif
 #endif
 
 	next=&initobj[42];
