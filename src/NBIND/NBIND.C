@@ -863,7 +863,7 @@ between() {
     ihead.tseg=codetot;
     ihead.dseg=datatot;
     ihead.bseg=alldata-datatot;
-    //__dprintf("tseg %x dseg %x bseg %x\n", ihead.tseg, ihead.dseg, ihead.bseg);
+    //__dprintf("cseg %x dseg %x bseg %x\n", ihead.tseg, ihead.dseg, ihead.bseg);
 
 	pfrom=&ihead;
 	incode=codebuf;

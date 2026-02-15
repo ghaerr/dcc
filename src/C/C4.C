@@ -154,7 +154,7 @@ long heir24c() {				/* operator is prefix -	+ */
 		tokit();
 		return !heir24c();
 		}
-	heir25c();
+	return heir25c();   //FIXME return missing
 	}
 
 
