@@ -291,7 +291,7 @@ init(argc,argv)
 
 #if CHECK
 	if (copt) {
-		if ((obj=fopen(objname,"a")) == 0) {
+		if ((obj=open(objname, 02|0100, 0666)) == 0) {  //FIXME was fopen(..., "a")
 			os("cannot create ");
 			ferror(objname);
 			}

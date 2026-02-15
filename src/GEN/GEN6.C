@@ -80,7 +80,7 @@ asm_init() {
 	else tempname6+=2;
 
 	if (copt) {
-		if ((obj=fopen(objname,"a")) == 0) {
+		if ((obj=open(objname, 02|0100, 0666)) == 0) {     //FIXME was fopen(..., "a")
 			os("cannot create ");
 			error(objname);
 			}
@@ -95,7 +95,7 @@ asm_init() {
 			strcat(nextpgm,objname);
 			strcpy(objname,tempname6);
 			}
-		if ((obj=creat(objname)) == -1) {
+		if ((obj=creat(objname, 0666)) == -1) {
 			os("cannot create ");
 			error(objname);
 			}

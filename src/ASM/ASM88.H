@@ -24,7 +24,7 @@ char *mstart;
 
 #define DEBUG	0
 #define	X8087	0       /* FIXME was 1 */
-#define CHECK	0       /* FIXME was 1 */
+#define CHECK	1
 #define LIMITED	0
 
 /*	data types	*/
