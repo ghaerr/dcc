@@ -337,7 +337,7 @@ oc(ch)
 	if (see_exit) {
 		if (see_index < 78 && ch != '\n') see_msg[see_index++]=ch;
 		}
-	else putchar(ch);
+	else
 #endif
 	write(1, &ch, 1);
 	}

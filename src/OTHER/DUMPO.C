@@ -261,12 +261,12 @@ os(str)
 oc(ch)
 	char ch; {
 
-	if (popt == 0) if (ofile) fputc(ch,ofile); else fputc(ch, 1);
+	if (popt == 0) if (ofile) xputc(ch,ofile); else xputc(ch, 1);
 	}
 
 /* --------- ELKS ---------- */
 
-fputc(int c, int fd)
+xputc(int c, int fd)
 {
     write(fd, &c, 1);
 }

@@ -152,7 +152,7 @@ main(argc,argv)
 	while (i < argc) if (*(argv[i++]+1) == '@') see_exit=1;
 	if (see_exit == 0)
 	{
-		fputs("Object Module Linker X3.0b  Copyright Mark DeSmet, 1988\n",2);
+		xputs("Object Module Linker X3.0b  Copyright Mark DeSmet, 1988\n",2);
 	}
 #endif
 	init(argc,argv);
@@ -268,8 +268,8 @@ init(argc,argv)
 							break;
 				case '2':	opt2=1;
 							break;
-				default:	fputs("bad argument ", 2);
-							fputs(argat-1, 2);
+				default:	xputs("bad argument ", 2);
+							xputs(argat-1, 2);
 							ocrlf();
 							nerr++;
 				}
@@ -778,8 +778,8 @@ between() {
 			}
 		else if (sp->edefn == LOTHER && sp->eused) {
 			_lmov(sp->enlen, sp->name, nseg, &syms[nsym], _showds());
-			fputs("undefined PUBLIC - ", 2);
-			fputs(&syms[nsym], 2);
+			xputs("undefined PUBLIC - ", 2);
+			xputs(&syms[nsym], 2);
 			ocrlf();
 			nerr++;
 			}
@@ -931,16 +931,16 @@ between() {
 			}
 
 		if (pfile != -1) {
-			fputs("\noverlay    code    data",pfile);
+			xputs("\noverlay    code    data",pfile);
 			for (i=0; i < MAXOVER; i++) {
 				if (ovlen[i][0]+ovlen[i][1]+ovlen[i][2]) {
-					fputs("\n   ",pfile);
+					xputs("\n   ",pfile);
 					ohn(i/10); ohn(i % 10);
-					fputs("      ",pfile);
+					xputs("      ",pfile);
 					oh(ovlen[i][1]);
-					fputs("H   ",pfile);
+					xputs("H   ",pfile);
 					oh(ovlen[i][0]+ovlen[i][2]);
-					fputs("H",pfile);
+					xputs("H",pfile);
 					}
 				}
 			}
@@ -948,14 +948,14 @@ between() {
 
 /*	print the CODE= message	*/
 	if (pfile != -1) {
-		fputs("\ncode=",pfile);
+		xputs("\ncode=",pfile);
 		oh(allcode);
-		fputs("H  data=",pfile);
+		xputs("H  data=",pfile);
 		oh(alldata);
-		fputs("H  stack and locals=",pfile);
+		xputs("H  stack and locals=",pfile);
 		if (stacklen) oh(stacklen);
 		else oh(0-alldata);
-		fputs("H\n",pfile);
+		xputs("H\n",pfile);
 		}
 	}
 
@@ -1050,24 +1050,24 @@ printsym(nsym,syms)
 /*	print the symbols	*/
 
 	lastov = 0;
-	fputs("\tSymbols\n\n", pfile);
+	xputs("\tSymbols\n\n", pfile);
 	for (i=0; i < nsym; i++) {
 		sp=syms[i];
 		n=sp->name;
 		if ((ch=_peek(n, nseg)) == 255 || (ch == '_' && under_opt == 0)) continue;
 		if(maxover) {
-			if(sp->eov < 10) fputc( '0', pfile);
+			if(sp->eov < 10) xputc( '0', pfile);
 			onum(sp->eov, pfile);
-			fputc(' ',pfile);
+			xputc(' ',pfile);
 			}
-		if (sp->eseg == INDSEG) fputs("DS:",pfile);
-			else fputs("CS:",pfile);
+		if (sp->eseg == INDSEG) xputs("DS:",pfile);
+			else xputs("CS:",pfile);
 		oh(sp->elen);
-		fputc(' ',pfile);
+		xputc(' ',pfile);
 		do
-			if (ch != '_' || _peek(n+1, nseg)) fputc(ch, pfile);
+			if (ch != '_' || _peek(n+1, nseg)) xputc(ch, pfile);
 		while (ch=_peek(++n, nseg));
-		fputs("\n", pfile);
+		xputs("\n", pfile);
 		}
 
 /*	sort the addresses	*/
@@ -1076,28 +1076,28 @@ printsym(nsym,syms)
 
 /*	print the symbols	*/
 
-	fputs("\n\n\tAddresses\n\n", pfile);
+	xputs("\n\n\tAddresses\n\n", pfile);
 	for (i=0; i < nsym; i++) {
 		sp=syms[i];
 		n=sp->name;
 		if ((ch=_peek(n, nseg)) == '_' && under_opt == 0) continue;
 		if(maxover) {
 			if(sp->eov != lastov) {
-				fputs("\n", pfile);
+				xputs("\n", pfile);
 				lastov = sp->eov;
 				}
-			if(sp->eov < 10) fputc( '0', pfile);
+			if(sp->eov < 10) xputc( '0', pfile);
 			onum(sp->eov, pfile);
-			fputc(' ',pfile);
+			xputc(' ',pfile);
 			}
-		if (sp->eseg == INDSEG) fputs("DS:",pfile);
-			else fputs("CS:",pfile);
+		if (sp->eseg == INDSEG) xputs("DS:",pfile);
+			else xputs("CS:",pfile);
 		oh(sp->elen);
-		fputc(' ',pfile);
+		xputc(' ',pfile);
 		do 
-			if (ch != '_' || _peek(n+1, nseg)) fputc(ch, pfile);
+			if (ch != '_' || _peek(n+1, nseg)) xputc(ch, pfile);
 		while (ch=_peek(++n, nseg));
-		fputs("\n", pfile);
+		xputs("\n", pfile);
 		}
 	}
 
@@ -1215,11 +1215,11 @@ find(pass)
 						}
 					while (tlen--);
 					if (dif && pass == 1) {
-						fputs("conflicting types for ", 2);
-						fputs(name, 2);
-						fputs(" in ", 2);
-						fputs(inname, 2);
-						fputc('\n', 2);
+						xputs("conflicting types for ", 2);
+						xputs(name, 2);
+						xputs(" in ", 2);
+						xputs(inname, 2);
+						xputc('\n', 2);
 						}
 					}
 				}
@@ -1404,14 +1404,14 @@ endup() {
 	nummod/=7;
 #if LIMITED == 0
 	if (see_exit == 0) {
-		fputs("end of BIND        ", 2);
+		xputs("end of BIND        ", 2);
 		onum(util > nummod ? util: nummod, 2);
-		fputs("% utilization    ", 2);
+		xputs("% utilization    ", 2);
 		}
 #endif
 	if (nerr) {
 		onum(nerr, 2);
-		fputs(" errors", 2);
+		xputs(" errors", 2);
 		}
         ocrlf();
 	}
@@ -1473,34 +1473,34 @@ ferror(str1,str2)
 	char *str1,*str2; {
 
 	ocrlf();
-	fputs(str1, 2);
-	fputs(str2, 2);
-	fputs("     BIND abandoned\n", 2);
+	xputs(str1, 2);
+	xputs(str2, 2);
+	xputs("     BIND abandoned\n", 2);
 	exit(2);
 	}
 
 error(str1,str2)
 	char *str1,*str2; {
 
-	fputs(inname, 2);
-	fputs(" - ", 2);
-	fputs(str1, 2);
-	fputc(' ', 2);
-	fputs(str2, 2);
+	xputs(inname, 2);
+	xputs(" - ", 2);
+	xputs(str1, 2);
+	xputc(' ', 2);
+	xputs(str2, 2);
 	ocrlf();
 	nerr++;
 	}
 
 ocrlf() {
 
-	fputc(10, 2);     //FIXME
+	xputc(10, 2);     //FIXME
 	}
 
 ohn(ch)
 	char ch; {
 
 	ch=(ch&15)+'0';
-	fputc(ch > '9' ? ch+7: ch,pfile);
+	xputc(ch > '9' ? ch+7: ch,pfile);
 	}
 
 oh(num)
@@ -1515,7 +1515,7 @@ oh(num)
 onum(nm, ffp)
 int nm, ffp; {
 	if (nm > 9) onum(nm/10, ffp);
-	fputc(nm%10+'0', ffp);
+	xputc(nm%10+'0', ffp);
 	}
 
 #if 0
@@ -1583,12 +1583,12 @@ findfile(filename, target_buf)
 
 /* --------- ELKS ---------- */
 
-fputs(char *str, int fd)
+xputs(char *str, int fd)
 {
     return write(fd, str, strlen(str));
 }
 
-fputc(int c, int fd)
+xputc(int c, int fd)
 {
     write(fd, &c, 1);
 }

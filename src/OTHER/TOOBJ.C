@@ -96,7 +96,7 @@ init(argc,argv)
 		deleteit=1;
 		}
 	else 	{
-		fputs("OBJ Converter for C88 and ASM88     V1.4    (c) Mark DeSmet, 1984,85,86,88\n");
+		xputs("OBJ Converter for C88 and ASM88     V1.4    (c) Mark DeSmet, 1984,85,86,88\n");
 		}
 	if (argc == 1) ferror("missing filename","");
 	else if (argc == 2) cmdname(argv[1]);
@@ -714,10 +714,10 @@ endup() {
 		if (unlink(inname) == -1)
 			ferror("cannot delete",inname);
 		}
-	else fputs("end of TOOBJ    ", 1);
+	else xputs("end of TOOBJ    ", 1);
 	if (nerr) {
 		onum(nerr);
-		fputs(" errors", 1);
+		xputs(" errors", 1);
 		}
 	ocrlf();
 	}
@@ -1021,34 +1021,34 @@ ferror(str1,str2)
 	char *str1,*str2; {
 
 	ocrlf();
-	fputs(str1, 1);
-	fputs(str2, 1);
-	fputs("     TOOBJ abandoned\n", 1);
+	xputs(str1, 1);
+	xputs(str2, 1);
+	xputs("     TOOBJ abandoned\n", 1);
 	exit(2);
 	}
 
 error(str1,str2)
 	char *str1,*str2; {
 
-	fputs(inname, 1);
-	fputs(" - ", 1);
-	fputs(str1, 1);
-	fputc(' ', 1);
-	fputs(str2, 1);
+	xputs(inname, 1);
+	xputs(" - ", 1);
+	xputs(str1, 1);
+	xputc(' ', 1);
+	xputs(str2, 1);
 	ocrlf();
 	nerr++;
 	}
 
 ocrlf() {
 
-	fputc(10, 1);
+	xputc(10, 1);
 	}
 
 ohn(ch)
 	char ch; {
 
 	ch=(ch&15)+'0';
-	fputc(ch > '9' ? ch+7: ch,pfile);
+	xputc(ch > '9' ? ch+7: ch,pfile);
 	}
 
 oh(num)
@@ -1063,17 +1063,17 @@ oh(num)
 onum(num)
 	int  num; {
 	if (num > 9) onum(num/10);
-	fputc(num%10+'0', 1);
+	xputc(num%10+'0', 1);
 	}
 
 /* --------- ELKS ---------- */
         
-fputs(char *str, int fd)
+xputs(char *str, int fd)
 {
     return write(fd, str, strlen(str));
 }
 
-fputc(int c, int fd)
+xputc(int c, int fd)
 {
     write(fd, &c, 1);
 }

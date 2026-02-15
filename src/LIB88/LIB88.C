@@ -85,7 +85,7 @@ main(argc,argv)
 	char *argv[]; {
 	int i;
 
-	fputs("Librarian for C88 and ASM88     V2.1A    (c) Mark DeSmet, 1982,83,84,2005\n", 1);
+	xputs("Librarian for C88 and ASM88     V2.1A    (c) Mark DeSmet, 1982,83,84,2005\n", 1);
 	init(argc,argv);
 	nextpass(1);
 	/*	eliminate modules that depend upon others from list of wanted mods */
@@ -162,8 +162,8 @@ init(argc,argv)
 							break;
 				case '_':	under_opt=1;
 							break;
-				default:	fputs("bad argument ", 1);
-							fputs(argat-1, 1);
+				default:	xputs("bad argument ", 1);
+							xputs(argat-1, 1);
 							ocrlf();
 							nerr++;
 				}
@@ -389,32 +389,32 @@ printsym() {
 		if (*nameptr == '_' && under_opt == 0) goto next_print;
 		if (wantmod[m_mod(found)->mod_number] == 0) goto next_print;
 		if (m_mod(found)->mod_number != lastmod) {
-			fputs("\n-",pfile);
+			xputs("\n-",pfile);
 			lastmod=m_mod(found)->mod_number;
 			column=0;
 			}
 		if (column >= 60) {
-			fputs("\n ",pfile);
+			xputs("\n ",pfile);
 			column=0;
 			}
 		else if (column >= 40) while (column < 60) {
 			column++;
-			fputc(' ',pfile);
+			xputc(' ',pfile);
 			}
 		else if (column >= 20) while (column < 40) {
 			column++;
-			fputc(' ',pfile);
+			xputc(' ',pfile);
 			}
 		else if (column) while (column < 20) {
 			column++;
-			fputc(' ',pfile);
+			xputc(' ',pfile);
 			}
 		if (column+strlen(nameptr) >= 79) {
-			fputs("\n ",pfile);
+			xputs("\n ",pfile);
 			column=0;
 			}
 		while (*nameptr) {
-			fputc(*nameptr++,pfile);
+			xputc(*nameptr++,pfile);
 			column++;
 			}
 next_print:
@@ -542,7 +542,7 @@ set_wants() {
 		numthis+=tempwant[i];
 		}
 	if (depnum && numthis == 0) {
-		fputs("\nwarning: circular dependencies\n", 1);
+		xputs("\nwarning: circular dependencies\n", 1);
 		for (i=0; i < MAXMOD; i++) {
 			numthis+=wantmod[i];
 			}
@@ -621,19 +621,19 @@ endup() {
 		ferror("cannot close ",outname);
 
 	if (pfile != -1) {
-		fputs("\n",pfile);
+		xputs("\n",pfile);
 		if (close(pfile) == -1)
 			ferror("cannot close ",pname);
 		}
 	max=(inext-memory)/((memlast-memory)/100);
 	if (max > util) util=max;
 	nummod/=3;
-	fputs("end of LIB88        ", 1);
+	xputs("end of LIB88        ", 1);
 	onum(util > nummod ? util: nummod);
-	fputs("% utilization    ", 1);
+	xputs("% utilization    ", 1);
 	if (nerr) {
 		onum(nerr);
-		fputs(" errors", 1);
+		xputs(" errors", 1);
 		}
 	ocrlf();
 	}
@@ -642,34 +642,34 @@ ferror(str1,str2)
 	char *str1,*str2; {
 
 	ocrlf();
-	fputs(str1, 1);
-	fputs(str2, 1);
-	fputs("     LIB88 abandoned\n", 1);
+	xputs(str1, 1);
+	xputs(str2, 1);
+	xputs("     LIB88 abandoned\n", 1);
 	exit(2);
 	}
 
 error(str1,str2)
 	char *str1,*str2; {
 
-	fputs(inname, 1);
-	fputs(" - ", 1);
-	fputs(str1, 1);
-	fputc(' ', 1);
-	fputs(str2, 1);
+	xputs(inname, 1);
+	xputs(" - ", 1);
+	xputs(str1, 1);
+	xputc(' ', 1);
+	xputs(str2, 1);
 	ocrlf();
 	nerr++;
 	}
 
 ocrlf() {
 
-	fputc(10, 1);
+	xputc(10, 1);
 	}
 
 ohn(ch)
 	char ch; {
 
 	ch=(ch&15)+'0';
-	fputc(ch > '9' ? ch+7: ch,pfile);
+	xputc(ch > '9' ? ch+7: ch,pfile);
 	}
 
 oh(num)
@@ -684,18 +684,18 @@ oh(num)
 onum(num)
 	int  num; {
 	if (num > 9) onum(num/10);
-	fputc(num%10+'0', 1);
+	xputc(num%10+'0', 1);
 	}
 
 
 /* --------- ELKS ---------- */
 
-fputs(char *str, int fd)
+xputs(char *str, int fd)
 {
     return write(fd, str, strlen(str));
 }
 
-fputc(int c, int fd)
+xputc(int c, int fd)
 {
     write(fd, &c, 1);
 }
