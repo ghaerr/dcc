@@ -19,6 +19,8 @@
 #define char        unsigned char
 #define HEAP        10000
 char *mstart;
+#define FIX(node)   (*(char *)(node))
+#define OS(str)     os(str)
 #define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)
 
 #define FP_SEG(fp)       ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
@@ -26,10 +28,12 @@ char *mstart;
 #define MK_FP(seg,off)   ((void __far *)((((unsigned long)(seg)) << 16) | \
                                            ((unsigned int)(off))))
 #define _showds()        (FP_SEG(lineBuf))
+#define _setsp(newsp)                   \
+        asm volatile ("movw %%ax,%%sp"  \
+            : /* no output */           \
+            :"a" ((newsp))    \
+            :"memory")
 
-#define FIX(node)   (*(char *)(node))
-#define OS(str)     os(str)
-#define _setsp(sp)              /* FIXME */
 /* ------------------- */
 
 #define	CHECK	1			/*	true if generating checkout compiler */
@@ -164,10 +168,24 @@ struct savearea{
 
 #define	SAVSIZE	sizeof(struct savearea)
 
-char name[65];
-char *lineBeg,*lineEnd,*cur,*bufEnd,*eofptr;
-unsigned cline, lineinc, file;
-char lineBuf[512],fileBuf[2048],savEnd[2];
+struct area { //FIXME the order of the following must be the same as the struct above
+    char name[65];
+    char *cur,*lineBeg,*lineEnd,*bufEnd,*eofptr;    //FIXME reordered cur
+    unsigned cline, lineinc, file;
+    char lineBuf[512],fileBuf[2048],savEnd[2];
+} area;
+#define name area.name
+#define cur area.cur
+#define lineBeg area.lineBeg
+#define lineEnd area.lineEnd
+#define bufEnd area.bufEnd
+#define eofptr area.eofptr
+#define cline area.cline
+#define lineinc area.lineinc
+#define file area.file
+#define lineBuf area.lineBuf
+#define fileBuf area.fileBuf
+#define savEnd area.savEnd
 
 char macExp[2048],macEnd[1],*macxp;
 
@@ -200,7 +218,8 @@ unsigned lastline;
 	unsigned incPara[MAXINC];
 	unsigned incnext;
 
-#define MAXNEST 60
+//#define MAXNEST 60
+#define MAXNEST 5   /*FIXME*/
 	int  nestfrom[MAXNEST];
 
 	struct stag {char cstype, *stat; int staglen;} stagat;

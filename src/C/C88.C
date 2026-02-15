@@ -1232,14 +1232,15 @@ newenum() {
 
 int _fmemalloc(int paras, unsigned short *pseg);
 
-xalloc(paras)
-    unsigned paras; {
+xalloc(bytes)
+    unsigned bytes; {
     unsigned seg;
 
-    if (paras == 0)      // alloc 64K
-        paras = 0x1000;
-    else paras = (paras + 15) >> 4;
-    if (_fmemalloc(paras, &seg))
+    if (bytes == 0)      // alloc 64K
+        bytes = 0x1000;
+    else bytes = (bytes + 15) >> 4;
+    __dprintf("xalloc %d paras\n", bytes);
+    if (_fmemalloc(bytes, &seg))
         return 0;
     return seg;
 }

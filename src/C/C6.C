@@ -349,11 +349,12 @@ addnest() {
 		 *nptr=wp+1,
 		 nlen=cur-tokat;
 	char narg, inquote, plevel;
+#define STMAX   80  //FIXME was 1024
 	char *argfrom[MAXNEST],
-		  argstk[1024],
+		  argstk[STMAX],
 		  *ap, *sp;
 
-	ap=&argstk[1024];
+	ap=&argstk[STMAX];
 	sp=argstk;
 	mname=defat=nameat;
 	narg=inquote=plevel=0;
@@ -451,8 +452,7 @@ xpand:	if (narg != m_defined(defat)->dargs) {
 		}
 	if(m_defined(defat)->dval == DEFEND)
 		return;
-error("No define nesting for now"); //FIXME
-	_setsp(ap-1);
+	//_setsp(ap-1);       //FIXME hopefully not needed
 	nestfrom[nested]=cur;
 	if (nested+1 >= MAXNEST) { 
 		error("define too deep");
@@ -567,7 +567,7 @@ error("No define nesting for now"); //FIXME
 			macOp=DEFPARM;
 			}
 		}
-	cur=nestfrom[nested];
+	cur=nestfrom[nested]; //FIXME was nested and macros didn't work!
 #ifdef MacHiWater
 	if(macxp > MacHiWaterP) MacHiWaterP=macxp;
 #endif
