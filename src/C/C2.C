@@ -590,7 +590,8 @@ inc_nest:
 
 /*	if MS-DOS V2.0 and use include= to find file */
 	if (inc_search /*&& _msdos2*/) {
-		findfile(string,inctemp);
+		if (!findfile(string, inctemp, "DSINC"))
+			findfile(string, inctemp, "INCLUDE");
 		strcpy(string,inctemp);
 		}
 	if ((ifd=open(string,0)) == -1) {
@@ -823,8 +824,8 @@ concatstring:
 
 /*	FINDFILE.C	*/
 /*
-	This file contains the routine to locate a file, utilizing the INCLUDE
-	environment variable for the directories to search.
+	This file contains the routine to locate a file, utilizing the passed
+	environment variable for the directory to search.
 
 	Interface:
 
@@ -837,8 +838,8 @@ concatstring:
 		otherwise it returns 0.
 */
 
-findfile(filename, target_buf)
-	char *filename, *target_buf; {
+findfile(filename, target_buf, envname)
+	char *filename, *target_buf, *envname; {
 	int fid;
 	char *p_ptr, *t_ptr, *p;
 	char *getenv();
@@ -850,8 +851,7 @@ findfile(filename, target_buf)
 		close(fid);
 		return (1);
 		}
-	p = getenv("DSINC");
-	if (p == 0) p = getenv("INCLUDE");
+	p = getenv(envname);
 	if (p == 0) return 0;
 	p_ptr = p;
 

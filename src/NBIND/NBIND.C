@@ -286,13 +286,8 @@ init(argc,argv)
 		chkat=chkbuf;
 		}
 /*	if MS-DOS V2.0 and no -L option, use path to find CSTDIO.S */
-#if IBM
-#if 0
-
-	if (_msdos2 && libname[6] == '.') findfile("CSTDIO.S",libname);
-#endif
-#endif
-
+	if (/*_msdos2 &&*/ libname[6] == '.')
+		findfile("CSTDIO.S", libname, "PATH");
 	}
 
 cmdname(name)
@@ -1518,14 +1513,10 @@ int nm, ffp; {
 	xputc(nm%10+'0', ffp);
 	}
 
-#if 0
-#if IBM
-
-
 /*	FINDFILE.C	*/
 /*
-	This file contains the routine to locate a file, utilizing the PATH
-	environment variable for the directories to search.
+	This file contains the routine to locate a file, utilizing the passed
+	environment variable for the directory to search.
 
 	Interface:
 
@@ -1536,17 +1527,13 @@ int nm, ffp; {
 
 		if the file is found, findfile return 1 and the pathname,
 		otherwise it returns 0.
-
-	This program uses the environ routines to access the PATH variable.
-
-	Stack requirements:  ~300 bytes
-
 */
 
-findfile(filename, target_buf)
-	char *filename, *target_buf; {
+findfile(filename, target_buf, envname)
+	char *filename, *target_buf, *envname; {
 	int fid;
-	char paths[256], *p_ptr, *t_ptr;
+	char *p_ptr, *t_ptr, *p;
+	char *getenv();
 
 	/* first check in the local directory */
 	strcpy(target_buf, filename);
@@ -1555,8 +1542,9 @@ findfile(filename, target_buf)
 		close(fid);
 		return (1);
 		}
-	getenv("PATH", paths);
-	p_ptr = paths;
+	p = getenv(envname);
+	if (p == 0) return 0;
+	p_ptr = p;
 
 	while (*p_ptr != 0) {
 		/* copy the directory name */
@@ -1564,7 +1552,8 @@ findfile(filename, target_buf)
 		while (*p_ptr != ';' && *p_ptr != 0) {
 			*t_ptr++ = *p_ptr++;
 			}
-		if (*(t_ptr-1) != '/' && *(t_ptr-1) != '\\') *t_ptr++ = '\\';
+		if (*(t_ptr-1) != '/' /*&& *(t_ptr-1) != '\\'*/)
+			*t_ptr++ = '/';
 		*t_ptr = 0;
 		if (*p_ptr) p_ptr++;		/* beyond the ';' */
 		strcat(target_buf, filename);
@@ -1577,9 +1566,6 @@ findfile(filename, target_buf)
 	strcpy(target_buf, filename);
 	return (0);							/* can't find one */
 	}
-
-#endif
-#endif
 
 /* --------- ELKS ---------- */
 
