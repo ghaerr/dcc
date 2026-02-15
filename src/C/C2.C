@@ -588,14 +588,11 @@ inc_nest:
 		strcat(string,&string[100]);/*	add name to end */
 		}
 
-#if 0
 /*	if MS-DOS V2.0 and use include= to find file */
-	extern char _msdos2;
-	if (inc_search && _msdos2) {
+	if (inc_search /*&& _msdos2*/) {
 		findfile(string,inctemp);
 		strcpy(string,inctemp);
 		}
-#endif
 	if ((ifd=open(string,0)) == -1) {
 		os("cannot open ");
 		os(string);
@@ -824,8 +821,6 @@ concatstring:
 	}
 
 
-#if 0
-
 /*	FINDFILE.C	*/
 /*
 	This file contains the routine to locate a file, utilizing the INCLUDE
@@ -840,17 +835,13 @@ concatstring:
 
 		if the file is found, findfile return 1 and the pathname,
 		otherwise it returns 0.
-
-	This program uses the environ routines to access the PATH variable.
-
-	Stack requirements:  ~300 bytes
-
 */
 
 findfile(filename, target_buf)
 	char *filename, *target_buf; {
 	int fid;
-	char paths[256], *p_ptr, *t_ptr;
+	char *p_ptr, *t_ptr, *p;
+	char *getenv();
 
 	/* first check in the local directory */
 	strcpy(target_buf, filename);
@@ -859,9 +850,10 @@ findfile(filename, target_buf)
 		close(fid);
 		return (1);
 		}
-	fid = _environ("DSINC", paths, 256);
-	if (fid == -1) fid = _environ("INCLUDE", paths, 256);
-	p_ptr = paths;
+	p = getenv("DSINC");
+	if (p == 0) p = getenv("INCLUDE");
+	if (p == 0) return 0;
+	p_ptr = p;
 
 	while (*p_ptr != 0) {
 		/* copy the directory name */
@@ -869,7 +861,8 @@ findfile(filename, target_buf)
 		while (*p_ptr != ';' && *p_ptr != 0) {
 			*t_ptr++ = *p_ptr++;
 			}
-		if (*(t_ptr-1) != '/' && *(t_ptr-1) != '\\') *t_ptr++ = '\\';
+		if (*(t_ptr-1) != '/' /*&& *(t_ptr-1) != '\\'*/)
+			*t_ptr++ = '/';
 		*t_ptr = 0;
 		if (*p_ptr) p_ptr++;		/* beyond the ';' */
 		strcat(target_buf, filename);
@@ -884,7 +877,7 @@ findfile(filename, target_buf)
 	}
 
 
-
+#if 0
 /*  ENVIRON.C	*/
 
 /*

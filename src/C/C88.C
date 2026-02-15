@@ -325,7 +325,7 @@ next_arg:;
 				}
 			}
 		else error("E option not valid from see");
-		real_exit(2);
+		real_exit(0);
 		}
 
 	if (see_exit == 0)
