@@ -290,7 +290,7 @@ next_arg:;
 						char lbuf[10];
 		
 						os("# line ");
-						itoa(cline, lbuf, 10);
+						xitoa(cline, lbuf, 10);
 						os(lbuf);
 						os(" \"");
 						os(name);
@@ -1227,6 +1227,42 @@ newenum() {
 		while (! ifch('}'));
 		}
 	}
+
+/* --------- DCC lib ---------- */
+
+char *xitoa(v, s, r)	/* convert n to characters in s using base r */
+int v;
+char *s;
+int r;
+{
+	char c;
+	char *b=s, *p=s;
+	int i, sign=0;
+
+	if(r < 2 || r > 36) {
+		*s=0;
+		return s;
+		}
+	if(r==10 && v < 0) {
+		sign++;
+		v = -v;
+		}
+	do {	/* generate digits in reverse order */
+		i = (unsigned)v % r;	/* get next digit */
+		*p++ = (i >= 10) ? i + ('A' - 10) : i + '0';
+	} 
+	//while (((unsigned)v /= r) > 0);	/* delete it */
+	while ((v = (unsigned)v / r) > 0);	/* delete it */
+	if(sign)
+		*p++='-';
+	*p = '\0';
+	while (p > s) {	/* reverse string */
+		c = *s;
+		*s++ = *--p;
+		*p = c;
+	}
+	return b;
+}
 
 /* --------- ELKS ---------- */
 

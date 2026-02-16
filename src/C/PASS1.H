@@ -19,6 +19,7 @@
 #define char        unsigned char
 #define HEAP        10000
 char *mstart;
+char *xitoa();
 #define FIX(node)   (*(char *)(node))
 #define OS(str)     os(str)
 #define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)

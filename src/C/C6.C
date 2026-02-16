@@ -41,7 +41,7 @@ builtinMac(){
 	char xpnd[32];
 
 	switch(bvalue) {
-		case R_LINE: itoa(cline, xpnd, 10);
+		case R_LINE: xitoa(cline, xpnd, 10);
 					 strngcpy(xpnd,0);
 					 break;
 		case R_FILE: strngcpy(name,1);
@@ -50,7 +50,7 @@ builtinMac(){
 					 break;
 		case R_TIME: strngcpy(mtime,1);
 					 break;
-		case R_STDC: itoa(__stdc, xpnd, 10);
+		case R_STDC: xitoa(__stdc, xpnd, 10);
 					 strngcpy(xpnd,0);
 					 break;
 		}

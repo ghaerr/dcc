@@ -392,7 +392,7 @@ putwrd:			wp=cur;
 				locname[n++] = 'P';
 				if(m_operand(nameat)->noff >= 0)
 				locname[n++] = '+';
-				itoa(m_operand(nameat)->noff, &locname[n], 10);
+				xitoa(m_operand(nameat)->noff, &locname[n], 10);
 				while(locname[++n]) ;
 				locname[n++] = ']';
 putloc:			if(n&1)
