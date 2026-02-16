@@ -20,7 +20,7 @@
 
 /* --- ELKS changes --- */
 #define char        unsigned char
-#define HEAP        10000
+#define HEAP        32766
 
 #define FP_SEG(fp)       ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
 #define FP_OFF(fp)       ((unsigned)(unsigned long)(void __far *)(fp))

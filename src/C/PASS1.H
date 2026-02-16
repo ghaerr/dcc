@@ -17,7 +17,7 @@
 
 /* --- ELKS changes --- */
 #define char        unsigned char
-#define HEAP        10000
+#define HEAP        32766
 char *mstart;
 char *xitoa();
 #define FIX(node)   (*(char *)(node))

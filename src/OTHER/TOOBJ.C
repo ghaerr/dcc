@@ -17,7 +17,7 @@
 
 /* --- ELKS changes --- */
 #define char        unsigned char
-#define HEAP        10000
+#define HEAP        32766
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 /* ------------------- */
 
