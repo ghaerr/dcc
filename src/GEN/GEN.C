@@ -273,7 +273,7 @@ initopt(argc,argv)
 	strcat(nextpgm,objname);
 	if (copt) strcat(nextpgm," C");
 	if (dopt[2] != 'Z') strcat(nextpgm,dopt);
-	strcat(asmname,".a");
+	strcat(asmname,".as");
 
 	/*	set asmname to name of output file	*/
 

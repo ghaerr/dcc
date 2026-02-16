@@ -243,7 +243,7 @@ init(argc,argv)
 	while (name[i] && name[i] != '.') {
 		i++;
 		}
-	if (name[i] == 0 && killopt == 0) strcat(name,".a");
+	//if (name[i] == 0 && killopt == 0) strcat(name,".a");
 	if ((infile=open(name,0)) == -1) {
 		os("cannot open ");
 		ferror(name);

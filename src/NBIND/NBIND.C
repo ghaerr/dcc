@@ -76,7 +76,7 @@
 	long  dataout_root,datatot_root,codeout_root,codetot_root;
 	unsigned util,stacklen;
 	unsigned len,num,nummod;
-	char copt,aopt,hopt,mopt,under_opt,*found,islib,libname[65]="CSTDIO.S";
+	char copt,aopt,hopt,mopt,under_opt,*found,islib,libname[65]="cstdio.a";
 	char *pname,numover[NUMARG],gotover,*fileat[NUMARG],ovnum,lastov;
 	char see_exit;
 	int  pfile=-1,numfile=1;
@@ -238,7 +238,7 @@ init(argc,argv)
 							break;
 				case 'L':	strcpy(libname,argat+1);
 							if (strlen(libname) == 1) strcat(libname,":");
-							strcat(libname,"CSTDIO.S");
+							strcat(libname,"cstdio.a");
 							break;
 				case 'N':	if (toupper(*(argat+1)) == 'M') {
 								no_member=1;
@@ -285,9 +285,9 @@ init(argc,argv)
 			ferror("cannot create",chkname);
 		chkat=chkbuf;
 		}
-/*	if MS-DOS V2.0 and no -L option, use path to find CSTDIO.S */
+/*	if MS-DOS V2.0 and no -L option, use path to find cstdio.a */
 	if (/*_msdos2 &&*/ libname[6] == '.')
-		findfile("CSTDIO.S", libname, "PATH");
+		findfile("cstdio.a", libname, "PATH");
 	}
 
 cmdname(name)
@@ -346,7 +346,7 @@ nextpass(pass)
 
 
 	/*	file zero is initobj if A option is off	*/
-	/*	numfile file is CSTDIO.S	*/
+	/*	numfile file is cstdio.a	*/
 
 	for (filen=aopt; filen <= numfile; filen++) {
 		gotdot=0;
@@ -396,7 +396,7 @@ nextpass(pass)
 		while (inname[i]) i++;
 		islib=0;
 		lastov=ovnum;
-		if (toupper(inname[i-1]) == 'S' && inname[i-2] == '.') {
+		if (toupper(inname[i-1]) == 'a' && inname[i-2] == '.') {
 			islib=1;
 			ovnum=0;
 			}

@@ -172,7 +172,7 @@ init(argc,argv)
 			isopen[filen]=FCLOSED;
 			if (outname[0] == 0) {
 				i=strlen(argat);
-				if (argat[i-2] != '.' || toupper(argat[i-1]) != 'S') 
+				if (argat[i-2] != '.' || toupper(argat[i-1]) != 'a') 
 					cmdname(argat);
 				else strcpy(outname,"NUL");
 				}
@@ -192,7 +192,7 @@ cmdname(name)
 		if (*name == '.') needs=0;
 		outname[i++]=*name++;
 		}
-	if (needs) strcpy(&outname[i],".S");
+	if (needs) strcpy(&outname[i],".a");
 	else outname[i]=0;
 	}
 
