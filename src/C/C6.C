@@ -749,7 +749,7 @@ whitesp() {
 				if (ch == LF) dolf(1);
 				else if (ch == 26) {    //FIXME
 					cur--;
-					ltoa((long)bline, &eoferr[37], 10);
+					xitoa(bline, &eoferr[37], 10);
 					error(eoferr);
 					return;
 					}
