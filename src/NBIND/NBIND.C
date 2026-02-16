@@ -396,7 +396,7 @@ nextpass(pass)
 		while (inname[i]) i++;
 		islib=0;
 		lastov=ovnum;
-		if (toupper(inname[i-1]) == 'a' && inname[i-2] == '.') {
+		if (toupper(inname[i-1]) == 'A' && inname[i-2] == '.') {
 			islib=1;
 			ovnum=0;
 			}
