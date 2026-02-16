@@ -1,0 +1,11 @@
+WARNING!  The following command line will DESTROY (not optimize)
+your .A file:                             ^^^^^^^
+
+		       O88 <MYFILE.A >MYFILE.A
+
+
+I.e., do NOT use the same filename for both input and output files
+when running O88 in stand-alone mode.
+
+See the file bugfixes.lst for a history of bugs repaired.
+See the file features.new for a history of new features added.

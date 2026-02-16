@@ -1,0 +1,20 @@
+del lint
+lint src\utils >>lint
+lint src\8088-pt1 >>lint
+lint src\80188 >>lint
+lint src\8088-pt2 >>lint
+lint src\8087 >>lint
+lint src\asmlib >>lint
+lint src\o88 >>lint
+lint src\labels >>lint
+lint src\8088-pt3 >>lint
+lint src\allocate >>lint
+lint src\squeeze >>lint
+lint src\jumps >>lint
+lint src\folding >>lint
+lint src\buffers >>lint
+lint src\cc >>lint
+lint src\cleanup >>lint
+lint src\linklist >>lint
+lint src\parse >>lint
+lint src\gather >>lint

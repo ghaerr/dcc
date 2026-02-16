@@ -1,0 +1,30 @@
+This the source to the O88 optimizer.
+
+It seems to be a copy of it's "development" directory, and as
+such has some cruft in it, and the source itself is in a state
+of flux (seems to have some debugging printf() statments, though
+the code works).
+
+Some of the files were "broken", and have been fixed.  The original
+files are in the BADFILES directory, in case you're interested.
+The "broken" files are:
+   O88.EXE  -- This version did not work.  It was replaced with O88
+               from the RELEASED directory.
+   MAKEFILE -- Very nice, but the author forgot the DATA.C file
+   FILES    -- The author forgot to link in OBJ\DATA
+
+While the documentation says that O88 works with the 3.03 compiler,
+the MAKEFILE (fixed) uses the -px (#pragma extensions) directive,
+which seems to imply that the author was playing with compiling
+the optimizer with/for the 3.1h compiler.
+
+The CC program only wants to be compiled with the 3.03 compiler,
+though O88 itself can be complied with either the 3.03 or 3.1h
+compiler.  "Make" files for both compilers (303_O88.BAT and
+31H_O88.BAT) are included.  For either compiler, copy the compiler
+itself (C88.EXE, GEN.EXE, ASM88.EXE, BIND.EXE, *.H, CSTDIO.S) into
+the current diretory.
+
+The O88 optimizer must be used to compile the O88 optimizer,
+otherwise the program overflows the 64K available to a small memory
+model program.

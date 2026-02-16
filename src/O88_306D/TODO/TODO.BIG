@@ -1,0 +1,26 @@
+
+
+
+
+ Mark's Code			O88's Code
+---------------------------------------------------------
+ LES SI,src			LES SI,src
+ MOV r1,ES			
+ LES DI,dst			
+ MOV r2,ES			
+ MOV ES,r1
+
+; if followed by ... (Copy byte or word)
+
+ MOV r3,ES:BYTE/WORD [SI]	MOV r1,ES:BYTE/WORD [SI]
+ MOV ES,r2			LES DI,dst
+ MOV ES:BYTE/WORD [DI],r3	MOV ES:BYTE/WORD [DI],r1
+
+; if followed by ... (Copy a pointer)
+
+ LES SI,ES:[SI]			LES r1,ES:WORD [SI]
+ MOV r1,ES			MOV r2,ES
+ MOV ES,r2			LES DI,dst
+ MOV ES:WORD [DI],SI		MOV ES:WORD [DI],r1
+ MOV ES:WORD [DI+2],r1		MOV ES:WORD [DI+2],r2
+ 				

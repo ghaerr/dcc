@@ -1,0 +1,6362 @@
+ CSEG 
+ DSEG 
+ PUBLIC input_text_
+ PUBLIC input_float_
+ PUBLIC input_int_
+ PUBLIC rv_
+ PUBLIC input_long_
+ PUBLIC at_normal_
+ PUBLIC at_reverse_
+ PUBLIC at_underline_
+ PUBLIC at_blink_
+ PUBLIC at_high_
+ CSEG 
+ PUBLIC set_pos_
+ PUBLIC w_set_pos_
+ PUBLIC box_
+ PUBLIC w_activate_
+ PUBLIC w_end_session_
+ PUBLIC w_graphics_
+ PUBLIC w_title_
+ PUBLIC _spr_
+ PUBLIC graphics_on_
+ PUBLIC graphics_off_
+ PUBLIC w_string_
+ PUBLIC w_fstring_
+ PUBLIC write_char_
+ PUBLIC w_message_
+ PUBLIC w_messages_
+ PUBLIC w_change_att_
+ PUBLIC w_change_message_att_
+ PUBLIC get_answer_
+ PUBLIC w_v_split_
+ PUBLIC w_h_split_
+ PUBLIC w_close_
+ PUBLIC w_open_message_system_
+ PUBLIC w_initialize_
+ PUBLIC w_clr_
+ PUBLIC w_update_
+ PUBLIC w_scroll_combined_
+ PUBLIC w_error_message_
+ PUBLIC w_help_
+ PUBLIC draw_box_
+ PUBLIC key_scan_
+ PUBLIC convert_fn_key_
+ PUBLIC get_ticks_
+ PUBLIC get_console_
+ PUBLIC w_input_line_
+ PUBLIC w_get_field_
+ PUBLIC remove_background_function_
+ PUBLIC add_background_function_
+ PUBLIC w_menu_
+ PUBLIC w_open_
+ DSEG 
+ PUBLIC mes_index_
+ PUBLIC mes_file_
+ PUBLIC sindex_
+ PUBLIC main_window_
+ PUBLIC mesage_window_
+ PUBLIC awindow_
+ CSEG 
+ PUBLIC fseek_
+ PUBLIC lseek_
+ PUBLIC w_alloc_
+ PUBLIC w_realloc_
+ PUBLIC w_free_
+ PUBLIC w_freeall_
+ PUBLIC rlocking_
+ DSEG 
+ PUBLIC record_locking_
+ CSEG 
+ PUBLIC _add_record_
+ DSEG 
+ PUBLIC errno_
+ PUBLIC P2X_
+ PUBLIC P2D_
+ PUBLIC P02D_
+ PUBLIC PN2D_
+ PUBLIC P3D_
+ PUBLIC P6LD_
+ PUBLIC P06LD_
+ PUBLIC PD_
+ PUBLIC PLD_
+ PUBLIC S_PS_
+ PUBLIC CRC_
+ PUBLIC CCR_
+ PUBLIC PRN_
+ PUBLIC NULL_STRING_
+ PUBLIC LAST_FIRST_
+ PUBLIC CLIENT_FILE_
+ PUBLIC CLIENT_ALINDEX_
+ PUBLIC CLIENT_MZINDEX_
+ PUBLIC DRUG_FILE_
+ PUBLIC DRUG_INDEX_
+ PUBLIC DOCTOR_FILE_
+ PUBLIC PLAN_FILE_
+ PUBLIC SCRIPT_INDEX_
+ PUBLIC SCRIPT_FILE_
+ PUBLIC CARRIER_FILE_
+ PUBLIC CARRIER_INDEX_
+ PUBLIC CASH_CODE_
+ PUBLIC MEDICAID_CODE_
+ PUBLIC MEDICAID_STRING_
+ PUBLIC FILE_READ_
+ PUBLIC FILE_WRITE_
+ PUBLIC FILE_APPEND_
+ CSEG 
+ PUBLIC quit_
+ PUBLIC key_cmp_
+ DSEG 
+ PUBLIC mesage_
+ CSEG 
+ PUBLIC bt_open_
+ PUBLIC open_file_
+ PUBLIC show_carrier_
+ DSEG 
+ PUBLIC carrier_block_
+ PUBLIC current_carrier_
+ PUBLIC records_
+carrier_heading_ DB 'CARRIER INFORMATION',0
+__109 DB 'AWP',0
+__110 DB 'DIRECT',0
+__111 DB 'MAC',0
+__112 DB 'CASH',0
+cost_basis_types_ DW WORD __109
+ DW WORD __110
+ DW WORD __111
+ DW WORD __112
+__114 DB 'METRIC',0
+__115 DB 'UNIT',0
+pric_quan_ DW WORD __114
+ DW WORD __115
+P2DP2D_ DB '%2d-%2d',0
+P02DP02D_ DB '%02d-%02d',0
+__119 DB '%02d)',0
+__120 DB '1) Name:',0
+__121 DB '2) Addr:',0
+__122 DB '3) Ct/st/zp:',0
+__123 DB '4) Phone:',0
+__124 DB '5) Carrier Code:',0
+__125 DB '6) Plan:',0
+__126 DB '7) Group:',0
+__127 DB '8) Pharmacy Id #:',0
+__128 DB 'Carrier Field Edits',0
+__129 DB '10) Group Id # (min, max):',0
+__130 DB '11) Member # (min, max):',0
+__131 DB '12) Person/Rider # (min, max):',0
+__132 DB '13) Plan (min, max):',0
+__133 DB '14) Member # Check Digit (0 = None):',0
+__134 DB '15) Bill To Secondary Carrier (Y/N):',0
+__135 DB '16) Secondary Carrier Bills:',0
+__136 DB '17) Form Type   :',0
+__137 DB '18)   Secondary :',0
+__138 DB '19) Auth Cl Rep :',0
+__139 DB '20) Auth Ph Rep :',0
+__140 DB '21) Disk Inv.  #:',0
+__141 DB '22) Disk Serial#:',0
+__142 DB '23) Birth 0,2,6 :',0
+__143 DB '24) Recn Bill At:',0
+__144 DB '25) FrmGen CD/JS:',0
+__145 DB 'Pricing Information',0
+__146 DB 'CA  CO  SF      CA  CO  SF      FORM  COST BASIS  PR QTY  MAR'
+ DB 'K    FEE',0
+__147 DB '[Ex{cept/clus}ion By Category]',0
+__148 DB '[Exception Pricing Formulae]',0
+__149 DB '%02d)  %d',0
+__150 DB '20) Exclude:',0
+__151 DB '26) Brand Deductable:',0
+__152 DB '27) Generic Deductable:',0
+__153 DB '28) Brand/No Generic:',0
+__154 DB '29) Dispensing Fee:',0
+__155 DB '30) Compounding Fee:',0
+__156 DB '[Special Fee',39,'s]',0
+__157 DB 'COST    QTY  DAYS  MARK    FEE  COPAY',0
+__158 DB 'Group/Plan Information',0
+__159 DB '10) Other Insur. (Y/N):',0
+__160 DB '11) Indv Co-Pay  (Y/N):',0
+__161 DB '12) Indv Max Age (Y/N):',0
+__162 DB '13) Indv Expire  (Y/N):',0
+__163 DB '14) Cardholder   (Y/N):',0
+__164 DB '15) Alternate NDC(Y/N):',0
+__165 DB '16) Special Cov. (Y/N):',0
+__166 DB '17) Max Age Dependants:',0
+__167 DB '18) Rx expires (days):',0
+__168 DB '20) Cost Basis    :            29) DESI   :',0
+__169 DB '21) Pricing Quanty:            30) Maint ?:',0
+__170 DB '                               31) Max Ref:',0
+__171 DB '22) Max Day Supply:            32) Accept:',0
+__172 DB '23) Max Quantity  :',0
+__173 DB '24) [+days | -% used] early refills :',0
+__174 DB '25) [P]riApr [W]ritn [N]one:',0
+__175 DB '26) Pays [B]r [G]n [L]n [D]f [E]ither:',0
+__176 DB '27) Client Cap (max covg under plan) :',0
+__177 DB '28) Contract expiration date         :',0
+ CSEG 
+
+open_carrier_window_: PUSH BP
+ MOV BP,SP
+ SUB SP,6
+ MOV WORD [BP-6],OFFSET __119
+ MOV BX,WORD [BP+4]
+ CMP BX,1
+ JL _L4
+ CMP BX,3
+ JG _L4
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L6[BX]
+_L6:
+ DW _L1
+ DW _L2
+ DW _L3
+_L1:
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_normal_
+ MOV AX,20
+ PUSH AX
+ MOV AX,78
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL w_open_
+ ADD SP,12
+ MOV WORD [BP-2],AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ PUSH WORD at_high_
+ MOV AX,OFFSET carrier_heading_
+ PUSH AX
+ CALL w_title_
+ ADD SP,8
+ MOV AX,0
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __120
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,1
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __121
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,2
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __122
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,3
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __123
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,0
+ PUSH AX
+ MOV AX,42
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __124
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,1
+ PUSH AX
+ MOV AX,42
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __125
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,2
+ PUSH AX
+ MOV AX,42
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __126
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,3
+ PUSH AX
+ MOV AX,42
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __127
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,1
+ PUSH AX
+ MOV AX,6
+ PUSH AX
+ PUSH WORD at_normal_
+ MOV AX,OFFSET __128
+ PUSH AX
+ CALL w_title_
+ ADD SP,8
+ MOV AX,6
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __129
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,7
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __130
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,8
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __131
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,9
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __132
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,11
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __133
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,13
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __134
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,14
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __135
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,6
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __136
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,7
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __137
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,8
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __138
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,9
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __139
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,11
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __140
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,12
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __141
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,14
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __142
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,15
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __143
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,16
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __144
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ JMP _L5
+_L2:
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_normal_
+ MOV AX,20
+ PUSH AX
+ MOV AX,78
+ PUSH AX
+ MOV AX,5
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL w_open_
+ ADD SP,12
+ MOV WORD [BP-2],AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ PUSH WORD at_high_
+ MOV AX,OFFSET __145
+ PUSH AX
+ CALL w_title_
+ ADD SP,8
+ MOV AX,1
+ PUSH AX
+ MOV AX,4
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __146
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,0
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __147
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,0
+ PUSH AX
+ MOV AX,41
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __148
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV WORD [BP-4],0
+_L7:
+ CMP WORD [BP-4],5
+ JAE _L8
+ MOV AX,WORD [BP-4]
+ ADD AX,2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP-4]
+ ADD AX,10
+ PUSH AX
+ PUSH WORD [BP-6]
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,WORD [BP-4]
+ ADD AX,2
+ PUSH AX
+ MOV AX,16
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP-4]
+ ADD AX,15
+ PUSH AX
+ PUSH WORD [BP-6]
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,WORD [BP-4]
+ ADD AX,2
+ PUSH AX
+ MOV AX,34
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP-4]
+ ADD AX,1
+ PUSH AX
+ MOV AX,WORD [BP-4]
+ ADD AX,21
+ PUSH AX
+ MOV AX,OFFSET __149
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,6
+_L9:
+ INC WORD [BP-4]
+ JMP _L7
+_L8:
+ MOV AX,7
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __150
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,9
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __151
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,10
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __152
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,11
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __153
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,12
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __154
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,13
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __155
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,7
+ PUSH AX
+ MOV AX,47
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __156
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,8
+ PUSH AX
+ MOV AX,39
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __157
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV WORD [BP-4],0
+_L10:
+ CMP WORD [BP-4],5
+ JAE _L11
+ MOV AX,WORD [BP-4]
+ ADD AX,9
+ PUSH AX
+ MOV AX,33
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP-4]
+ ADD AX,31
+ PUSH AX
+ PUSH WORD [BP-6]
+ CALL w_fstring_
+ ADD SP,4
+_L12:
+ INC WORD [BP-4]
+ JMP _L10
+_L11:
+ JMP _L5
+_L3:
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_normal_
+ MOV AX,20
+ PUSH AX
+ MOV AX,78
+ PUSH AX
+ MOV AX,5
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL w_open_
+ ADD SP,12
+ MOV WORD [BP-2],AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ PUSH WORD at_high_
+ MOV AX,OFFSET __158
+ PUSH AX
+ CALL w_title_
+ ADD SP,8
+ MOV AX,0
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __159
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __160
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __161
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __162
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,4
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __163
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __164
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,6
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __165
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,8
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __166
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,10
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __167
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,0
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __168
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,1
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __169
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,2
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __170
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,3
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __171
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,4
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __172
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,6
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __173
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,7
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __174
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,8
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __175
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,9
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __176
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,11
+ PUSH AX
+ MOV AX,28
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __177
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ PUSH WORD at_normal_
+ CALL w_change_att_
+ ADD SP,2
+_L4:
+ JMP _L5
+_L5:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+ PUBLIC carrier_
+ DSEG 
+ PUBLIC todays_mm_
+ PUBLIC todays_yy_
+__181 DB 'carrier.idx',0
+__182 DB 'carrier.dat',0
+ CSEG 
+ PUBLIC get_carrier_field_
+ PUBLIC fclose_
+ PUBLIC bt_close_
+ PUBLIC data_select_
+ DSEG 
+__187 DB 'Carrier',0
+ CSEG 
+ PUBLIC add_carrier_
+ PUBLIC _gt_record_
+ PUBLIC display_carrier_
+ PUBLIC arc_serv_
+ PUBLIC sprintf_
+ DSEG 
+__193 DB '%2s%-7s%-15s',0
+__194 DB 'YN',0
+ CSEG 
+ PUBLIC delete_record_
+ DSEG 
+__196 DB 'Carrier',0
+__197 DB 'YN',0
+__198 DB '%2s%-7s%-15s',0
+ CSEG 
+ PUBLIC _pt_record_
+
+carrier_: PUSH BP
+ MOV BP,SP
+ SUB SP,60
+ MOV WORD [BP-6],0
+ MOV WORD [BP-8],0
+ MOV WORD [BP-12],0
+ MOV BYTE [BP-25],0
+ MOV AX,WORD [BP+6]
+ MOV WORD [BP-27],AX
+ MOV AX,OFFSET open_file_
+ PUSH AX
+ MOV AX,OFFSET key_cmp_
+ PUSH AX
+ MOV AX,OFFSET __181
+ PUSH AX
+ MOV AL,BYTE records_[100]
+ MOV AH,0
+ PUSH AX
+ CALL bt_open_
+ ADD SP,8
+ MOV WORD [BP-4],AX
+ MOV AX,OFFSET FILE_APPEND_
+ PUSH AX
+ MOV AX,OFFSET __182
+ PUSH AX
+ MOV AL,BYTE records_[101]
+ MOV AH,0
+ PUSH AX
+ CALL open_file_
+ ADD SP,6
+ MOV WORD [BP-60],AX
+ CMP WORD [BP+4],0
+ JNZ _L13
+ MOV WORD [BP-27],OFFSET carrier_block_[3]
+ MOV AX,1
+ PUSH AX
+ CALL open_carrier_window_
+ ADD SP,2
+ MOV WORD [BP-2],AX
+_L13:
+_L14:
+ MOV WORD [BP-22],0
+ MOV WORD [BP-20],0
+ CMP WORD [BP-12],0
+ JZ _L17
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_high_
+ CALL w_clr_
+ ADD SP,4
+_L17:
+ PUSH WORD at_high_
+ CALL w_change_att_
+ ADD SP,2
+ CMP WORD [BP+4],0
+ JNZ _L18
+ MOV AX,1
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+ CMP AX,-1
+ JNZ _L19
+ PUSH WORD [BP-2]
+ CALL w_close_
+ ADD SP,2
+ PUSH WORD [BP-60]
+ CALL fclose_
+ ADD SP,2
+ PUSH WORD [BP-4]
+ CALL bt_close_
+ ADD SP,2
+ MOV AX,-1
+ MOV SP,BP
+ POP BP
+ RET
+_L19:
+_L18:
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-25]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,OFFSET show_carrier_
+ PUSH AX
+ MOV AX,OFFSET __187
+ PUSH AX
+ PUSH WORD [BP-27]
+ PUSH WORD [BP-60]
+ PUSH WORD [BP-4]
+ CALL data_select_
+ ADD SP,16
+ MOV WORD [BP-12],AX
+ CMP AX,-5
+ JNZ _L20
+ PUSH WORD [BP-2]
+ PUSH WORD [BP+4]
+ PUSH WORD [BP-27]
+ PUSH WORD [BP-60]
+ PUSH WORD [BP-4]
+ CALL add_carrier_
+ ADD SP,10
+ MOV WORD [BP-12],AX
+ JMP _L21
+_L20:
+ CMP WORD [BP-12],0
+ JL _L22
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,480
+ PUSH AX
+ PUSH WORD [BP-12]
+ PUSH WORD [BP-60]
+ CALL _gt_record_
+ ADD SP,8
+ CMP WORD [BP+4],0
+ JNZ _L23
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ CALL display_carrier_
+ ADD SP,4
+ MOV WORD [BP-24],1
+_L24:
+ MOV BX,WORD [BP-24]
+ CMP BX,1
+ JL _L30
+ CMP BX,3
+ JG _L30
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L32[BX]
+_L32:
+ DW _L27
+ DW _L28
+ DW _L29
+_L27:
+_L33:
+ MOV AX,68
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ CALL arc_serv_
+ ADD SP,4
+ MOV WORD [BP-10],AX
+ CMP AX,-2
+ JZ _L36
+ CMP WORD [BP-10],-3
+ JZ _L36
+ CMP WORD [BP-10],-10
+ JZ _L36
+ PUSH WORD [BP-10]
+ MOV AX,1
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+ CMP AX,-1
+ JZ _L37
+ MOV WORD [BP-20],-1
+ CMP WORD [BP-10],5
+ JL _L38
+ CMP WORD [BP-10],7
+ JG _L38
+ MOV WORD [BP-22],-1
+_L38:
+_L37:
+_L36:
+_L34:
+ CMP WORD [BP-10],-2
+ JZ _L39
+ CMP WORD [BP-10],-3
+ JZ _L40
+ CMP WORD [BP-10],-10
+ JNZ _L33
+_L40:
+_L39:
+_L35:
+ CMP WORD [BP-10],-10
+ JNZ _L41
+ MOV AX,OFFSET carrier_block_[29]
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[45]
+ PUSH AX
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,OFFSET __193
+ PUSH AX
+ LEA AX,WORD [BP-57]
+ PUSH AX
+ CALL sprintf_
+ ADD SP,10
+ LEA AX,WORD [BP-57]
+ PUSH AX
+ MOV AX,OFFSET __194
+ PUSH AX
+ MOV AX,2074
+ PUSH AX
+ CALL get_answer_
+ ADD SP,6
+ CMP AL,89
+ JNZ _L42
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET __196
+ PUSH AX
+ MOV AX,480
+ PUSH AX
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ LEA AX,WORD [BP-57]
+ PUSH AX
+ PUSH WORD [BP-12]
+ PUSH WORD [BP-4]
+ PUSH WORD [BP-60]
+ CALL delete_record_
+ ADD SP,16
+_L42:
+ MOV WORD [BP-10],-3
+_L41:
+ CMP WORD [BP-10],-3
+ JNZ _L43
+ MOV WORD [BP-24],0
+ JMP _L44
+_L43:
+ MOV WORD [BP-24],2
+_L44:
+ JMP _L31
+_L28:
+ CMP WORD [BP-6],0
+ JNZ _L45
+ MOV AX,2
+ PUSH AX
+ CALL open_carrier_window_
+ ADD SP,2
+ MOV WORD [BP-6],AX
+_L45:
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,2
+ PUSH AX
+ CALL display_carrier_
+ ADD SP,4
+_L46:
+ MOV AX,0
+ PUSH AX
+ MOV AX,35
+ PUSH AX
+ CALL arc_serv_
+ ADD SP,4
+ MOV WORD [BP-10],AX
+ CMP AX,-2
+ JZ _L49
+ CMP WORD [BP-10],-3
+ JZ _L49
+ PUSH WORD [BP-10]
+ MOV AX,2
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+ CMP AX,-1
+ JZ _L50
+ MOV WORD [BP-20],-1
+_L50:
+_L49:
+_L47:
+ CMP WORD [BP-10],-2
+ JZ _L51
+ CMP WORD [BP-10],-3
+ JNZ _L46
+_L51:
+_L48:
+ CMP WORD [BP-10],-3
+ JNZ _L52
+ MOV WORD [BP-24],1
+ PUSH WORD [BP-6]
+ CALL w_close_
+ ADD SP,2
+ MOV WORD [BP-6],0
+ PUSH WORD [BP-2]
+ CALL w_activate_
+ ADD SP,2
+ JMP _L53
+_L52:
+ MOV WORD [BP-24],3
+_L53:
+ JMP _L31
+_L29:
+ CMP WORD [BP-8],0
+ JNZ _L54
+ MOV AX,3
+ PUSH AX
+ CALL open_carrier_window_
+ ADD SP,2
+ MOV WORD [BP-8],AX
+_L54:
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,3
+ PUSH AX
+ CALL display_carrier_
+ ADD SP,4
+_L55:
+ MOV AX,0
+ PUSH AX
+ MOV AX,32
+ PUSH AX
+ CALL arc_serv_
+ ADD SP,4
+ MOV WORD [BP-10],AX
+ CMP AX,-2
+ JZ _L58
+ CMP WORD [BP-10],-3
+ JZ _L58
+ PUSH WORD [BP-10]
+ MOV AX,3
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+ CMP AX,-1
+ JZ _L59
+ MOV WORD [BP-20],-1
+_L59:
+_L58:
+_L56:
+ CMP WORD [BP-10],-2
+ JZ _L60
+ CMP WORD [BP-10],-3
+ JNZ _L55
+_L60:
+_L57:
+ CMP WORD [BP-10],-3
+ JNZ _L61
+ MOV WORD [BP-24],2
+ PUSH WORD [BP-8]
+ CALL w_close_
+ ADD SP,2
+ MOV WORD [BP-8],0
+ PUSH WORD [BP-6]
+ CALL w_activate_
+ ADD SP,2
+ JMP _L62
+_L61:
+ PUSH WORD [BP-6]
+ CALL w_close_
+ ADD SP,2
+ PUSH WORD [BP-8]
+ CALL w_close_
+ ADD SP,2
+ MOV WORD [BP-6],0
+ MOV WORD [BP-8],0
+ MOV WORD [BP-24],0
+_L62:
+_L30:
+ JMP _L31
+_L31:
+_L25:
+ CMP WORD [BP-24],0
+ JNZ _L24
+_L26:
+ CMP WORD [BP-10],-2
+ JNZ _L63
+ CMP WORD [BP-20],-1
+ JNZ _L63
+ CMP WORD [BP-22],0
+ JZ _L64
+ MOV AX,OFFSET __197
+ PUSH AX
+ MOV AX,2007
+ PUSH AX
+ CALL get_answer_
+ ADD SP,4
+ CMP AL,89
+ JNZ _L64
+ MOV AX,OFFSET carrier_block_[29]
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[45]
+ PUSH AX
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,OFFSET __198
+ PUSH AX
+ LEA AX,WORD [BP-57]
+ PUSH AX
+ CALL sprintf_
+ ADD SP,10
+ MOV AX,-1
+ PUSH AX
+ MOV AX,-1
+ PUSH AX
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ LEA AX,WORD [BP-57]
+ PUSH AX
+ MOV AX,480
+ PUSH AX
+ PUSH WORD [BP-60]
+ PUSH WORD [BP-4]
+ CALL _add_record_
+ ADD SP,14
+ MOV WORD [BP-12],AX
+ JMP _L65
+_L64:
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,480
+ PUSH AX
+ PUSH WORD [BP-12]
+ PUSH WORD [BP-60]
+ CALL _pt_record_
+ ADD SP,8
+_L65:
+_L63:
+_L23:
+_L22:
+_L21:
+ PUSH WORD [BP-2]
+ CALL w_activate_
+ ADD SP,2
+_L15:
+ CMP WORD [BP+4],0
+ JZ _L14
+_L16:
+ PUSH WORD [BP-60]
+ CALL fclose_
+ ADD SP,2
+ PUSH WORD [BP-4]
+ CALL bt_close_
+ ADD SP,2
+ MOV AX,WORD [BP-12]
+ MOV WORD current_carrier_,AX
+ MOV SP,BP
+ POP BP
+ RET
+ DSEG 
+ PUBLIC claim_block_
+ CSEG 
+ PUBLIC strcpy_
+ DSEG 
+__202 DB '***** ADD Carrier *****',0
+ CSEG 
+ PUBLIC _setmem_
+ PUBLIC get_carrier_main_screen_
+ PUBLIC get_carrier_plan_screen_
+ PUBLIC get_carrier_group_screen_
+ DSEG 
+__207 DB '%2s%-7s%-15s',0
+ CSEG 
+ PUBLIC bt_insert_
+ DSEG 
+__209 DB '%c:plan%s.dat',0
+ CSEG 
+ PUBLIC fopen_
+
+add_carrier_: PUSH BP
+ MOV BP,SP
+ SUB SP,78
+ MOV WORD [BP-62],0
+ MOV WORD [BP-64],0
+ MOV WORD [BP-66],0
+ MOV WORD [BP-68],0
+ MOV WORD [BP-76],OFFSET claim_block_
+ PUSH WORD [BP+8]
+ LEA AX,WORD [BP-30]
+ PUSH AX
+ CALL strcpy_
+ ADD SP,4
+ CMP WORD [BP+10],0
+ JZ _L66
+ MOV AX,1
+ PUSH AX
+ CALL open_carrier_window_
+ ADD SP,2
+ MOV WORD [BP-62],AX
+ JMP _L67
+_L66:
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_high_
+ CALL w_clr_
+ ADD SP,4
+ MOV AX,WORD [BP+12]
+ MOV WORD [BP-62],AX
+_L67:
+ MOV AX,0
+ PUSH AX
+ MOV AX,-1
+ PUSH AX
+ PUSH WORD at_blink_
+ MOV AX,OFFSET __202
+ PUSH AX
+ CALL w_title_
+ ADD SP,8
+ PUSH WORD at_high_
+ CALL w_change_att_
+ ADD SP,2
+ MOV AX,0
+ PUSH AX
+ MOV AX,480
+ PUSH AX
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ CALL _setmem_
+ ADD SP,6
+ LEA AX,WORD [BP-30]
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[3]
+ PUSH AX
+ CALL strcpy_
+ ADD SP,4
+ MOV AX,0
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET carrier_block_[3]
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV WORD [BP-74],1
+_L68:
+ MOV BX,WORD [BP-74]
+ CMP BX,1
+ JL _L74
+ CMP BX,3
+ JG _L74
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L76[BX]
+_L76:
+ DW _L71
+ DW _L72
+ DW _L73
+_L71:
+ CALL get_carrier_main_screen_
+ CMP AX,-3
+ JNZ _L77
+ CMP WORD [BP+10],0
+ JZ _L78
+ PUSH WORD [BP-62]
+ CALL w_close_
+ ADD SP,2
+ JMP _L79
+_L78:
+ MOV AX,0
+ PUSH AX
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET NULL_STRING_
+ PUSH AX
+ CALL w_title_
+ ADD SP,8
+_L79:
+ MOV AX,-3
+ MOV SP,BP
+ POP BP
+ RET
+_L77:
+ MOV WORD [BP-74],2
+ JMP _L75
+_L72:
+ CMP WORD [BP-64],0
+ JNZ _L80
+ MOV AX,2
+ PUSH AX
+ CALL open_carrier_window_
+ ADD SP,2
+ MOV WORD [BP-64],AX
+ JMP _L81
+_L80:
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_high_
+ CALL w_clr_
+ ADD SP,4
+_L81:
+ CALL get_carrier_plan_screen_
+ CMP AX,-3
+ JNZ _L82
+ PUSH WORD [BP-64]
+ CALL w_close_
+ ADD SP,2
+ MOV WORD [BP-64],0
+ PUSH WORD [BP-62]
+ CALL w_activate_
+ ADD SP,2
+ MOV WORD [BP-74],1
+ JMP _L83
+_L82:
+ MOV WORD [BP-74],3
+_L83:
+ JMP _L75
+_L73:
+ CMP WORD [BP-66],0
+ JNZ _L84
+ MOV AX,3
+ PUSH AX
+ CALL open_carrier_window_
+ ADD SP,2
+ MOV WORD [BP-66],AX
+ JMP _L85
+_L84:
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_high_
+ CALL w_clr_
+ ADD SP,4
+_L85:
+ CALL get_carrier_group_screen_
+ CMP AX,-3
+ JZ _L86
+ MOV AX,-1
+ PUSH AX
+ MOV AX,-1
+ PUSH AX
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[3]
+ PUSH AX
+ MOV AX,480
+ PUSH AX
+ PUSH WORD [BP+6]
+ MOV AX,0
+ PUSH AX
+ CALL _add_record_
+ ADD SP,14
+ MOV WORD [BP-68],AX
+ MOV AX,OFFSET carrier_block_[29]
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[45]
+ PUSH AX
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,OFFSET __207
+ PUSH AX
+ LEA AX,WORD [BP-60]
+ PUSH AX
+ CALL sprintf_
+ ADD SP,10
+ PUSH WORD [BP-68]
+ LEA AX,WORD [BP-60]
+ PUSH AX
+ PUSH WORD [BP+4]
+ CALL bt_insert_
+ ADD SP,6
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AL,BYTE records_[101]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET __209
+ PUSH AX
+ LEA AX,WORD [BP-60]
+ PUSH AX
+ CALL sprintf_
+ ADD SP,8
+ MOV AX,OFFSET FILE_READ_
+ PUSH AX
+ LEA AX,WORD [BP-60]
+ PUSH AX
+ CALL fopen_
+ ADD SP,4
+ MOV WORD [BP-78],AX
+ CMP AX,0
+ JNZ _L87
+ MOV AX,OFFSET FILE_WRITE_
+ PUSH AX
+ LEA AX,WORD [BP-60]
+ PUSH AX
+ CALL fopen_
+ ADD SP,4
+ MOV WORD [BP-78],AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,220
+ PUSH AX
+ PUSH WORD [BP-76]
+ CALL _setmem_
+ ADD SP,6
+ MOV SI,WORD [BP-76]
+ MOV WORD [SI],1
+ PUSH WORD [BP-76]
+ MOV AX,220
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ PUSH WORD [BP-78]
+ CALL _pt_record_
+ ADD SP,8
+_L87:
+ PUSH WORD [BP-78]
+ CALL fclose_
+ ADD SP,2
+ PUSH WORD [BP-66]
+ CALL w_close_
+ ADD SP,2
+ MOV WORD [BP-66],0
+ PUSH WORD [BP-64]
+ CALL w_close_
+ ADD SP,2
+ MOV WORD [BP-64],0
+ CMP WORD [BP+10],0
+ JZ _L88
+ PUSH WORD [BP-62]
+ CALL w_close_
+ ADD SP,2
+_L88:
+ MOV AX,WORD [BP-68]
+ MOV SP,BP
+ POP BP
+ RET
+ JMP _L89
+_L86:
+ PUSH WORD [BP-66]
+ CALL w_close_
+ ADD SP,2
+ MOV WORD [BP-66],0
+ PUSH WORD [BP-64]
+ CALL w_activate_
+ ADD SP,2
+ MOV WORD [BP-74],2
+_L89:
+_L74:
+ JMP _L75
+_L75:
+_L69:
+ CMP WORD [BP-74],0
+ JNZ _L68
+_L70:
+ MOV SP,BP
+ POP BP
+ RET
+
+get_carrier_main_screen_: PUSH BP
+ MOV BP,SP
+ SUB SP,4
+ MOV WORD [BP-2],2
+ PUSH WORD at_high_
+ CALL w_change_att_
+ ADD SP,2
+_L90:
+ MOV AX,WORD [BP-2]
+ MOV WORD [BP-2],AX
+_L93:
+ CMP WORD [BP-2],25
+ JG _L94
+ PUSH WORD [BP-2]
+ MOV AX,1
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+ MOV WORD [BP-4],AX
+ CMP AX,-1
+ JNZ _L96
+ MOV BX,WORD [BP-2]
+ CMP BX,1
+ JL _L101
+ CMP BX,23
+ JG _L101
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L103[BX]
+_L103:
+ DW _L97
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L98
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L99
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L101
+ DW _L100
+_L97:
+ MOV AX,-3
+ MOV SP,BP
+ POP BP
+ RET
+_L98:
+ MOV WORD [BP-2],8
+ JMP _L102
+_L99:
+ MOV WORD [BP-2],14
+ JMP _L102
+_L100:
+ MOV WORD [BP-2],20
+ JMP _L102
+_L101:
+ SUB WORD [BP-2],2
+ JMP _L102
+_L102:
+_L96:
+_L95:
+ INC WORD [BP-2]
+ JMP _L93
+_L94:
+_L104:
+ MOV AX,0
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ CALL arc_serv_
+ ADD SP,4
+ MOV WORD [BP-4],AX
+ CMP AX,-2
+ JZ _L107
+ CMP WORD [BP-4],-3
+ JZ _L107
+ PUSH WORD [BP-4]
+ MOV AX,1
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+_L107:
+_L105:
+ CMP WORD [BP-4],-2
+ JZ _L108
+ CMP WORD [BP-4],-3
+ JNZ _L104
+_L108:
+_L106:
+ CMP WORD [BP-4],-3
+ JNZ _L109
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_high_
+ CALL w_clr_
+ ADD SP,4
+ MOV WORD [BP-2],1
+_L109:
+_L91:
+ CMP WORD [BP-4],-3
+ JZ _L90
+_L92:
+ MOV AX,WORD [BP-4]
+ MOV SP,BP
+ POP BP
+ RET
+
+get_carrier_plan_screen_: PUSH BP
+ MOV BP,SP
+ SUB SP,4
+ PUSH WORD at_high_
+ CALL w_change_att_
+ ADD SP,2
+_L110:
+ MOV WORD [BP-2],10
+_L113:
+ CMP WORD [BP-2],35
+ JG _L114
+ PUSH WORD [BP-2]
+ MOV AX,2
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+ MOV WORD [BP-4],AX
+ CMP AX,-1
+ JZ _L116
+ CMP WORD [BP-4],0
+ JNZ _L117
+ CMP WORD [BP-2],10
+ JL _L118
+ CMP WORD [BP-2],19
+ JG _L118
+ MOV WORD [BP-2],19
+ JMP _L119
+_L118:
+ CMP WORD [BP-2],21
+ JL _L120
+ CMP WORD [BP-2],25
+ JG _L120
+ MOV WORD [BP-2],25
+ JMP _L121
+_L120:
+ CMP WORD [BP-2],31
+ JL _L122
+ CMP WORD [BP-2],35
+ JG _L122
+ MOV WORD [BP-2],35
+_L122:
+_L121:
+_L119:
+_L117:
+ JMP _L123
+_L116:
+ MOV BX,WORD [BP-2]
+ CMP BX,10
+ JL _L127
+ CMP BX,26
+ JG _L127
+ SUB BX,10
+ SHL BX,1
+ JMP BYTE _L129[BX]
+_L129:
+ DW _L124
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L125
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L127
+ DW _L126
+_L124:
+ MOV AX,-3
+ MOV SP,BP
+ POP BP
+ RET
+_L125:
+ MOV WORD [BP-2],19
+_L130:
+ MOV SI,WORD [BP-2]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ CMP BYTE carrier_block_[SI+168],0
+ JNZ _L131
+ CMP WORD [BP-2],10
+ JL _L131
+ DEC WORD [BP-2]
+ JMP _L130
+_L131:
+ DEC WORD [BP-2]
+ JMP _L128
+_L126:
+ MOV WORD [BP-2],25
+_L132:
+ MOV SI,WORD [BP-2]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ CMP BYTE carrier_block_[SI+208],0
+ JNZ _L133
+ CMP WORD [BP-2],21
+ JL _L133
+ DEC WORD [BP-2]
+ JMP _L132
+_L133:
+ DEC WORD [BP-2]
+ JMP _L128
+_L127:
+ SUB WORD [BP-2],2
+ JMP _L128
+_L128:
+_L123:
+_L115:
+ INC WORD [BP-2]
+ JMP _L113
+_L114:
+_L134:
+ MOV AX,0
+ PUSH AX
+ MOV AX,35
+ PUSH AX
+ CALL arc_serv_
+ ADD SP,4
+ MOV WORD [BP-4],AX
+ CMP AX,-2
+ JZ _L137
+ CMP WORD [BP-4],-3
+ JZ _L137
+ PUSH WORD [BP-4]
+ MOV AX,2
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+_L137:
+_L135:
+ CMP WORD [BP-4],-2
+ JZ _L138
+ CMP WORD [BP-4],-3
+ JNZ _L134
+_L138:
+_L136:
+ CMP WORD [BP-4],-3
+ JNZ _L139
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_high_
+ CALL w_clr_
+ ADD SP,4
+ MOV WORD [BP-2],10
+_L139:
+_L111:
+ CMP WORD [BP-4],-3
+ JZ _L110
+_L112:
+ MOV AX,WORD [BP-4]
+ MOV SP,BP
+ POP BP
+ RET
+
+get_carrier_group_screen_: PUSH BP
+ MOV BP,SP
+ SUB SP,4
+ PUSH WORD at_high_
+ CALL w_change_att_
+ ADD SP,2
+_L140:
+ MOV WORD [BP-2],10
+_L143:
+ CMP WORD [BP-2],32
+ JG _L144
+ PUSH WORD [BP-2]
+ MOV AX,3
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+ MOV WORD [BP-4],AX
+ CMP AX,-1
+ JNZ _L146
+ MOV BX,WORD [BP-2]
+ CMP BX,10
+ JL _L148
+ CMP BX,10
+ JG _L148
+ SUB BX,10
+ SHL BX,1
+ JMP BYTE _L150[BX]
+_L150:
+ DW _L147
+_L147:
+ MOV AX,-3
+ MOV SP,BP
+ POP BP
+ RET
+_L148:
+ SUB WORD [BP-2],2
+ JMP _L149
+_L149:
+_L146:
+_L145:
+ INC WORD [BP-2]
+ JMP _L143
+_L144:
+_L151:
+ MOV AX,0
+ PUSH AX
+ MOV AX,32
+ PUSH AX
+ CALL arc_serv_
+ ADD SP,4
+ MOV WORD [BP-4],AX
+ CMP AX,-2
+ JZ _L154
+ CMP WORD [BP-4],-3
+ JZ _L154
+ PUSH WORD [BP-4]
+ MOV AX,3
+ PUSH AX
+ CALL get_carrier_field_
+ ADD SP,4
+_L154:
+_L152:
+ CMP WORD [BP-4],-2
+ JZ _L155
+ CMP WORD [BP-4],-3
+ JNZ _L151
+_L155:
+_L153:
+ CMP WORD [BP-4],-3
+ JNZ _L156
+ MOV AX,1
+ PUSH AX
+ PUSH WORD at_high_
+ CALL w_clr_
+ ADD SP,4
+ MOV WORD [BP-2],10
+_L156:
+_L141:
+ CMP WORD [BP-4],-3
+ JZ _L140
+_L142:
+ MOV AX,WORD [BP-4]
+ MOV SP,BP
+ POP BP
+ RET
+ PUBLIC get_main_fields_
+ PUBLIC get_plan_fields_
+ PUBLIC get_group_fields_
+
+get_carrier_field_: PUSH BP
+ MOV BP,SP
+ MOV BX,WORD [BP+4]
+ CMP BX,1
+ JL _L160
+ CMP BX,3
+ JG _L160
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L162[BX]
+_L162:
+ DW _L157
+ DW _L158
+ DW _L159
+_L157:
+ PUSH WORD [BP+6]
+ CALL get_main_fields_
+ MOV SP,BP
+ POP BP
+ RET
+_L158:
+ PUSH WORD [BP+6]
+ CALL get_plan_fields_
+ MOV SP,BP
+ POP BP
+ RET
+_L159:
+ PUSH WORD [BP+6]
+ CALL get_group_fields_
+ MOV SP,BP
+ POP BP
+ RET
+_L160:
+ MOV AX,0
+ POP BP
+ RET
+_L161:
+ POP BP
+ RET
+ PUBLIC format_phone_
+ PUBLIC get_mnmx_
+ DSEG 
+__216 DB '( )',0
+__217 DB '   ',0
+ CSEG 
+ PUBLIC index_
+ DSEG 
+__219 DB '02468',0
+ CSEG 
+ PUBLIC print_money_
+
+get_main_fields_: PUSH BP
+ MOV BP,SP
+ SUB SP,10
+ MOV BX,WORD [BP+4]
+ CMP BX,1
+ JL _L185
+ CMP BX,23
+ JG _L185
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L187[BX]
+_L187:
+ DW _L163
+ DW _L164
+ DW _L165
+ DW _L166
+ DW _L167
+ DW _L168
+ DW _L169
+ DW _L170
+ DW _L185
+ DW _L171
+ DW _L172
+ DW _L173
+ DW _L174
+ DW _L175
+ DW _L176
+ DW _L177
+ DW _L178
+ DW _L179
+ DW _L180
+ DW _L181
+ DW _L182
+ DW _L183
+ DW _L184
+_L163:
+_L188:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[3]
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,2016
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+_L189:
+ CMP WORD [BP-2],0
+ JZ _L188
+_L190:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L164:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[53]
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,2013
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L165:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[79]
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,2
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,2019
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L166:
+_L191:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[105]
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,3
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,2017
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ MOV AX,OFFSET carrier_block_[105]
+ PUSH AX
+ CALL format_phone_
+ ADD SP,2
+ MOV WORD [BP-4],AX
+ CMP AX,0
+ JZ _L194
+ MOV AX,3
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET carrier_block_[105]
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+_L194:
+_L192:
+ CMP WORD [BP-4],0
+ JZ _L191
+_L193:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L167:
+_L195:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_
+ PUSH AX
+ MOV AX,2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2015
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+_L196:
+ CMP WORD [BP-2],-1
+ JZ _L198
+ CMP WORD [BP-2],2
+ JNZ _L195
+_L198:
+_L197:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L168:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[45]
+ PUSH AX
+ MOV AX,7
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2049
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L169:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[29]
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,2
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2033
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L170:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[120]
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,3
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2047
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L171:
+ MOV AX,OFFSET carrier_block_[136]
+ PUSH AX
+ MOV AX,6
+ PUSH AX
+ MOV AX,33
+ PUSH AX
+ MOV AX,2028
+ PUSH AX
+ CALL get_mnmx_
+ ADD SP,8
+ MOV SP,BP
+ POP BP
+ RET
+_L172:
+ MOV AX,OFFSET carrier_block_[138]
+ PUSH AX
+ MOV AX,7
+ PUSH AX
+ MOV AX,33
+ PUSH AX
+ MOV AX,2039
+ PUSH AX
+ CALL get_mnmx_
+ ADD SP,8
+ MOV SP,BP
+ POP BP
+ RET
+_L173:
+ MOV AX,OFFSET carrier_block_[141]
+ PUSH AX
+ MOV AX,8
+ PUSH AX
+ MOV AX,33
+ PUSH AX
+ MOV AX,2055
+ PUSH AX
+ CALL get_mnmx_
+ ADD SP,8
+ MOV SP,BP
+ POP BP
+ RET
+_L174:
+ MOV AX,OFFSET carrier_block_[145]
+ PUSH AX
+ MOV AX,9
+ PUSH AX
+ MOV AX,33
+ PUSH AX
+ MOV AX,2048
+ PUSH AX
+ CALL get_mnmx_
+ ADD SP,8
+ MOV SP,BP
+ POP BP
+ RET
+_L175:
+ MOV AX,-5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[140]
+ PUSH AX
+ MOV AX,-1
+ PUSH AX
+ MOV AX,11
+ PUSH AX
+ MOV AX,37
+ PUSH AX
+ MOV AX,2038
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L199
+ MOV AX,-1
+ MOV SP,BP
+ POP BP
+ RET
+ JMP _L200
+_L199:
+ CMP WORD [BP-2],0
+ JNZ _L201
+ MOV BYTE carrier_block_[140],48
+ MOV AX,11
+ PUSH AX
+ MOV AX,37
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,48
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+_L201:
+_L200:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L176:
+_L202:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[248]
+ PUSH AX
+ MOV AX,2
+ PUSH AX
+ MOV AX,6
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2029
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L205
+ MOV AX,-1
+ MOV SP,BP
+ POP BP
+ RET
+ JMP _L206
+_L205:
+ CMP BYTE carrier_block_[248],76
+ JNZ _L207
+ MOV AX,6
+ PUSH AX
+ MOV AX,63
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __216
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[402]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,6
+ PUSH AX
+ MOV AX,64
+ PUSH AX
+ MOV AX,2040
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L208
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+ JMP _L209
+_L208:
+ MOV AX,6
+ PUSH AX
+ MOV AX,63
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,OFFSET __217
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+_L209:
+_L207:
+_L206:
+_L203:
+ CMP WORD [BP-2],-1
+ JZ _L202
+_L204:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L177:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[413]
+ PUSH AX
+ MOV AX,2
+ PUSH AX
+ MOV AX,7
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2035
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L178:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[370]
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,8
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2014
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L179:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[386]
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,9
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2042
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L180:
+ MOV AX,-3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[366]
+ PUSH AX
+ MOV AX,-11
+ PUSH AX
+ MOV AX,11
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2037
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L181:
+ MOV AX,-3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[362]
+ PUSH AX
+ MOV AX,-6
+ PUSH AX
+ MOV AX,12
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2036
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L182:
+_L210:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[148]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,14
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2018
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP WORD [BP-2],0
+ JNZ _L213
+ MOV AX,14
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV BYTE carrier_block_[148],0
+ MOV AX,48
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV WORD [BP-2],1
+_L213:
+_L211:
+ CMP WORD [BP-2],-1
+ JZ _L214
+ MOV AL,BYTE carrier_block_[148]
+ ADD AL,48
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET __219
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ CMP AX,0
+ JZ _L210
+_L214:
+_L212:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L183:
+ MOV AX,WORD carrier_block_[253]
+ CWD 
+ MOV WORD [BP-8],AX
+ MOV WORD [BP-6],DX
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-8]
+ PUSH AX
+ MOV AX,-9
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2012
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L215
+ MOV DX,WORD [BP-6]
+ MOV AX,WORD [BP-8]
+ MOV WORD carrier_block_[253],AX
+ MOV AX,0
+ PUSH AX
+ PUSH WORD [BP-6]
+ PUSH WORD [BP-8]
+ MOV AX,15
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+_L215:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L184:
+ MOV AX,-5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[153]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,16
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ MOV AX,2066
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L185:
+ MOV AX,0
+ MOV SP,BP
+ POP BP
+ RET
+_L186:
+ MOV SP,BP
+ POP BP
+ RET
+ PUBLIC get_drug_exception_
+ PUBLIC get_special_formula_
+ PUBLIC get_special_fee_
+
+get_plan_fields_: PUSH BP
+ MOV BP,SP
+ SUB SP,6
+ MOV BX,WORD [BP+4]
+ CMP BX,10
+ JL _L242
+ CMP BX,35
+ JG _L242
+ SUB BX,10
+ SHL BX,1
+ JMP BYTE _L244[BX]
+_L244:
+ DW _L216
+ DW _L217
+ DW _L218
+ DW _L219
+ DW _L220
+ DW _L221
+ DW _L222
+ DW _L223
+ DW _L224
+ DW _L225
+ DW _L226
+ DW _L227
+ DW _L228
+ DW _L229
+ DW _L230
+ DW _L231
+ DW _L232
+ DW _L233
+ DW _L234
+ DW _L235
+ DW _L236
+ DW _L237
+ DW _L238
+ DW _L239
+ DW _L240
+ DW _L241
+_L216:
+_L217:
+_L218:
+_L219:
+_L220:
+_L221:
+_L222:
+_L223:
+_L224:
+_L225:
+ PUSH WORD [BP+4]
+ CALL get_drug_exception_
+ ADD SP,2
+ MOV SP,BP
+ POP BP
+ RET
+_L226:
+ MOV WORD [BP-4],0
+_L245:
+ MOV SI,WORD [BP-4]
+ MOV AL,BYTE carrier_block_[SI+357]
+ MOV BYTE [BP-5],AL
+_L248:
+ MOV AX,-5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-5]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,7
+ PUSH AX
+ MOV AX,WORD [BP-4]
+ SHL AX,1
+ ADD AX,13
+ PUSH AX
+ MOV AX,2027
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,0
+ JNZ _L251
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L251:
+_L249:
+ CMP WORD [BP-2],-1
+ JZ _L252
+ CMP BYTE [BP-5],65
+ JB _L254
+ CMP BYTE [BP-5],90
+ JBE _L253
+_L254:
+ CMP BYTE [BP-5],32
+ JNZ _L248
+_L253:
+_L252:
+_L250:
+ CMP WORD [BP-2],-1
+ JNZ _L255
+ CMP WORD [BP-4],0
+ JNZ _L256
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+ JMP _L257
+_L256:
+ DEC WORD [BP-4]
+_L257:
+ JMP _L258
+_L255:
+ CMP BYTE [BP-5],32
+ JZ _L259
+ MOV AL,BYTE [BP-5]
+ MOV AH,0
+ JMP _L260
+_L259:
+ MOV AL,0
+ MOV AH,0
+_L260:
+ MOV SI,WORD [BP-4]
+ INC WORD [BP-4]
+ MOV BYTE carrier_block_[SI+357],AL
+_L258:
+_L246:
+ CMP WORD [BP-4],5
+ JL _L245
+_L247:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L227:
+_L228:
+_L229:
+_L230:
+_L231:
+ PUSH WORD [BP+4]
+ CALL get_special_formula_
+ ADD SP,2
+ MOV SP,BP
+ POP BP
+ RET
+_L232:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[261]
+ PUSH AX
+ MOV AX,-9
+ PUSH AX
+ MOV AX,9
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ MOV AX,2023
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L261
+ MOV AX,5
+ PUSH AX
+ PUSH WORD carrier_block_[263]
+ PUSH WORD carrier_block_[261]
+ MOV AX,9
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+_L261:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L233:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[273]
+ PUSH AX
+ MOV AX,-9
+ PUSH AX
+ MOV AX,10
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ MOV AX,2030
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L262
+ MOV AX,5
+ PUSH AX
+ PUSH WORD carrier_block_[275]
+ PUSH WORD carrier_block_[273]
+ MOV AX,10
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+_L262:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L234:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[405]
+ PUSH AX
+ MOV AX,-9
+ PUSH AX
+ MOV AX,11
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ MOV AX,2010
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L263
+ MOV AX,5
+ PUSH AX
+ PUSH WORD carrier_block_[407]
+ PUSH WORD carrier_block_[405]
+ MOV AX,11
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+_L263:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L235:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[265]
+ PUSH AX
+ MOV AX,-9
+ PUSH AX
+ MOV AX,12
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ MOV AX,2026
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L264
+ MOV AX,5
+ PUSH AX
+ PUSH WORD carrier_block_[267]
+ PUSH WORD carrier_block_[265]
+ MOV AX,12
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+_L264:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L236:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[269]
+ PUSH AX
+ MOV AX,-9
+ PUSH AX
+ MOV AX,13
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ MOV AX,2025
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L265
+ MOV AX,5
+ PUSH AX
+ PUSH WORD carrier_block_[271]
+ PUSH WORD carrier_block_[269]
+ MOV AX,13
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+_L265:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L237:
+_L238:
+_L239:
+_L240:
+_L241:
+ PUSH WORD [BP+4]
+ CALL get_special_fee_
+ ADD SP,2
+ MOV SP,BP
+ POP BP
+ RET
+_L242:
+ MOV AX,0
+ MOV SP,BP
+ POP BP
+ RET
+_L243:
+ MOV SP,BP
+ POP BP
+ RET
+ PUBLIC erase_
+ DSEG 
+__225 DB 'ADMC',0
+__226 DB 'MU',0
+__227 DB 'DPWN',0
+__228 DB 'BGLDE',0
+ CSEG 
+ PUBLIC from_1180_
+ PUBLIC input_date_
+ DSEG 
+__231 DB '123199',0
+ CSEG 
+ PUBLIC to_1180_
+
+get_group_fields_: PUSH BP
+ MOV BP,SP
+ SUB SP,12
+ MOV BX,WORD [BP+4]
+ CMP BX,10
+ JL _L289
+ CMP BX,32
+ JG _L289
+ SUB BX,10
+ SHL BX,1
+ JMP BYTE _L291[BX]
+_L291:
+ DW _L266
+ DW _L267
+ DW _L268
+ DW _L269
+ DW _L270
+ DW _L271
+ DW _L272
+ DW _L273
+ DW _L274
+ DW _L275
+ DW _L276
+ DW _L277
+ DW _L278
+ DW _L279
+ DW _L280
+ DW _L281
+ DW _L282
+ DW _L283
+ DW _L284
+ DW _L285
+ DW _L286
+ DW _L287
+ DW _L288
+_L266:
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[149]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,2041
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L267:
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[150]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,2004
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L268:
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[151]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,2
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,2006
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L269:
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[152]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,3
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,2005
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L270:
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[154]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,4
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,2003
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L271:
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[155]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,5
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,2075
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L272:
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[258]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,6
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ MOV AX,2034
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L273:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[259]
+ PUSH AX
+ MOV AX,-2
+ PUSH AX
+ MOV AX,8
+ PUSH AX
+ MOV AX,24
+ PUSH AX
+ MOV AX,2031
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L274:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[156]
+ PUSH AX
+ MOV AX,-3
+ PUSH AX
+ MOV AX,10
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ MOV AX,2058
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L292
+ MOV AX,10
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ PUSH WORD carrier_block_[156]
+ MOV AX,OFFSET P3D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+_L292:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L275:
+ MOV AX,0
+ MOV SP,BP
+ POP BP
+ RET
+_L276:
+_L293:
+ MOV AX,9
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ CALL erase_
+ ADD SP,6
+ MOV AX,-5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[158]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ MOV AX,2043
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP WORD [BP-2],0
+ JNZ _L296
+ MOV BYTE carrier_block_[158],65
+ MOV WORD [BP-2],1
+_L296:
+_L294:
+ CMP WORD [BP-2],-1
+ JZ _L297
+ MOV AL,BYTE carrier_block_[158]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET __225
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ CMP AX,0
+ JZ _L293
+_L297:
+_L295:
+ MOV AX,9
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ CALL erase_
+ ADD SP,6
+ MOV AX,0
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV BL,BYTE carrier_block_[158]
+ MOV BH,0
+ CMP BX,65
+ JL _L302
+ CMP BX,77
+ JG _L302
+ SUB BX,65
+ SHL BX,1
+ JMP BYTE _L304[BX]
+_L304:
+ DW _L298
+ DW _L302
+ DW _L301
+ DW _L299
+ DW _L302
+ DW _L302
+ DW _L302
+ DW _L302
+ DW _L302
+ DW _L302
+ DW _L302
+ DW _L302
+ DW _L300
+_L298:
+ PUSH WORD cost_basis_types_
+ CALL w_string_
+ ADD SP,2
+ JMP _L303
+_L299:
+ PUSH WORD cost_basis_types_[2]
+ CALL w_string_
+ ADD SP,2
+ JMP _L303
+_L300:
+ PUSH WORD cost_basis_types_[4]
+ CALL w_string_
+ ADD SP,2
+ JMP _L303
+_L301:
+ PUSH WORD cost_basis_types_[6]
+ CALL w_string_
+ ADD SP,2
+ JMP _L303
+_L302:
+ JMP _L303
+_L303:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L277:
+_L305:
+ MOV AX,9
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ CALL erase_
+ ADD SP,6
+ MOV AX,-5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[159]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ MOV AX,2054
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP WORD [BP-2],0
+ JNZ _L308
+ MOV BYTE carrier_block_[159],77
+ MOV WORD [BP-2],1
+_L308:
+_L306:
+ CMP WORD [BP-2],-1
+ JZ _L309
+ MOV AL,BYTE carrier_block_[159]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET __226
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ CMP AX,0
+ JZ _L305
+_L309:
+_L307:
+ MOV AX,9
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ CALL erase_
+ ADD SP,6
+ MOV AX,1
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV BL,BYTE carrier_block_[159]
+ MOV BH,0
+ CMP BX,77
+ JL _L312
+ CMP BX,85
+ JG _L312
+ SUB BX,77
+ SHL BX,1
+ JMP BYTE _L314[BX]
+_L314:
+ DW _L310
+ DW _L312
+ DW _L312
+ DW _L312
+ DW _L312
+ DW _L312
+ DW _L312
+ DW _L312
+ DW _L311
+_L310:
+ PUSH WORD pric_quan_
+ CALL w_string_
+ ADD SP,2
+ JMP _L313
+_L311:
+ PUSH WORD pric_quan_[2]
+ CALL w_string_
+ ADD SP,2
+ JMP _L313
+_L312:
+ JMP _L313
+_L313:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L278:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[160]
+ PUSH AX
+ MOV AX,-3
+ PUSH AX
+ MOV AX,3
+ PUSH AX
+ MOV AX,48
+ PUSH AX
+ MOV AX,2051
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L315
+ MOV AX,-5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[404]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,3
+ PUSH AX
+ MOV AX,51
+ PUSH AX
+ MOV AX,2021
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+_L315:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L279:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[162]
+ PUSH AX
+ MOV AX,-4
+ PUSH AX
+ MOV AX,4
+ PUSH AX
+ MOV AX,48
+ PUSH AX
+ MOV AX,2052
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L280:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[143]
+ PUSH AX
+ MOV AX,-3
+ PUSH AX
+ MOV AX,6
+ PUSH AX
+ MOV AX,71
+ PUSH AX
+ MOV AX,2020
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L281:
+_L316:
+ MOV AX,-5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[255]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,7
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ MOV AX,2057
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+_L317:
+ CMP WORD [BP-2],0
+ JZ _L316
+ CMP WORD [BP-2],-1
+ JZ _L319
+ MOV AL,BYTE carrier_block_[255]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET __227
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ CMP AX,0
+ JZ _L316
+_L319:
+_L318:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L282:
+_L320:
+ MOV AX,-5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[256]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,8
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ MOV AX,2011
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+_L321:
+ CMP WORD [BP-2],0
+ JZ _L320
+ CMP WORD [BP-2],-1
+ JZ _L323
+ MOV AL,BYTE carrier_block_[256]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET __228
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ CMP AX,0
+ JZ _L320
+_L323:
+_L322:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L283:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[409]
+ PUSH AX
+ MOV AX,-8
+ PUSH AX
+ MOV AX,9
+ PUSH AX
+ MOV AX,66
+ PUSH AX
+ MOV AX,2032
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JZ _L324
+ MOV AX,5
+ PUSH AX
+ PUSH WORD carrier_block_[411]
+ PUSH WORD carrier_block_[409]
+ MOV AX,9
+ PUSH AX
+ MOV AX,66
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+_L324:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L284:
+ LEA AX,WORD [BP-12]
+ PUSH AX
+ PUSH WORD carrier_block_[251]
+ CALL from_1180_
+ ADD SP,4
+_L325:
+ MOV AX,2024
+ PUSH AX
+ CALL w_message_
+ ADD SP,2
+ MOV AX,11
+ PUSH AX
+ MOV AX,68
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-12]
+ PUSH AX
+ LEA AX,WORD [BP-12]
+ PUSH AX
+ CALL input_date_
+ ADD SP,6
+ MOV WORD [BP-2],AX
+ CMP AX,0
+ JNZ _L328
+ MOV AX,OFFSET __231
+ PUSH AX
+ LEA AX,WORD [BP-12]
+ PUSH AX
+ CALL strcpy_
+ ADD SP,4
+ MOV WORD [BP-2],6
+_L328:
+_L326:
+ CMP WORD [BP-2],-1
+ JZ _L329
+ CMP WORD [BP-2],0
+ JZ _L325
+_L329:
+_L327:
+ CMP WORD [BP-2],-1
+ JZ _L330
+ LEA AX,WORD [BP-12]
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[251]
+ PUSH AX
+ CALL to_1180_
+ ADD SP,4
+ MOV AX,11
+ PUSH AX
+ MOV AX,68
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ LEA AX,WORD [BP-12]
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+_L330:
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+_L285:
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[167]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ MOV AX,2045
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L286:
+ MOV AX,3
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[166]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ MOV AX,2050
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L287:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[164]
+ PUSH AX
+ MOV AX,-2
+ PUSH AX
+ MOV AX,2
+ PUSH AX
+ MOV AX,72
+ PUSH AX
+ MOV AX,2053
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L288:
+ MOV AX,2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ MOV AX,OFFSET carrier_block_[257]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ MOV AX,3
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ MOV AX,2065
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV SP,BP
+ POP BP
+ RET
+_L289:
+ MOV AX,0
+ MOV SP,BP
+ POP BP
+ RET
+_L290:
+ MOV SP,BP
+ POP BP
+ RET
+ PUBLIC convert_
+ PUBLIC atoi_
+
+get_mnmx_: PUSH BP
+ MOV BP,SP
+ SUB SP,20
+ MOV WORD [BP-16],-1
+ MOV WORD [BP-18],-1
+ MOV SI,WORD [BP+10]
+ MOV AL,BYTE [SI+1]
+ MOV AH,0
+ PUSH AX
+ MOV SI,WORD [BP+10]
+ MOV AL,BYTE [SI]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET P2DP2D_
+ PUSH AX
+ LEA AX,WORD [BP-10]
+ PUSH AX
+ CALL sprintf_
+ ADD SP,8
+_L331:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-10]
+ PUSH AX
+ MOV AX,5
+ PUSH AX
+ PUSH WORD [BP+8]
+ PUSH WORD [BP+6]
+ PUSH WORD [BP+4]
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-20],AX
+ CMP AX,-1
+ JZ _L334
+ MOV AX,44
+ PUSH AX
+ LEA AX,WORD [BP-10]
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ MOV WORD [BP-12],AX
+ CMP AX,0
+ JNZ _L335
+ MOV AX,45
+ PUSH AX
+ LEA AX,WORD [BP-10]
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ MOV WORD [BP-12],AX
+ CMP AX,0
+ JNZ _L336
+ MOV AX,32
+ PUSH AX
+ LEA AX,WORD [BP-10]
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ MOV WORD [BP-12],AX
+_L336:
+_L335:
+ CMP WORD [BP-12],0
+ JNZ _L337
+ CMP WORD [BP-20],4
+ JNZ _L337
+ LEA AX,WORD [BP-10]
+ PUSH AX
+ CALL convert_
+ ADD SP,2
+ MOV WORD [BP-16],AX
+ LEA AX,WORD [BP-8]
+ PUSH AX
+ CALL convert_
+ ADD SP,2
+ MOV WORD [BP-18],AX
+ JMP _L338
+_L337:
+ CMP WORD [BP-12],0
+ JZ _L339
+ MOV SI,WORD [BP-12]
+ MOV AL,BYTE [SI]
+ MOV BYTE [BP-13],AL
+ MOV SI,WORD [BP-12]
+ MOV BYTE [SI],0
+ LEA AX,WORD [BP-10]
+ PUSH AX
+ CALL atoi_
+ ADD SP,2
+ MOV WORD [BP-16],AX
+ MOV AX,WORD [BP-12]
+ ADD AX,1
+ PUSH AX
+ CALL atoi_
+ ADD SP,2
+ MOV WORD [BP-18],AX
+ MOV SI,WORD [BP-12]
+ MOV AL,BYTE [BP-13]
+ MOV BYTE [SI],AL
+_L339:
+_L338:
+ CMP WORD [BP-16],0
+ JL _L340
+ CMP WORD [BP-18],0
+ JL _L340
+ MOV AX,WORD [BP-18]
+ CMP AX,WORD [BP-16]
+ JL _L340
+ MOV SI,WORD [BP+10]
+ MOV AX,WORD [BP-16]
+ MOV BYTE [SI],AL
+ MOV SI,WORD [BP+10]
+ MOV AX,WORD [BP-18]
+ MOV BYTE [SI+1],AL
+ PUSH WORD [BP+8]
+ PUSH WORD [BP+6]
+ CALL w_set_pos_
+ ADD SP,4
+ PUSH WORD [BP-18]
+ PUSH WORD [BP-16]
+ MOV AX,OFFSET P02DP02D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,6
+ MOV AX,WORD [BP-20]
+ MOV SP,BP
+ POP BP
+ RET
+ JMP _L341
+_L340:
+ LEA AX,WORD [BP-10]
+ PUSH AX
+ MOV AX,2001
+ PUSH AX
+ CALL w_error_message_
+ ADD SP,4
+_L341:
+_L334:
+_L332:
+ CMP WORD [BP-20],-1
+ JNZ _L331
+_L333:
+ MOV AX,WORD [BP-20]
+ MOV SP,BP
+ POP BP
+ RET
+
+print_mm_: PUSH BP
+ MOV BP,SP
+ MOV SI,WORD [BP+4]
+ MOV AL,BYTE [SI+1]
+ MOV AH,0
+ PUSH AX
+ MOV SI,WORD [BP+4]
+ MOV AL,BYTE [SI]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET P02DP02D_
+ PUSH AX
+ CALL w_fstring_
+ MOV SP,BP
+ POP BP
+ RET
+ DSEG 
+ PUBLIC excats_
+__237 DB 'AL',0
+__238 DB 'MA',0
+__239 DB 'GE',0
+__240 DB 'BR',0
+__241 DB 'DE',0
+__242 DB 'OT',0
+__243 DB 'DM',0
+__244 DB 'NH',0
+__245 DB 'FO',0
+__246 DB 'PR',0
+__247 DB 0
+excats_ DW WORD __237
+ DW WORD __238
+ DW WORD __239
+ DW WORD __240
+ DW WORD __241
+ DW WORD __242
+ DW WORD __243
+ DW WORD __244
+ DW WORD __245
+ DW WORD __246
+ DW WORD __247
+ PUBLIC excatv_
+excatv_ DW 128
+ DW 129
+ DW 130
+ DW 131
+ DW 132
+ DW 133
+ DW 134
+ DW 135
+ DW 136
+ DW 137
+ DW 0
+ CSEG 
+ PUBLIC strlen_
+ PUBLIC strcmp_
+ DSEG 
+__251 DB 'YNM',0
+ CSEG 
+
+get_drug_exception_: PUSH BP
+ MOV BP,SP
+ SUB SP,36
+ MOV WORD [BP-12],1
+ CMP WORD [BP+4],14
+ JLE _L342
+ MOV AL,20
+ MOV AH,0
+ JMP _L343
+_L342:
+ MOV AL,4
+ MOV AH,0
+_L343:
+ MOV WORD [BP-2],AX
+ CMP WORD [BP+4],14
+ JLE _L344
+ MOV AX,WORD [BP+4]
+ SUB AX,13
+ JMP _L345
+_L344:
+ MOV AX,WORD [BP+4]
+ SUB AX,8
+_L345:
+ MOV WORD [BP-4],AX
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV AL,BYTE carrier_block_[SI+169]
+ MOV BYTE [BP-17],AL
+ CMP AL,128
+ JB _L346
+ MOV AL,BYTE [BP-17]
+ SUB AL,128
+ MOV AH,0
+ SHL AX,1
+ MOV SI,AX
+ PUSH WORD excats_[SI]
+ LEA AX,WORD [BP-35]
+ PUSH AX
+ CALL strcpy_
+ ADD SP,4
+ JMP _L347
+_L346:
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV AL,BYTE carrier_block_[SI+168]
+ MOV BYTE [BP-35],AL
+ MOV BYTE [BP-34],0
+_L347:
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV AL,BYTE carrier_block_[SI+169]
+ MOV BYTE [BP-18],AL
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV AL,BYTE carrier_block_[SI+170]
+ MOV AH,0
+ MOV WORD [BP-8],AX
+_L348:
+ MOV BX,WORD [BP-12]
+ CMP BX,1
+ JL _L354
+ CMP BX,3
+ JG _L354
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L356[BX]
+_L356:
+ DW _L351
+ DW _L352
+ DW _L353
+_L351:
+_L357:
+ MOV WORD [BP-14],0
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-35]
+ PUSH AX
+ MOV AX,2
+ PUSH AX
+ PUSH WORD [BP-4]
+ PUSH WORD [BP-2]
+ MOV AX,2046
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-10],AX
+ CMP AX,0
+ JNZ _L360
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV BYTE carrier_block_[SI+168],0
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV BYTE carrier_block_[SI+169],0
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV BYTE carrier_block_[SI+170],0
+ MOV AX,9
+ PUSH AX
+ PUSH WORD [BP-4]
+ PUSH WORD [BP-2]
+ CALL erase_
+ ADD SP,6
+ MOV AX,0
+ MOV SP,BP
+ POP BP
+ RET
+ JMP _L361
+_L360:
+ MOV AL,BYTE [BP-35]
+ MOV BYTE [BP-17],AL
+ CMP WORD [BP-10],-1
+ JZ _L362
+ LEA AX,WORD [BP-35]
+ PUSH AX
+ CALL strlen_
+ ADD SP,2
+ CMP AX,1
+ JNZ _L363
+ CMP BYTE [BP-17],65
+ JB _L365
+ CMP BYTE [BP-17],90
+ JBE _L364
+_L365:
+ MOV WORD [BP-14],-1
+_L364:
+ JMP _L366
+_L363:
+ MOV WORD [BP-20],OFFSET excats_
+ MOV WORD [BP-16],0
+_L367:
+ MOV SI,WORD [BP-20]
+ CMP BYTE [SI],0
+ JZ _L368
+ MOV SI,WORD [BP-16]
+ SHL SI,1
+ PUSH WORD excats_[SI]
+ LEA AX,WORD [BP-35]
+ PUSH AX
+ CALL strcmp_
+ ADD SP,4
+ CMP AX,0
+ JZ _L368
+ INC WORD [BP-16]
+ JMP _L367
+_L368:
+ MOV SI,WORD [BP-20]
+ CMP BYTE [SI],0
+ JZ _L369
+ MOV SI,WORD [BP-16]
+ SHL SI,1
+ MOV SI,WORD excatv_[SI]
+ MOV AX,SI
+ MOV BYTE [BP-17],AL
+ JMP _L370
+_L369:
+ MOV WORD [BP-14],-1
+_L370:
+_L366:
+_L362:
+_L361:
+_L358:
+ CMP WORD [BP-10],-1
+ JZ _L371
+ CMP WORD [BP-14],0
+ JNZ _L357
+_L371:
+_L359:
+ CMP WORD [BP-10],-1
+ JNZ _L372
+ MOV AX,-1
+ MOV SP,BP
+ POP BP
+ RET
+_L372:
+ MOV WORD [BP-12],2
+ JMP _L355
+_L352:
+_L373:
+ MOV AX,-5
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-18]
+ PUSH AX
+ MOV AX,1
+ PUSH AX
+ PUSH WORD [BP-4]
+ MOV AX,WORD [BP-2]
+ ADD AX,4
+ PUSH AX
+ MOV AX,2044
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-10],AX
+_L374:
+ CMP WORD [BP-10],-1
+ JZ _L376
+ CMP WORD [BP-10],0
+ JZ _L377
+ MOV AL,BYTE [BP-18]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET __251
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ CMP AX,0
+ JZ _L373
+_L377:
+_L376:
+_L375:
+ CMP WORD [BP-10],-1
+ JNZ _L378
+ MOV WORD [BP-12],1
+ JMP _L379
+_L378:
+ MOV WORD [BP-12],3
+_L379:
+ JMP _L355
+_L353:
+_L380:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-8]
+ PUSH AX
+ MOV AX,-1
+ PUSH AX
+ PUSH WORD [BP-4]
+ MOV AX,WORD [BP-2]
+ ADD AX,8
+ PUSH AX
+ MOV AX,2056
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-10],AX
+_L381:
+ CMP WORD [BP-10],0
+ JLE _L383
+ CMP WORD [BP-8],1
+ JL _L380
+ CMP WORD [BP-8],5
+ JG _L380
+_L383:
+ CMP WORD [BP-10],0
+ JNZ _L384
+ CMP BYTE [BP-18],89
+ JZ _L380
+_L384:
+_L382:
+ CMP WORD [BP-10],-1
+ JZ _L385
+ MOV WORD [BP-10],1
+ MOV WORD [BP-12],0
+ JMP _L355
+_L385:
+ MOV WORD [BP-12],2
+ JMP _L355
+_L354:
+ JMP _L355
+_L355:
+_L349:
+ CMP WORD [BP-12],0
+ JNZ _L348
+_L350:
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV AL,BYTE [BP-17]
+ MOV BYTE carrier_block_[SI+168],AL
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV AL,BYTE [BP-18]
+ MOV BYTE carrier_block_[SI+169],AL
+ MOV SI,WORD [BP+4]
+ SUB SI,10
+ SHL SI,1
+ SHL SI,1
+ MOV AL,BYTE [BP-8]
+ MOV BYTE carrier_block_[SI+170],AL
+ MOV AX,WORD [BP-10]
+ MOV SP,BP
+ POP BP
+ RET
+ DSEG 
+ PUBLIC sfpb_
+sfpb_ DB 'ADMC',0
+__253 DB 'MU',0
+ CSEG 
+
+get_special_formula_: PUSH BP
+ MOV BP,SP
+ SUB SP,24
+ MOV WORD [BP-24],1
+ MOV SI,WORD [BP+4]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ MOV SI,WORD carrier_block_[SI+210]
+ MOV WORD [BP-4],SI
+ MOV SI,WORD [BP+4]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ MOV AL,BYTE carrier_block_[SI+209]
+ MOV BYTE [BP-8],AL
+ MOV SI,WORD [BP+4]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ MOV AL,BYTE carrier_block_[SI+208]
+ MOV BYTE [BP-7],AL
+ MOV SI,WORD [BP+4]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ MOV DX,WORD carrier_block_[SI+214]
+ MOV AX,WORD carrier_block_[SI+212]
+ MOV WORD [BP-22],AX
+ MOV WORD [BP-20],DX
+_L386:
+ MOV BX,WORD [BP-24]
+ CMP BX,1
+ JL _L393
+ CMP BX,4
+ JG _L393
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L395[BX]
+_L395:
+ DW _L389
+ DW _L390
+ DW _L391
+ DW _L392
+_L389:
+_L396:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-18]
+ PUSH AX
+ MOV AX,6
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,19
+ PUSH AX
+ MOV AX,43
+ PUSH AX
+ MOV AX,2061
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP WORD [BP-2],0
+ JNZ _L399
+ MOV AX,0
+ PUSH AX
+ MOV AX,8
+ PUSH AX
+ MOV SI,WORD [BP+4]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ LEA SI,WORD carrier_block_[SI+208]
+ PUSH SI
+ CALL _setmem_
+ ADD SP,6
+ MOV AX,0
+ MOV SP,BP
+ POP BP
+ RET
+_L399:
+_L397:
+ CMP WORD [BP-2],-1
+ JZ _L400
+ MOV AL,BYTE [BP-18]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET sfpb_
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ CMP AX,0
+ JZ _L396
+_L400:
+_L398:
+ CMP WORD [BP-2],-1
+ JNZ _L401
+ MOV AX,-1
+ MOV SP,BP
+ POP BP
+ RET
+_L401:
+ MOV AL,BYTE [BP-18]
+ MOV BYTE [BP-7],AL
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET sfpb_
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ SUB AX,OFFSET sfpb_
+ MOV WORD [BP-6],AX
+ MOV AX,WORD [BP+4]
+ SUB AX,19
+ PUSH AX
+ MOV AX,43
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP-6]
+ SHL SI,1
+ PUSH WORD cost_basis_types_[SI]
+ CALL w_string_
+ ADD SP,2
+ MOV WORD [BP-24],2
+ JMP _L394
+_L390:
+_L402:
+ MOV AX,1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-18]
+ PUSH AX
+ MOV AX,6
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,19
+ PUSH AX
+ MOV AX,53
+ PUSH AX
+ MOV AX,2064
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+_L403:
+ CMP WORD [BP-2],-1
+ JZ _L405
+ CMP WORD [BP-2],0
+ JNZ _L406
+ MOV AL,BYTE [BP-18]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET __253
+ PUSH AX
+ CALL index_
+ ADD SP,4
+ CMP AX,0
+ JZ _L402
+_L406:
+_L405:
+_L404:
+ CMP WORD [BP-2],-1
+ JNZ _L407
+ MOV WORD [BP-24],1
+ JMP _L394
+_L407:
+ MOV AL,BYTE [BP-18]
+ MOV BYTE [BP-8],AL
+ CMP AL,77
+ JNZ _L408
+ MOV AL,0
+ MOV AH,0
+ JMP _L409
+_L408:
+ MOV AL,1
+ MOV AH,0
+_L409:
+ MOV WORD [BP-6],AX
+ MOV AX,WORD [BP+4]
+ SUB AX,19
+ PUSH AX
+ MOV AX,53
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP-6]
+ SHL SI,1
+ PUSH WORD pric_quan_[SI]
+ CALL w_string_
+ ADD SP,2
+ MOV WORD [BP-24],3
+ JMP _L394
+_L391:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-4]
+ PUSH AX
+ MOV AX,-3
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,19
+ PUSH AX
+ MOV AX,62
+ PUSH AX
+ MOV AX,2063
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L410
+ MOV WORD [BP-24],2
+ JMP _L394
+_L410:
+ MOV WORD [BP-24],4
+ JMP _L394
+_L392:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-22]
+ PUSH AX
+ MOV AX,-8
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,19
+ PUSH AX
+ MOV AX,67
+ PUSH AX
+ MOV AX,2062
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L411
+ MOV WORD [BP-24],3
+ JMP _L394
+_L411:
+ MOV AX,5
+ PUSH AX
+ PUSH WORD [BP-20]
+ PUSH WORD [BP-22]
+ MOV AX,WORD [BP+4]
+ SUB AX,19
+ PUSH AX
+ MOV AX,67
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV WORD [BP-2],1
+ MOV WORD [BP-24],0
+_L393:
+ JMP _L394
+_L394:
+_L387:
+ CMP WORD [BP-24],0
+ JNZ _L386
+_L388:
+ MOV SI,WORD [BP+4]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ MOV AX,WORD [BP-4]
+ MOV WORD carrier_block_[SI+210],AX
+ MOV SI,WORD [BP+4]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ MOV AL,BYTE [BP-8]
+ MOV BYTE carrier_block_[SI+209],AL
+ MOV SI,WORD [BP+4]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ MOV AL,BYTE [BP-7]
+ MOV BYTE carrier_block_[SI+208],AL
+ MOV SI,WORD [BP+4]
+ SUB SI,21
+ MOV AX,SI
+ MOV SI,8
+ IMUL SI
+ MOV SI,AX
+ MOV DX,WORD [BP-20]
+ MOV AX,WORD [BP-22]
+ MOV WORD carrier_block_[SI+212],AX
+ MOV WORD carrier_block_[SI+214],DX
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+
+get_special_fee_: PUSH BP
+ MOV BP,SP
+ SUB SP,22
+ MOV WORD [BP-22],1
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV SI,WORD carrier_block_[SI+285]
+ MOV WORD [BP-4],SI
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV SI,WORD carrier_block_[SI+281]
+ MOV WORD [BP-8],SI
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV SI,WORD carrier_block_[SI+283]
+ MOV WORD [BP-6],SI
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV DX,WORD carrier_block_[SI+289]
+ MOV AX,WORD carrier_block_[SI+287]
+ MOV WORD [BP-12],AX
+ MOV WORD [BP-10],DX
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV DX,WORD carrier_block_[SI+279]
+ MOV AX,WORD carrier_block_[SI+277]
+ MOV WORD [BP-16],AX
+ MOV WORD [BP-14],DX
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV SI,WORD carrier_block_[SI+291]
+ MOV AX,SI
+ CWD 
+ MOV WORD [BP-20],AX
+ MOV WORD [BP-18],DX
+_L412:
+ MOV BX,WORD [BP-22]
+ CMP BX,1
+ JL _L421
+ CMP BX,6
+ JG _L421
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L423[BX]
+_L423:
+ DW _L415
+ DW _L416
+ DW _L417
+ DW _L418
+ DW _L419
+ DW _L420
+_L415:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-16]
+ PUSH AX
+ MOV AX,-8
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,22
+ PUSH AX
+ MOV AX,37
+ PUSH AX
+ MOV AX,2069
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L424
+ MOV AX,-1
+ MOV SP,BP
+ POP BP
+ RET
+_L424:
+ CMP WORD [BP-2],0
+ JNZ _L425
+ MOV AX,0
+ MOV SP,BP
+ POP BP
+ RET
+_L425:
+ MOV AX,5
+ PUSH AX
+ PUSH WORD [BP-14]
+ PUSH WORD [BP-16]
+ MOV AX,WORD [BP+4]
+ SUB AX,40
+ PUSH AX
+ MOV AX,37
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV WORD [BP-22],2
+ JMP _L422
+_L416:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-8]
+ PUSH AX
+ MOV AX,-3
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,22
+ PUSH AX
+ MOV AX,47
+ PUSH AX
+ MOV AX,2073
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L426
+ MOV WORD [BP-22],1
+ JMP _L422
+_L426:
+ MOV WORD [BP-22],3
+ JMP _L422
+_L417:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-6]
+ PUSH AX
+ MOV AX,-3
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,22
+ PUSH AX
+ MOV AX,52
+ PUSH AX
+ MOV AX,2070
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L427
+ MOV WORD [BP-22],2
+ JMP _L422
+_L427:
+ MOV WORD [BP-22],4
+ JMP _L422
+_L418:
+ MOV AX,-1
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-4]
+ PUSH AX
+ MOV AX,-3
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,22
+ PUSH AX
+ MOV AX,58
+ PUSH AX
+ MOV AX,2072
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L428
+ MOV WORD [BP-22],3
+ JMP _L422
+_L428:
+ MOV WORD [BP-22],5
+ JMP _L422
+_L419:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-12]
+ PUSH AX
+ MOV AX,-8
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,22
+ PUSH AX
+ MOV AX,62
+ PUSH AX
+ MOV AX,2071
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L429
+ MOV WORD [BP-22],4
+ JMP _L422
+_L429:
+ MOV AX,5
+ PUSH AX
+ PUSH WORD [BP-10]
+ PUSH WORD [BP-12]
+ MOV AX,WORD [BP+4]
+ SUB AX,22
+ PUSH AX
+ MOV AX,62
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV WORD [BP-22],6
+ JMP _L422
+_L420:
+ MOV AX,-2
+ PUSH AX
+ MOV AX,0
+ PUSH AX
+ LEA AX,WORD [BP-20]
+ PUSH AX
+ MOV AX,-6
+ PUSH AX
+ MOV AX,WORD [BP+4]
+ SUB AX,22
+ PUSH AX
+ MOV AX,70
+ PUSH AX
+ MOV AX,2068
+ PUSH AX
+ CALL w_get_field_
+ ADD SP,14
+ MOV WORD [BP-2],AX
+ CMP AX,-1
+ JNZ _L430
+ MOV WORD [BP-22],5
+ JMP _L422
+_L430:
+ MOV AX,3
+ PUSH AX
+ PUSH WORD [BP-18]
+ PUSH WORD [BP-20]
+ MOV AX,WORD [BP+4]
+ SUB AX,22
+ PUSH AX
+ MOV AX,70
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV WORD [BP-22],0
+ JMP _L422
+_L421:
+ JMP _L422
+_L422:
+_L413:
+ CMP WORD [BP-22],0
+ JNZ _L412
+_L414:
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV AX,WORD [BP-4]
+ MOV WORD carrier_block_[SI+285],AX
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV AX,WORD [BP-8]
+ MOV WORD carrier_block_[SI+281],AX
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV DX,WORD [BP-14]
+ MOV AX,WORD [BP-16]
+ MOV WORD carrier_block_[SI+277],AX
+ MOV WORD carrier_block_[SI+279],DX
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV DX,WORD [BP-10]
+ MOV AX,WORD [BP-12]
+ MOV WORD carrier_block_[SI+287],AX
+ MOV WORD carrier_block_[SI+289],DX
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV AX,WORD [BP-6]
+ MOV WORD carrier_block_[SI+283],AX
+ MOV SI,WORD [BP+4]
+ SUB SI,31
+ MOV AX,SI
+ MOV SI,16
+ IMUL SI
+ MOV SI,AX
+ MOV DX,WORD [BP-18]
+ MOV AX,WORD [BP-20]
+ MOV WORD carrier_block_[SI+291],AX
+ MOV AX,WORD [BP-2]
+ MOV SP,BP
+ POP BP
+ RET
+ DSEG 
+__254 DB '(%d)',0
+__255 DB '%15s',0
+__256 DB '%15s',0
+__257 DB '%09ld',0
+__258 DB '%-2s',0
+__259 DB '  %c   %c',0
+__260 DB '%4d',0
+ CSEG 
+
+display_carrier_: PUSH BP
+ MOV BP,SP
+ SUB SP,38
+ PUSH WORD at_high_
+ CALL w_change_att_
+ ADD SP,2
+ MOV BX,WORD [BP+4]
+ CMP BX,1
+ JL _L434
+ CMP BX,3
+ JG _L434
+ SUB BX,1
+ SHL BX,1
+ JMP BYTE _L436[BX]
+_L436:
+ DW _L431
+ DW _L432
+ DW _L433
+_L431:
+ MOV AX,0
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,3
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,1
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,53
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,2
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,79
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,3
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,105
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,0
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ PUSH WORD [BP+6]
+ CALL w_string_
+ ADD SP,2
+ MOV AX,1
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,45
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,2
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,29
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,3
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,120
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,6
+ PUSH AX
+ MOV AX,33
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ LEA SI,WORD [SI+136]
+ PUSH SI
+ CALL print_mm_
+ ADD SP,2
+ MOV AX,7
+ PUSH AX
+ MOV AX,33
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ LEA SI,WORD [SI+138]
+ PUSH SI
+ CALL print_mm_
+ ADD SP,2
+ MOV AX,8
+ PUSH AX
+ MOV AX,33
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ LEA SI,WORD [SI+141]
+ PUSH SI
+ CALL print_mm_
+ ADD SP,2
+ MOV AX,9
+ PUSH AX
+ MOV AX,33
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ LEA SI,WORD [SI+145]
+ PUSH SI
+ CALL print_mm_
+ ADD SP,2
+ MOV AX,11
+ PUSH AX
+ MOV AX,37
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+140]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,6
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,248
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV SI,WORD [BP+6]
+ ADD SI,248
+ CMP BYTE [SI],76
+ JNZ _L437
+ MOV AX,6
+ PUSH AX
+ MOV AX,63
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+402]
+ MOV AX,OFFSET __254
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+_L437:
+ MOV AX,7
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,413
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+ MOV AX,8
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,370
+ PUSH AX
+ MOV AX,OFFSET __255
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,9
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV AX,WORD [BP+6]
+ ADD AX,386
+ PUSH AX
+ MOV AX,OFFSET __256
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,11
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+368]
+ PUSH WORD [SI+366]
+ MOV AX,OFFSET __257
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,6
+ MOV AX,12
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+364]
+ PUSH WORD [SI+362]
+ MOV AX,OFFSET P06LD_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,6
+ MOV AX,14
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+148]
+ ADD AL,48
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,0
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ MOV AX,WORD [SI+253]
+ CWD 
+ PUSH DX
+ PUSH AX
+ MOV AX,15
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV AX,16
+ PUSH AX
+ MOV AX,60
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+153]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ JMP _L435
+_L432:
+ MOV WORD [BP-2],0
+_L438:
+ CMP WORD [BP-2],5
+ JGE _L439
+ MOV AX,7
+ PUSH AX
+ MOV AX,WORD [BP-2]
+ SHL AX,1
+ ADD AX,13
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ ADD SI,357
+ ADD SI,WORD [BP-2]
+ MOV AL,BYTE [SI]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+_L440:
+ INC WORD [BP-2]
+ JMP _L438
+_L439:
+ MOV WORD [BP-2],0
+_L441:
+ CMP WORD [BP-2],10
+ JGE _L442
+ MOV SI,WORD [BP-2]
+ SHL SI,1
+ SHL SI,1
+ MOV DI,WORD [BP+6]
+ ADD DI,168
+ ADD DI,SI
+ MOV AL,BYTE [DI]
+ MOV BYTE [BP-25],AL
+ CMP AL,0
+ JZ _L444
+ CMP BYTE [BP-25],128
+ JB _L445
+ MOV AL,BYTE [BP-25]
+ SUB AL,128
+ MOV AH,0
+ SHL AX,1
+ MOV SI,AX
+ PUSH WORD excats_[SI]
+ LEA AX,WORD [BP-24]
+ PUSH AX
+ CALL strcpy_
+ ADD SP,4
+ JMP _L446
+_L445:
+ MOV SI,WORD [BP-2]
+ SHL SI,1
+ SHL SI,1
+ MOV DI,WORD [BP+6]
+ ADD DI,168
+ ADD DI,SI
+ MOV AL,BYTE [DI]
+ MOV BYTE [BP-24],AL
+ MOV BYTE [BP-23],0
+_L446:
+ CMP WORD [BP-2],4
+ JLE _L447
+ MOV AX,WORD [BP-2]
+ SUB AX,3
+ JMP _L448
+_L447:
+ MOV AX,WORD [BP-2]
+ ADD AX,2
+_L448:
+ PUSH AX
+ CMP WORD [BP-2],4
+ JLE _L449
+ MOV AL,20
+ MOV AH,0
+ JMP _L450
+_L449:
+ MOV AL,4
+ MOV AH,0
+_L450:
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ LEA AX,WORD [BP-24]
+ PUSH AX
+ MOV AX,OFFSET __258
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ ADD SI,168
+ MOV DI,WORD [BP-2]
+ SHL DI,1
+ SHL DI,1
+ ADD SI,DI
+ MOV AL,BYTE [SI+2]
+ MOV BYTE [BP-25],AL
+ CMP AL,0
+ JNZ _L451
+ MOV BYTE [BP-25],32
+ JMP _L452
+_L451:
+ ADD BYTE [BP-25],48
+_L452:
+ MOV AL,BYTE [BP-25]
+ MOV AH,0
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ ADD SI,168
+ MOV DI,WORD [BP-2]
+ SHL DI,1
+ SHL DI,1
+ ADD SI,DI
+ MOV AL,BYTE [SI+1]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET __259
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,6
+_L444:
+_L443:
+ INC WORD [BP-2]
+ JMP _L441
+_L442:
+ MOV AX,5
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+263]
+ PUSH WORD [SI+261]
+ MOV AX,9
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV AX,5
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+275]
+ PUSH WORD [SI+273]
+ MOV AX,10
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV AX,5
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+407]
+ PUSH WORD [SI+405]
+ MOV AX,11
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV AX,5
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+267]
+ PUSH WORD [SI+265]
+ MOV AX,12
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV AX,5
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+271]
+ PUSH WORD [SI+269]
+ MOV AX,13
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV WORD [BP-2],0
+_L453:
+ CMP WORD [BP-2],5
+ JGE _L454
+ MOV AX,WORD [BP-2]
+ MOV SI,8
+ IMUL SI
+ MOV SI,WORD [BP+6]
+ ADD SI,208
+ ADD SI,AX
+ MOV AL,BYTE [SI]
+ MOV BYTE [BP-13],AL
+ CMP AL,0
+ JZ _L456
+ MOV BL,BYTE [BP-13]
+ MOV BH,0
+ CMP BX,65
+ JL _L461
+ CMP BX,77
+ JG _L461
+ SUB BX,65
+ SHL BX,1
+ JMP BYTE _L463[BX]
+_L463:
+ DW _L457
+ DW _L461
+ DW _L460
+ DW _L458
+ DW _L461
+ DW _L461
+ DW _L461
+ DW _L461
+ DW _L461
+ DW _L461
+ DW _L461
+ DW _L461
+ DW _L459
+_L457:
+ MOV WORD [BP-4],0
+ JMP _L462
+_L458:
+ MOV WORD [BP-4],1
+ JMP _L462
+_L459:
+ MOV WORD [BP-4],2
+ JMP _L462
+_L460:
+ MOV WORD [BP-4],3
+ JMP _L462
+_L461:
+ MOV WORD [BP-4],0
+ JMP _L462
+_L462:
+ MOV AX,WORD [BP-2]
+ ADD AX,2
+ PUSH AX
+ MOV AX,43
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP-4]
+ SHL SI,1
+ PUSH WORD cost_basis_types_[SI]
+ CALL w_string_
+ ADD SP,2
+ MOV SI,WORD [BP+6]
+ ADD SI,208
+ MOV AX,WORD [BP-2]
+ MOV DI,8
+ IMUL DI
+ ADD SI,AX
+ MOV AL,BYTE [SI+1]
+ MOV BYTE [BP-14],AL
+ CMP AL,77
+ JNZ _L464
+ MOV AL,0
+ MOV AH,0
+ JMP _L465
+_L464:
+ MOV AL,1
+ MOV AH,0
+_L465:
+ MOV WORD [BP-4],AX
+ MOV AX,WORD [BP-2]
+ ADD AX,2
+ PUSH AX
+ MOV AX,53
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP-4]
+ SHL SI,1
+ PUSH WORD pric_quan_[SI]
+ CALL w_string_
+ ADD SP,2
+ MOV AX,WORD [BP-2]
+ ADD AX,2
+ PUSH AX
+ MOV AX,62
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ ADD SI,208
+ MOV AX,WORD [BP-2]
+ MOV DI,8
+ IMUL DI
+ ADD SI,AX
+ PUSH WORD [SI+2]
+ MOV AX,OFFSET P2D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,5
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ ADD SI,208
+ MOV AX,WORD [BP-2]
+ MOV DI,8
+ IMUL DI
+ ADD SI,AX
+ PUSH WORD [SI+6]
+ PUSH WORD [SI+4]
+ MOV AX,WORD [BP-2]
+ ADD AX,2
+ PUSH AX
+ MOV AX,67
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+_L456:
+_L455:
+ INC WORD [BP-2]
+ JMP _L453
+_L454:
+ MOV WORD [BP-2],0
+_L466:
+ CMP WORD [BP-2],5
+ JGE _L467
+ MOV SI,WORD [BP+6]
+ ADD SI,277
+ MOV AX,WORD [BP-2]
+ MOV DI,16
+ IMUL DI
+ ADD SI,AX
+ MOV SI,WORD [SI+8]
+ MOV WORD [BP-6],SI
+ MOV SI,WORD [BP+6]
+ ADD SI,277
+ MOV AX,WORD [BP-2]
+ MOV DI,16
+ IMUL DI
+ ADD SI,AX
+ MOV SI,WORD [SI+4]
+ MOV WORD [BP-10],SI
+ MOV SI,WORD [BP+6]
+ ADD SI,277
+ MOV AX,WORD [BP-2]
+ MOV DI,16
+ IMUL DI
+ ADD SI,AX
+ MOV SI,WORD [SI+6]
+ MOV WORD [BP-8],SI
+ MOV SI,WORD [BP+6]
+ ADD SI,277
+ MOV AX,WORD [BP-2]
+ MOV DI,16
+ IMUL DI
+ ADD SI,AX
+ MOV DX,WORD [SI+12]
+ MOV AX,WORD [SI+10]
+ MOV WORD [BP-30],AX
+ MOV WORD [BP-28],DX
+ MOV AX,WORD [BP-2]
+ MOV SI,16
+ IMUL SI
+ MOV SI,WORD [BP+6]
+ ADD SI,277
+ ADD SI,AX
+ MOV DX,WORD [SI+2]
+ MOV AX,WORD [SI]
+ MOV WORD [BP-34],AX
+ MOV WORD [BP-32],DX
+ MOV SI,WORD [BP+6]
+ ADD SI,277
+ MOV AX,WORD [BP-2]
+ MOV DI,16
+ IMUL DI
+ ADD SI,AX
+ MOV SI,WORD [SI+14]
+ MOV AX,SI
+ CWD 
+ MOV WORD [BP-38],AX
+ MOV WORD [BP-36],DX
+ CMP WORD [BP-6],0
+ JNZ _L470
+ CMP WORD [BP-10],0
+ JNZ _L471
+ CMP WORD [BP-8],0
+ JNZ _L472
+ MOV AX,WORD [BP-28]
+ OR AX,WORD [BP-30]
+ JNZ _L473
+ MOV AX,WORD [BP-32]
+ OR AX,WORD [BP-34]
+ JNZ _L474
+ MOV AX,WORD [BP-36]
+ OR AX,WORD [BP-38]
+ JZ _L469
+_L474:
+_L473:
+_L472:
+_L471:
+_L470:
+ MOV AX,5
+ PUSH AX
+ PUSH WORD [BP-32]
+ PUSH WORD [BP-34]
+ MOV AX,WORD [BP-2]
+ ADD AX,9
+ PUSH AX
+ MOV AX,37
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV AX,WORD [BP-2]
+ ADD AX,9
+ PUSH AX
+ MOV AX,47
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ PUSH WORD [BP-10]
+ MOV AX,OFFSET P3D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,WORD [BP-2]
+ ADD AX,9
+ PUSH AX
+ MOV AX,52
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ PUSH WORD [BP-8]
+ MOV AX,OFFSET P3D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,WORD [BP-2]
+ ADD AX,9
+ PUSH AX
+ MOV AX,58
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ PUSH WORD [BP-6]
+ MOV AX,OFFSET P3D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,5
+ PUSH AX
+ PUSH WORD [BP-28]
+ PUSH WORD [BP-30]
+ MOV AX,WORD [BP-2]
+ ADD AX,9
+ PUSH AX
+ MOV AX,62
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ MOV AX,3
+ PUSH AX
+ PUSH WORD [BP-36]
+ PUSH WORD [BP-38]
+ MOV AX,WORD [BP-2]
+ ADD AX,9
+ PUSH AX
+ MOV AX,70
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+_L469:
+_L468:
+ INC WORD [BP-2]
+ JMP _L466
+_L467:
+ JMP _L435
+_L433:
+ MOV AX,0
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+149]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,1
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+150]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,2
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+151]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,3
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+152]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,4
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+154]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,5
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+155]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,6
+ PUSH AX
+ MOV AX,25
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+258]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,8
+ PUSH AX
+ MOV AX,24
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+259]
+ MOV AX,OFFSET P2D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,10
+ PUSH AX
+ MOV AX,23
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+156]
+ MOV AX,OFFSET P3D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,0
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV BL,BYTE [SI+158]
+ MOV BH,0
+ CMP BX,65
+ JL _L479
+ CMP BX,77
+ JG _L479
+ SUB BX,65
+ SHL BX,1
+ JMP BYTE _L481[BX]
+_L481:
+ DW _L475
+ DW _L479
+ DW _L478
+ DW _L476
+ DW _L479
+ DW _L479
+ DW _L479
+ DW _L479
+ DW _L479
+ DW _L479
+ DW _L479
+ DW _L479
+ DW _L477
+_L475:
+ PUSH WORD cost_basis_types_
+ CALL w_string_
+ ADD SP,2
+ JMP _L480
+_L476:
+ PUSH WORD cost_basis_types_[2]
+ CALL w_string_
+ ADD SP,2
+ JMP _L480
+_L477:
+ PUSH WORD cost_basis_types_[4]
+ CALL w_string_
+ ADD SP,2
+ JMP _L480
+_L478:
+ PUSH WORD cost_basis_types_[6]
+ CALL w_string_
+ ADD SP,2
+_L479:
+ JMP _L480
+_L480:
+ MOV AX,0
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+167]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,1
+ PUSH AX
+ MOV AX,49
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV BL,BYTE [SI+159]
+ MOV BH,0
+ CMP BX,77
+ JL _L484
+ CMP BX,85
+ JG _L484
+ SUB BX,77
+ SHL BX,1
+ JMP BYTE _L486[BX]
+_L486:
+ DW _L482
+ DW _L484
+ DW _L484
+ DW _L484
+ DW _L484
+ DW _L484
+ DW _L484
+ DW _L484
+ DW _L483
+_L482:
+ PUSH WORD pric_quan_
+ CALL w_string_
+ ADD SP,2
+ JMP _L485
+_L483:
+ PUSH WORD pric_quan_[2]
+ CALL w_string_
+ ADD SP,2
+_L484:
+ JMP _L485
+_L485:
+ MOV AX,1
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+166]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,2
+ PUSH AX
+ MOV AX,72
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+164]
+ MOV AX,OFFSET P2D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,3
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+257]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,3
+ PUSH AX
+ MOV AX,48
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+160]
+ MOV AX,OFFSET P3D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+404]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,4
+ PUSH AX
+ MOV AX,47
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+162]
+ MOV AX,OFFSET __260
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,6
+ PUSH AX
+ MOV AX,71
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+143]
+ MOV AH,0
+ PUSH AX
+ MOV AX,OFFSET P3D_
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV AX,7
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+255]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,8
+ PUSH AX
+ MOV AX,73
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ MOV SI,WORD [BP+6]
+ MOV AL,BYTE [SI+256]
+ MOV AH,0
+ PUSH AX
+ CALL write_char_
+ ADD SP,2
+ MOV AX,5
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+411]
+ PUSH WORD [SI+409]
+ MOV AX,9
+ PUSH AX
+ MOV AX,66
+ PUSH AX
+ CALL print_money_
+ ADD SP,10
+ LEA AX,WORD [BP-24]
+ PUSH AX
+ MOV SI,WORD [BP+6]
+ PUSH WORD [SI+251]
+ CALL from_1180_
+ ADD SP,4
+ MOV AX,11
+ PUSH AX
+ MOV AX,68
+ PUSH AX
+ CALL w_set_pos_
+ ADD SP,4
+ LEA AX,WORD [BP-24]
+ PUSH AX
+ CALL w_string_
+ ADD SP,2
+_L434:
+ JMP _L435
+_L435:
+ MOV SP,BP
+ POP BP
+ RET
+ DSEG 
+__261 DB '%-2s %7s %15s',0
+__262 DB ' %-25s',0
+ CSEG 
+
+show_carrier_: PUSH BP
+ MOV BP,SP
+ SUB SP,480
+ LEA AX,WORD [BP-480]
+ PUSH AX
+ MOV AX,480
+ PUSH AX
+ PUSH WORD [BP+6]
+ PUSH WORD [BP+4]
+ CALL _gt_record_
+ ADD SP,8
+ LEA AX,WORD [BP-451]
+ PUSH AX
+ LEA AX,WORD [BP-435]
+ PUSH AX
+ LEA AX,WORD [BP-480]
+ PUSH AX
+ MOV AX,OFFSET __261
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,8
+ LEA AX,WORD [BP-477]
+ PUSH AX
+ MOV AX,OFFSET __262
+ PUSH AX
+ CALL w_fstring_
+ ADD SP,4
+ MOV SP,BP
+ POP BP
+ RET
+
+format_phone_: PUSH BP
+ MOV BP,SP
+ SUB SP,26
+ MOV AX,WORD [BP+4]
+ MOV WORD [BP-26],AX
+ PUSH WORD [BP+4]
+ CALL strlen_
+ ADD SP,2
+ MOV WORD [BP-2],AX
+ CMP AX,7
+ JZ _L488
+ CMP WORD [BP-2],8
+ JNZ _L487
+_L488:
+ MOV BYTE [BP-20],40
+ MOV AX,OFFSET records_[94]
+ PUSH AX
+ LEA AX,WORD [BP-19]
+ PUSH AX
+ CALL strcpy_
+ ADD SP,4
+ MOV BYTE [BP-16],41
+ LEA AX,WORD [BP-15]
+ MOV WORD [BP-24],AX
+ MOV WORD [BP-4],1
+_L489:
+ MOV AX,WORD [BP-4]
+ CMP AX,WORD [BP-2]
+ JG _L490
+ MOV SI,WORD [BP-26]
+ INC WORD [BP-26]
+ MOV DI,WORD [BP-24]
+ INC WORD [BP-24]
+ MOV AL,BYTE [SI]
+ MOV BYTE [DI],AL
+ CMP WORD [BP-4],3
+ JNZ _L492
+ CMP WORD [BP-2],7
+ JNZ _L492
+ MOV SI,WORD [BP-24]
+ INC WORD [BP-24]
+ MOV BYTE [SI],45
+_L492:
+_L491:
+ INC WORD [BP-4]
+ JMP _L489
+_L490:
+ MOV SI,WORD [BP-24]
+ MOV BYTE [SI],0
+ JMP _L493
+_L487:
+ CMP WORD [BP-2],10
+ JNZ _L494
+ LEA AX,WORD [BP-20]
+ MOV WORD [BP-24],AX
+ MOV WORD [BP-4],1
+_L495:
+ CMP WORD [BP-4],10
+ JG _L496
+ CMP WORD [BP-4],1
+ JNZ _L498
+ MOV SI,WORD [BP-24]
+ INC WORD [BP-24]
+ MOV BYTE [SI],40
+ JMP _L499
+_L498:
+ CMP WORD [BP-4],4
+ JNZ _L500
+ MOV SI,WORD [BP-24]
+ INC WORD [BP-24]
+ MOV BYTE [SI],41
+ JMP _L501
+_L500:
+ CMP WORD [BP-4],7
+ JNZ _L502
+ MOV SI,WORD [BP-24]
+ INC WORD [BP-24]
+ MOV BYTE [SI],45
+_L502:
+_L501:
+_L499:
+ MOV SI,WORD [BP-26]
+ INC WORD [BP-26]
+ MOV DI,WORD [BP-24]
+ INC WORD [BP-24]
+ MOV AL,BYTE [SI]
+ MOV BYTE [DI],AL
+_L497:
+ INC WORD [BP-4]
+ JMP _L495
+_L496:
+ MOV SI,WORD [BP-24]
+ MOV BYTE [SI],0
+_L494:
+_L493:
+ CMP WORD [BP-2],0
+ JZ _L504
+ CMP WORD [BP-2],13
+ JNZ _L503
+_L504:
+ MOV AX,-1
+ MOV SP,BP
+ POP BP
+ RET
+_L503:
+ LEA AX,WORD [BP-20]
+ PUSH AX
+ CALL strlen_
+ ADD SP,2
+ CMP AX,13
+ JZ _L505
+ MOV AX,0
+ MOV SP,BP
+ POP BP
+ RET
+_L505:
+ LEA AX,WORD [BP-20]
+ PUSH AX
+ PUSH WORD [BP+4]
+ CALL strcpy_
+ ADD SP,4
+ MOV AX,-1
+ MOV SP,BP
+ POP BP
+ RET
+ END

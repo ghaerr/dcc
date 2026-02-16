@@ -1,0 +1,46 @@
+----- src\8088-PT2.C -----
+            (((stmt->dst.attb | stmt->src.attb) & _DEPSRC) ==
+                        switch (stmt->dst.attb & _DEPSRC)
+                                case _DEPSI:
+                                case _DEPDI:
+                                case _DEPBP:
+                                case _DEPBX:
+                                case (_DEPBP|_DEPDI):
+                                case (_DEPBX|_DEPSI):
+                                case (_DEPBX|_DEPDI):
+                                case (_DEPBP|_DEPSI):
+            (sattb2 & _DEPSRC)==DEPEND_FLAG(dreg1) &&
+                        if ((stmt2->src.attb & _DEPSRC) ==
+                        else if ((stmt2->dst.attb & _DEPSRC) ==
+                    (sattb1 & (_DEPSI|_DEPDI))==0) ||
+                    (dreg2==BX && (sattb1 & _DEPBX)==0))
+
+----- src\80188.C -----
+        if ((attb & _DEPBX) != 0)
+        if ((attb & _DEPBP) != 0)
+        if ((attb & _DEPSI) != 0)
+        if ((attb & _DEPDI) != 0)
+
+----- src\8088-PT1.C -----
+        if (DEPEND_FLAG(dreg1) && ((sattb1 & _DEPSRC)==DEPEND_FLAG(dreg1)))
+
+----- src\8087.C -----
+                    (stmt->dst.attb & _DEPSRC) == _DEPSI)
+
+----- src\O88.C -----
+                        _DEPBX, etc. since those are
+                        dop1->attb = dreg1->attb & ~_DEPSRC ;
+                        _DEPBX, etc. since those are
+                        sop1->attb = sreg1->attb & ~_DEPSRC ;
+        if ((attb & _DEPSI) != 0)
+        else if ((attb & _DEPDI) != 0)
+        if ((attb & _DEPBX)!=0 && EMPTY(BX))
+
+----- src\8088-PT3.C -----
+                if ((ndex & (_DEPSI|_DEPDI)) != 0)
+        else if (INDEX(dreg1) && (ndex & (_DEPBX|_DEPBP))!=0)
+
+----- src\PARSE.C -----
+        if ((attb & _DEPSI) != 0) ref |= _REFSI ;
+        if ((attb & _DEPDI) != 0) ref |= _REFDI ;
+        if ((attb & _DEPBX) != 0) ref |= _REFBX ;
