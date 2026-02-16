@@ -276,7 +276,9 @@ init(argc,argv)
 				}
 			outname[i]='.';
 			outname[i+1]='l';
-			outname[i+2]=0;
+			outname[i+2]='s';
+			outname[i+3]='t';
+			outname[i+4]=0;
 			}
 		strcpy(lstname,tempname);
 		i=0;
