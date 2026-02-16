@@ -202,8 +202,6 @@ scaled(ptr)
 	return val;
 	}
 
-#if CHECK
-
 dumpsym() {
 	char ch,*lastt;
 	int  num;
@@ -328,7 +326,6 @@ listtype() {
 		}
 	while (tp >= FUNCTION);
 	}
-#endif
 
 oc(ch)
 	char ch; {

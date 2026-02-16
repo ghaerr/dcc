@@ -807,7 +807,7 @@ dummyb(byt)
 	if (indummy == &dbuf[2048]) {
 		if (nerr == 0) {
 			if (ndummy == 0) {
-				if ((dummy=creat(tempname)) == -1)
+				if ((dummy=open(tempname, 02|0100, 0666)) == -1)    //FIXME open r/w
 					ferror("cannot create CTEMP3");
 				}
 			if(write(dummy,dbuf,2048) == -1) {
