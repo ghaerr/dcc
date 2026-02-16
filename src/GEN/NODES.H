@@ -16,15 +16,14 @@
 /*	TYPES GO INTO THE DTYP FIELD OF NODES THAT NEED A TYPE */
 
 
-#define CCHAR		1
-#define CINT		2
-#define CUNSG		3
-#define CLONG		4
-#define CFLOAT		5
-#define CDOUBLE		6
-#define	CSCHAR		7
-#define CSHORT		8
-#define	CULONG		9
+#define CSCHAR		1	/* Integral types */
+#define	CCHAR		2
+#define CINT		3
+#define CUNSG		4
+#define CLONG		5
+#define	CULONG		6
+#define CFLOAT		7	/* Floating point types */
+#define CDOUBLE		8	/* Last arithmetic type */
 #define CLABEL		10
 #define CSTRUCT		11	/* FOLLOWED BY POINTER TO STAG IN SYMBOL TABLE.	*/
 #define BITS		12	/* dtype is BITS+(#bits-1)*16+bit offset */

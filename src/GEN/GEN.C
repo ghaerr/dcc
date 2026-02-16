@@ -102,7 +102,7 @@ init() {
 
 	/*	initilize the names of the builtin functions.	*/
 
-	initst(bltname,"_SWITCH _CMP4 _SHR4 _SHL4 _MUL4 _DIV4 _MOD4 ");
+	initst(bltname,"_SWITCH _CMP4 _SAR4 _SHL4 _MUL4 _DIV4 _MOD4 ");
 	initst(&bltname[7],"_FLOADD _FLOADE _FLOADL _FSTORED _FSTOREE ");
 	initst(&bltname[12],"_FSTOREL _FADD _FSUB _FMUL _FDIV _FCMP _FNEG ");
 	initst(&bltname[19],"_FIS _FNOT _FDEC _FINC _FPUSH _FXCH _FCLEAR ");

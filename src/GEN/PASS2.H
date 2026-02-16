@@ -125,7 +125,7 @@ VMORE:
 
 #define _SWITCH		0
 #define _CMP4		1
-#define _SHR4		2
+#define _SAR4		2
 #define _SHL4		3
 #define _MUL4		4
 #define _DIV4		5

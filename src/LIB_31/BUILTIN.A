@@ -85,15 +85,15 @@ cmp4r:  _ret
 
         split
 
-;       _shr4   shift right     shr     dx ax,cl
+;       _SAR4   shift right     sar     dx ax,cl
 
-        public  _SHR4,_SHL4
-_SHR4:  mov     ch,0            ;need count in cx
-        jcxz    shr4r
-sr_lp:  shr     dx,1            ;low bit in carry
+        public  _SAR4,_SHL4
+_SAR4:  mov     ch,0            ;need count in cx
+        jcxz    sar4r
+sr_lp:  sar     dx,1            ;low bit in carry
         rcr     ax,1            ;now high in ax
         loop    sr_lp
-shr4r:  _ret
+sar4r:  _ret
 
 
 ;       _SHL4   shift left      shl     dx ax,cl

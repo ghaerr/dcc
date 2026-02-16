@@ -45,19 +45,35 @@ ojmp(jtype,num)
 get2same(node,vtype,lnode)
 	int  node,vtype[],lnode[]; {
 
+	int type;
 	get2(node,vtype,lnode);
 	forcerm(lnode);
 	forcerm(vtype);
-	if (lnode[VT] != vtype[VT]) {
-		if (lnode[VT] > vtype[VT]) {
-			if (lnode[VT] == CLONG) forcel(vtype);
-			else forceint(vtype);
-			}
-		else {
-			if (vtype[VT] == CLONG) forcel(lnode);
-			else forceint(lnode);
-			}
+	type = comntype(vtype, lnode);
+	forcetyp(vtype, type);
+	forcetyp(lnode, type);
+	}
+
+comntype(vtype, lnode)
+	int  vtype[], lnode[]; {
+	int type;
+
+	/* common type per "usual arithmetic conversions" */
+	type = (vtype[VT] > lnode[VT])? vtype[VT] : lnode[VT];
+	return (type < CINT)? CINT : type;
+	}
+
+forcetyp(vtype, type)
+	int vtype[], type; {
+	if (type > CDOUBLE) return;
+	else if (type >= CFLOAT) {
+		forcef(vtype);
+		return;
 		}
+	else if (type >= CLONG) forcel(vtype);
+	else if (type >= CINT) forceint(vtype);
+	else /* is a char */ forcebyt(vtype);
+	vtype[VT] = type;  /* preserve signed/unsigned */
 	}
 
 get2(node,vtype,lnode)

@@ -277,7 +277,7 @@ asm_add(type,vleft,vright)
 	char type;
 	int  vleft[],vright[]; {
 	char sgned,from;
-	int  data_type;
+	int  data_size;
 
 	alterv(vleft);
 	if (zopt) {
@@ -287,12 +287,12 @@ asm_add(type,vleft,vright)
 				asm_const(vright,vleft[VT]);
 				}
 			else {
-				data_type=realtype(vleft);
-				sgned=(data_type == CINT && vright[VIS] == CONSTV &&
+				data_size=realtype(vleft);
+				sgned=(data_size == 2 && vright[VIS] == CONSTV &&
 					vright[VVAL] <= 127 && 	vright[VVAL] >= -128) ? 2 : 0;
-				codeb(127+sgned+realtype(vleft));
+				codeb(127+sgned+data_size);
 				asm_orm(type,vleft);
-				asm_const(vright,sgned ? CCHAR: data_type);
+				asm_const(vright, (sgned || data_size == 1) ? CCHAR: CINT);
 				}
 			}
 		else {
@@ -301,7 +301,7 @@ asm_add(type,vleft,vright)
 				asm_orm(vleft[VVAL],vright);
 				}
 			else if (vright[VIS] == REGV) {
-				codeb((type<<3)+realtype(vleft)-CCHAR);
+				codeb((type<<3)+realtype(vleft)-1);
 				asm_orm(vright[VVAL],vleft);
 				}
 			else error("impossable arithmetic");
@@ -562,7 +562,7 @@ asm_inc(type,vtype)
 	int  vtype[]; {
 
 	if (zopt) {
-		if (vtype[VIS] == REGV && realtype(vtype) == CINT)
+		if (vtype[VIS] == REGV && realtype(vtype) == 2)
 			codeb(0X40+vtype[VVAL]+(type<<3));
 		else {
 			codeb(0xfd+realtype(vtype));
@@ -1427,7 +1427,7 @@ dummyw(wrd)
 
 realtype(vtype)
 	int vtype[]; {
-
-	if (vtype[VT] == CCHAR || vtype[VT] == CSCHAR) return CCHAR;
-	return CINT;
+	/* return width of char/int type, for codegen purposes */
+	if (vtype[VT] == CCHAR || vtype[VT] == CSCHAR) return 1;
+	return 2;
 	}
