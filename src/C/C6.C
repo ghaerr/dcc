@@ -627,12 +627,16 @@ number() {
 			}
 		if ((*cur == '.' && *(cur+1) != '.') || *cur == 'e' || *cur == 'E') {
 /*			cur=tokat+_finput(tokat,&fvalue,100); */
+#if 0
 			*((double*)(&fvalue))=strtod(tokat, &cur);
+#endif
 			heir=FDCONSTANT;
 			while((ch = toupper(*cur)) == 'L' || ch == 'F') {
 				if(ch == 'F') {
 					heir=FFCONSTANT;
+#if 0
 					*((float*)(&fvalue))=*((double*)(&fvalue));
+#endif
 					}
 				cur++;
 				}

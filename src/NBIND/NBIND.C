@@ -117,7 +117,7 @@ Sym * hash[32];
 #else
 	//struct {char cform; int clen,cbase,cmin,cmax;
 			//char dform; int dlen,dbase,dmin,dmax; char rest[110]; };
-    struct {
+    struct exehdr {
         unsigned    hdr1, hdr2;     // 0x0301, 0x0430
         char        hlen;           // 0x20
         char        reserved1;
@@ -387,7 +387,7 @@ nextpass(pass)
 			}
 		else if (isopen[filen] == FOPEN) {
 			if (lseek(infile[filen],0L,0) == -1)
-				ferror("cannot seek ",filen ? fileat[filen] : "STDIO.O");
+				ferror("cannot seek ",filen ? fileat[filen] : "STDIO.O");   //FIXME
 			inin=endin=&inbuf[4096];
 			}
 		else continue;
@@ -858,6 +858,9 @@ between() {
     ihead.tseg=codetot;
     ihead.dseg=datatot;
     ihead.bseg=alldata-datatot;
+    ihead.chmem = 32766;
+    ihead.minstack = 4096;
+    //ihead.entry = 0;      //FIXME always generates near jump to _CSETUP from 0
     //__dprintf("cseg %x dseg %x bseg %x\n", ihead.tseg, ihead.dseg, ihead.bseg);
 
 	pfrom=&ihead;

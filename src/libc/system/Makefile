@@ -1,4 +1,4 @@
-# C88 builtin Makefile
+# C88 system Makefile
 #
 
 BIN=/root/
@@ -27,11 +27,12 @@ LD=$(BIN)link88
 
 ##### End of standardized section #####
 
-LIB=builtin.a
+LIB=system.a
 LIBOBJS=        \
-    builtin.o   \
-    muldiv.o    \
-    umuldiv.o   \
+    creat.o     \
+    isatty.o    \
+    isetup.o    \
+    sbrk.o      \
 
 all: $(LIB)
 

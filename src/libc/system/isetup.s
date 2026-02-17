@@ -9,31 +9,33 @@
 ;
 include "syselks.h"
 ;
-        CSEG                    ; first text seg
-        nop                     ; prevent text having address 0 for SIG_DFL,SIG_IGN
-        nop
-        nop
-        nop
-
         DSEG                    ; first data seg
         dw      0,0             ; prevent data having address 0
+        PUBLIC  errno_
+        PUBLIC  environ_
+        PUBLIC  __stacklow_
 errno_:     dw      0
 environ_:   dw      0
 __stacklow_:dw      0
-        ;.comm   ___argc,2
-        ;.comm   ___argv,2
-        ;.comm   ___program_filename,2
+        ;.comm   __argc_,2
+        ;.comm   __argv_,2
+        ;.comm   __program_filename_,2
 
-        CSEG
+        CSEG                    ; first text seg
+        ;nop                     ; prevent text having address 0 for SIG_DFL,SIG_IGN
+        ;nop
+        ;nop
+        ;nop
+
         PUBLIC  _CSETUP,main_
 _CSETUP:                        ; C program entry point
         mov     ax,sp
         sub     ax,dx           ; DX is stack size
         mov     __stacklow_,ax
         pop     ax              ; get argc
-        ;mov     [___argc],ax
+        ;mov     __argc_,ax
         mov     bx,sp
-        ;mov     [___argv],bx
+        ;mov     __argv_,bx
         mov     dx,bx           ; save argc in DX
 L1:     cmp     WORD [bx],1
         inc     bx
@@ -42,14 +44,20 @@ L1:     cmp     WORD [bx],1
         mov     environ_,bx
         ;mov     bx,sp
         ;mov     bx,[bx]
-        ;mov     [___program_filename], bx
-        ;push    [___argv]
+        ;mov     __program_filename_, bx
+        ;push    __argv_
         push    dx              ; push argv
         push    ax              ; restore argc
         ;call   initrtns
         call    main_
         push    ax              ; pass return value to exit
         call    _exit_          ; no return
+
+
+        public  _showds_
+_showds_:mov    ax,ds           ;ds (and ss) value
+        ret
+
 
         PUBLIC  callsys
 callsys:                        ; common routine for ELKS system call
@@ -74,8 +82,8 @@ L2:
         pop     bp
         ret
 
-        PUBLIC  _exit
-        PUBLIC  __exit
+        PUBLIC  exit_
+        PUBLIC  _exit_
 exit_:                          ; C exit temp comes here
 _exit_:                         ; _exit
         mov     ax,SYS_exit

@@ -1267,7 +1267,7 @@ int r;
 
 /* --------- ELKS ---------- */
 
-int _fmemalloc(unsigned paras, unsigned short *pseg);
+int _fmemalloc(unsigned paras, unsigned *pseg);
 
 xalloc(bytes)
     unsigned bytes; {
@@ -1276,8 +1276,10 @@ xalloc(bytes)
     if (bytes == 0)      // alloc 64K
         bytes = 0x1000;
     else bytes = (bytes + 15) >> 4;
-    if (_fmemalloc(bytes, &seg))
+    if (_fmemalloc(bytes, &seg)) {
+        write(1, "*** _fmemalloc FAIL\n", 20);
         return 0;
+    }
     return seg;
 }
 
