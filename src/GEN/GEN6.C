@@ -18,7 +18,7 @@
 #include "PASS2.H"
 #include "NODES.H"
 #include "OBJ.H"
-#include "inst86.h"
+#include "INST86.H"
 
 
 /*	the ES,DS,CS,SS values are different in this module.	*/

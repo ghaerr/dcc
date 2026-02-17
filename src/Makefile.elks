@@ -1,0 +1,13 @@
+#
+# DCC Makefile on ELKS
+#
+MAKE = make
+
+DIRS = libc C GEN
+
+all:
+	for DIR in $(DIRS); do cd $$DIR; $(MAKE) all || exit 1; cd ..; done
+
+clean:
+	for DIR in $(DIRS); do cd $$DIR; $(MAKE) clean || exit 1; cd ..; done
+

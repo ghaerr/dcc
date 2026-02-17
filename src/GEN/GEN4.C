@@ -17,7 +17,7 @@
 
 #include "PASS2.H"
 #include "NODES.H"
-#include "inst86.h"
+#include "INST86.H"
 
 
 genarith(node,vtype)

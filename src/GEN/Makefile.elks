@@ -1,4 +1,4 @@
-# C88 system Makefile
+# GEN88 Makefile
 #
 
 BIN=/root/
@@ -19,26 +19,28 @@ LD=$(BIN)link88
 .c.o:
 	#$(CPP) $(CPPFLAGS) $*.c -o $*.i
 	$(CC) $*.c PW
-	$(C2) $* A
-	$(AS) $*.as L
+	$(C2) $* Z
+	#$(AS) $*.as L
 
 .s.o:
 	$(AS) $*.s L
 
 ##### End of standardized section #####
 
-LIB=system.a
-LIBOBJS=        \
-    creat.o     \
-    isatty.o    \
-    isetup.o    \
-    lseek.o     \
-    sbrk.o      \
+PROG=gen88.bin
+OBJS=       \
+    GEN.o   \
+    GEN2.o    \
+    GEN3.o    \
+    GEN4.o    \
+    GEN5.o    \
+    GEN6.o    \
 
-all: $(LIB)
+all: $(OBJS) $(PROG)
 
-$(LIB): $(LIBOBJS)
-	$(AR) $^ -O$(LIB)
+$(PROG): $(OBJS)
+	$(LD) $^ -Ogen88 -Pgen88.lst -_
+	cp gen88.bin /root/dgen88
 
 clean:
-	rm -f *.i *.as *.o *.a *.lst
+	rm -f *.i *.as *.o *.a *.lst $(PROG)

@@ -858,7 +858,7 @@ between() {
     ihead.tseg=codetot;
     ihead.dseg=datatot;
     ihead.bseg=alldata-datatot;
-    ihead.chmem = 32766;
+    ihead.chmem = stacklen; //FIXME use -S stacksize for heap
     ihead.minstack = 4096;
     //ihead.entry = 0;      //FIXME always generates near jump to _CSETUP from 0
     //__dprintf("cseg %x dseg %x bseg %x\n", ihead.tseg, ihead.dseg, ihead.bseg);
@@ -1402,7 +1402,7 @@ endup() {
 	nummod/=7;
 #if LIMITED == 0
 	if (see_exit == 0) {
-		xputs("end of BIND        ", 2);
+		xputs("End of BIND        ", 2);
 		onum(util > nummod ? util: nummod, 2);
 		xputs("% utilization    ", 2);
 		}

@@ -40,8 +40,8 @@ OBJS=       \
 all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $^ -Odc88 -Pc88.lst -_
-	cp dc88.bin /root/dc88
+	$(LD) $^ -Oc88 -Pc88.lst -_ -S7FFE
+	cp c88.bin /root/dc88
 
 clean:
 	rm -f *.i *.as *.o *.a *.lst $(PROG)

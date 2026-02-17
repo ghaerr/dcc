@@ -15,9 +15,9 @@
  */
 /* GEN.C   - pass 2 for c88	*/
 
-#include "pass2.h"
-#include "nodes.h"
-#include "inst86.h"
+#include "PASS2.H"
+#include "NODES.H"
+#include "INST86.H"
 
 char nextpgm[77]="Z:ASM88 Z:CTEMP4     U00 O";
 char perfect=1;
@@ -636,10 +636,10 @@ addext(nested)
 									case CFLOAT:if (vtype[VIS] != CONSTV)
 													ierror();
 												if (vtype[VT] == CDOUBLE)
-													cvt.flt=CVT1((char *)(&vtype[VVAL]))->dbl;
+													; //FIXME cvt.flt=CVT1((char *)(&vtype[VVAL]))->dbl;
 												else if (vtype[VT] == CLONG)
-													cvt.flt=CVT1((char *)(&vtype[VVAL]))->lng;
-												else cvt.flt=vtype[VVAL];
+													; //FIXME cvt.flt=CVT1((char *)(&vtype[VVAL]))->lng;
+												else ; //FIXME cvt.flt=vtype[VVAL];
 												asm_dw();
 												if (zopt) {
 													codew(cvt.flts[0]);
@@ -1211,10 +1211,10 @@ genopnd(node,vtype)
 
 								if (vtype[VIS] == CONSTV) {
 									if (vtype[VT] == CDOUBLE)
-										CVT2((char *)(&vtype[VVAL]))->flt=CVT2((char *)(&vtype[VVAL]))->dbl;
+										; //FIXME CVT2((char *)(&vtype[VVAL]))->flt=CVT2((char *)(&vtype[VVAL]))->dbl;
 									else if (vtype[VT] == CLONG)
-										CVT2((char *)(&vtype[VVAL]))->flt=CVT2((char *)(&vtype[VVAL]))->lng;
-									else CVT2((char *)(&vtype[VVAL]))->flt=vtype[VVAL];
+										; //FIXME CVT2((char *)(&vtype[VVAL]))->flt=CVT2((char *)(&vtype[VVAL]))->lng;
+									else ; //FIXME CVT2((char *)(&vtype[VVAL]))->flt=vtype[VVAL];
 									vtype[VT]=CFLOAT;
 									}
 								else loadf(vtype);

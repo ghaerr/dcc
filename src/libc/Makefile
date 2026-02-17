@@ -10,6 +10,7 @@ all:
 	$(AR) */*.a -Ocstdio
 	cp cstdio.a /root
 	cp cstdio.a /root/test/C
+	cp cstdio.a /root/test/GEN
 
 clean:
 	for DIR in $(DIRS); do cd $$DIR $(MAKE) clean || exit 1; cd ..; done

@@ -17,7 +17,7 @@
 
 #include "PASS2.H"
 #include "NODES.H"
-#include "inst86.h"
+#include "INST86.H"
 
 union un_cvt3 {double dbl; long lng;};
 #define CVT3(v)		((union un_cvt3 *)(v))
@@ -152,8 +152,8 @@ forcef(vtype)
 	if (!floater(vtype)) {
 		if (vtype[VIS] == CONSTV) {
 			if (vtype[VT] == CLONG)
-				CVT3((char *)(&vtype[VVAL]))->dbl=CVT3((char *)(&vtype[VVAL]))->lng;
-			else CVT3((char *)(&vtype[VVAL]))->dbl=vtype[VVAL];
+				; //FIXME CVT3((char *)(&vtype[VVAL]))->dbl=CVT3((char *)(&vtype[VVAL]))->lng;
+			else ; //FIXME CVT3((char *)(&vtype[VVAL]))->dbl=vtype[VVAL];
 			vtype[VT]=CDOUBLE;
 			}
 		else loadf(vtype);
@@ -165,7 +165,7 @@ forceint(vtype)
 
 	if (floater(vtype)) {
 		if (vtype[VIS] == CONSTV) {
-			CVT3((char *)(&vtype[VVAL]))->lng=CVT3((char *)(&vtype[VVAL]))->dbl;
+			; //FIXME CVT3((char *)(&vtype[VVAL]))->lng=CVT3((char *)(&vtype[VVAL]))->dbl;
 			vtype[VT]=CINT;
 			}
 		else {
@@ -303,7 +303,7 @@ forcel(vtype)
 	if (floater(vtype)) {
 
 		if (vtype[VIS] == CONSTV) {
-			CVT3((char *)(&vtype[VVAL]))->lng=CVT3((char *)(&vtype[VVAL]))->dbl;
+			; //FIXME CVT3((char *)(&vtype[VVAL]))->lng=CVT3((char *)(&vtype[VVAL]))->dbl;
 			}
 		else {
 			loadf(vtype);

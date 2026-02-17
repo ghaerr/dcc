@@ -15,8 +15,10 @@
  */
 
 /* --- ELKS changes --- */
+#if __ia16__
 #define char        unsigned char
 #define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)
+#endif
 /* ------------------- */
 
 #define	OPT		0		/*	on if want optimize code	*/
