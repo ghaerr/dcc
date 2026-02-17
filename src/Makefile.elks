@@ -3,10 +3,11 @@
 #
 MAKE = make
 
-DIRS = libc C GEN NBIND LIB88
+DIRS = libc C GEN ASM88 NBIND LIB88
 
 all:
 	for DIR in $(DIRS); do cd $$DIR; $(MAKE) all || exit 1; cd ..; done
+	sync
 
 clean:
 	for DIR in $(DIRS); do cd $$DIR; $(MAKE) clean || exit 1; cd ..; done

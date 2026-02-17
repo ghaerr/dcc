@@ -16,10 +16,13 @@
 /*	ASM88.H		include file for ASM88	*/
 
 /* --- ELKS changes --- */
+#if __ia16__
 #define char        unsigned char
+#define _setmem(addr,count,byte)    memset(addr,byte,count)
+#endif
+
 #define HEAP        32766
 char *mstart;
-#define _setmem(addr,count,byte)    memset(addr,byte,count)
 /* ------------------- */
 
 #define DEBUG	0

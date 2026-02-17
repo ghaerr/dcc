@@ -14,6 +14,7 @@ rm -rf $DEST
 mkdir -p $DEST
 mkdir -p $DEST/C
 mkdir -p $DEST/GEN
+mkdir -p $DEST/ASM
 mkdir -p $DEST/NBIND
 mkdir -p $DEST/LIB88
 mkdir -p $DEST/libc
@@ -41,6 +42,14 @@ cp -p GEN/GEN5.C                $DEST/GEN/GEN5.c
 cp -p GEN/GEN6.C                $DEST/GEN/GEN6.c
 cp -p GEN/*.H                   $DEST/GEN
 cp -p GEN/Makefile.elks         $DEST/GEN/Makefile
+
+cp -p ASM/ASM88.C               $DEST/ASM/ASM88.c
+cp -p ASM/ASM2.C                $DEST/ASM/ASM2.c
+cp -p ASM/ASM3.C                $DEST/ASM/ASM3.c
+cp -p ASM/ASM4.C                $DEST/ASM/ASM4.c
+cp -p ASM/ASM5.C                $DEST/ASM/ASM5.c
+cp -p ASM/*.H                   $DEST/ASM
+cp -p ASM/Makefile.elks         $DEST/ASM/Makefile
 
 cp -p NBIND/NBIND.C             $DEST/NBIND/NBIND.c
 cp -p NBIND/*.H                 $DEST/NBIND

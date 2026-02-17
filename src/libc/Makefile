@@ -11,6 +11,7 @@ all:
 	cp cstdio.a /root
 	cp cstdio.a /root/test/C
 	cp cstdio.a /root/test/GEN
+	cp cstdio.a /root/test/ASM
 	cp cstdio.a /root/test/NBIND
 	cp cstdio.a /root/test/LIB88
 
