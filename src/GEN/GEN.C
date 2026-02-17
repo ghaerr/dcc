@@ -355,7 +355,7 @@ endit() {
 		else _chain(&nextpgm[2]);
 		}
 #endif
-	os("End of C88     ");
+	os("End of GEN88   ");
 	if (zopt) asm_size();
 	os("     ");
 	ounum(util);
@@ -366,7 +366,8 @@ endit() {
 		else _chain(&nextpgm[2]);
 		}
 #endif
-	real_exit(warn ? 1:0);
+	//real_exit(warn ? 1:0);        //FIXME allow warnings
+        real_exit(0);
 	}
 
 addfun() {

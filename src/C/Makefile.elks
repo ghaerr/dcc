@@ -1,0 +1,46 @@
+# C88 Makefile
+#
+
+BIN=/root/
+#INCLUDES=-I/usr/include -I/usr/include/c86
+#DEFINES=
+#CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
+#CPP=$(BIN)cpp
+
+##### Standardized section of Makefile #####
+
+CC=$(BIN)c88
+C2=$(BIN)gen88
+AS=$(BIN)asm88
+AR=$(BIN)lib88
+LD=$(BIN)link88
+
+# Automated rules for C88 toolchain
+.c.o:
+	#$(CPP) $(CPPFLAGS) $*.c -o $*.i
+	$(CC) $*.c PW
+	$(C2) $* A
+	$(AS) $*.as L
+
+.s.o:
+	$(AS) $*.s L
+
+##### End of standardized section #####
+
+PROG=c88.bin
+OBJS=       \
+    C88.o   \
+    C2.o    \
+    C3.o    \
+    C4.o    \
+    C5.o    \
+    C6.o    \
+    C7.o
+
+all: $(OBJS) $(PROG)
+
+$(PROG): $(OBJS)
+	$(LD) $^ -P$(PROG)
+
+clean:
+	rm -f *.i *.as *.o *.a *.lst $(PROG)

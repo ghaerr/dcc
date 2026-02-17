@@ -15,8 +15,8 @@
  */
 /*	C4.C					PART4 OF MEDIUM C COMPILER	*/
 
-#include "pass1.h"
-#include "nodes.h"
+#include "PASS1.H"
+#include "NODES.H"
 
 /*	get a constant expression	*/
 

@@ -463,6 +463,7 @@ endit() {
 			}
 		os("Number of Errors = ");
 		onum(nerr);
+        ocrlf();
 		real_exit(2);
 		}
 	else real_exit(0);
@@ -1266,7 +1267,7 @@ int r;
 
 /* --------- ELKS ---------- */
 
-int _fmemalloc(int paras, unsigned short *pseg);
+int _fmemalloc(unsigned paras, unsigned short *pseg);
 
 xalloc(bytes)
     unsigned bytes; {
@@ -1280,6 +1281,7 @@ xalloc(bytes)
     return seg;
 }
 
+#if __ia16__
 /* following routines are in DCC ASM on target */
 int _lmove(count, from_offset, from_segment, to_offset, to_segment)
     unsigned count, from_offset, from_segment, to_offset, to_segment; {
@@ -1290,4 +1292,4 @@ int _lmove(count, from_offset, from_segment, to_offset, to_segment)
         *((char __far *)dst++) = *((char __far*)src++);
     return 0;
 }
-
+#endif

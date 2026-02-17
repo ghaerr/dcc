@@ -24,7 +24,9 @@ tokit() {
 		while (tokone());
 	}
 
-strngcpy(char *cp, int qs){
+strngcpy(cp, qs)
+	char *cp;
+	int qs; {
 
 	OS("NESTED++ called"); //FIXME
 	whitesp();
@@ -227,7 +229,8 @@ tokone() {
 /*	if reserved, set bvalue to rvalue. */
 
 
-find(int macOK) {
+find(int macOK) { /* FIXME 'int a' required after this ???*/
+int a;
 	cur--;
 	i=hashno=0;
 	while ((ltype[*cur] <= DIGIT) && i < 31) {
@@ -350,6 +353,7 @@ addnest() {
 		 nlen=cur-tokat;
 	char narg, inquote, plevel;
 #define STMAX   80  //FIXME was 1024
+
 	char *argfrom[MAXNEST],
 		  argstk[STMAX],
 		  *ap, *sp;
@@ -568,6 +572,7 @@ xpand:	if (narg != m_defined(defat)->dargs) {
 			}
 		}
 	cur=nestfrom[nested]; //FIXME was nested and macros didn't work!
+
 #ifdef MacHiWater
 	if(macxp > MacHiWaterP) MacHiWaterP=macxp;
 #endif

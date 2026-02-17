@@ -1,5 +1,5 @@
 #
-# DeSmet C for ELKS Makefile
+# DCC Makefile on host
 #
 
 DIRS = C GEN ASM LIB88 NBIND OTHER

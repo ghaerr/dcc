@@ -354,10 +354,10 @@ onum(num)
 	oc(num % 10 +'0');
 	}
 
-obnum(bnum)         //FIXME same as onum
-	char bnum; {
+obnum(bnum)
+	int bnum; {     //FIXME changed from char
 	int  num;
-	onum(num=bnum);
+	onum(num=bnum&255);
 	}
 
 ohb(bnum)

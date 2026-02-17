@@ -15,8 +15,8 @@
  */
 /* c5.C					PART 5 OF C88 COMPILER	*/
 		
-#include "pass1.h"
-#include "nodes.h"
+#include "PASS1.H"
+#include "NODES.H"
 #if CHECK
 #include "OBJ.H"
 #endif

@@ -15,8 +15,8 @@
  */
 /*	c3.c			third pard of medium c	*/
 
-#include "pass1.h"
-#include "nodes.h"
+#include "PASS1.H"
+#include "NODES.H"
 #if CHECK
 #include "OBJ.H"
 #endif
@@ -350,7 +350,8 @@ putwrd:			wp=cur;
 				cur+=2;
 				find(1);
 				if(heir == DEFINED && m_defined(nameat)->dargs == 255) {
-					char *dp = &m_defined(nameat)->dval+1, suffix = 0;
+					char *dp = &m_defined(nameat)->dval+1;
+					char suffix = 0;
 
 					while(*dp != LF) {
 						char c;

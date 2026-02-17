@@ -16,12 +16,8 @@
 /*	PASS1.H			INCLUDE FOR PASS1	*/
 
 /* --- ELKS changes --- */
+#if __ia16__
 #define char        unsigned char
-#define HEAP        32766
-char *mstart;
-char *xitoa();
-#define FIX(node)   (*(char *)(node))
-#define OS(str)     os(str)
 #define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)
 
 #define FP_SEG(fp)       ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
@@ -34,6 +30,13 @@ char *xitoa();
             : /* no output */           \
             :"a" ((newsp))    \
             :"memory")
+#endif
+
+#define HEAP        32766
+char *mstart;
+char *xitoa();
+#define FIX(node)   (*(char *)(node))
+#define OS(str)     os(str)
 
 /* ------------------- */
 
@@ -220,6 +223,7 @@ unsigned lastline;
 	unsigned incnext;
 
 //#define MAXNEST 60
+
 #define MAXNEST 5   /*FIXME*/
 	int  nestfrom[MAXNEST];
 

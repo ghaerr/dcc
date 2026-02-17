@@ -1580,7 +1580,7 @@ xputc(int c, int fd)
 }
 
 
-int _fmemalloc(int paras, unsigned short *pseg);
+int _fmemalloc(unsigned paras, unsigned short *pseg);
 
 xalloc(bytes)
     unsigned bytes; {
