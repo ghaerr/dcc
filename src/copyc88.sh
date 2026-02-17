@@ -17,6 +17,7 @@ mkdir -p $DEST/GEN
 mkdir -p $DEST/ASM
 mkdir -p $DEST/NBIND
 mkdir -p $DEST/LIB88
+mkdir -p $DEST/OTHER
 mkdir -p $DEST/libc
 mkdir -p $DEST/libc/system
 mkdir -p $DEST/libc/builtin
@@ -58,6 +59,11 @@ cp -p NBIND/Makefile.elks       $DEST/NBIND/Makefile
 cp -p LIB88/LIB88.C             $DEST/LIB88/LIB88.c
 cp -p LIB88/*.H                 $DEST/LIB88
 cp -p LIB88/Makefile.elks       $DEST/LIB88/Makefile
+
+cp -p OTHER/DUMPO.C             $DEST/OTHER/DUMPO.c
+cp -p OTHER/TOOBJ.C             $DEST/OTHER/TOOBJ.c
+cp -p OTHER/*.H                 $DEST/OTHER
+cp -p OTHER/Makefile.elks       $DEST/OTHER/Makefile
 
 cp -p libc/Makefile             $DEST/libc
 cp -p libc/system/*             $DEST/libc/system

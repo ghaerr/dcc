@@ -1,0 +1,43 @@
+# DUMP88 and TOOBJ88  Makefile
+#
+
+BIN=/root/
+#INCLUDES=-I/usr/include -I/usr/include/c86
+#DEFINES=
+#CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
+#CPP=$(BIN)cpp
+
+##### Standardized section of Makefile #####
+
+CC=$(BIN)c88
+C2=$(BIN)gen88
+AS=$(BIN)asm88
+AR=$(BIN)lib88
+LD=$(BIN)link88
+
+# Automated rules for C88 toolchain
+.c.o:
+	#$(CPP) $(CPPFLAGS) $*.c -o $*.i
+	$(CC) $*.c PW
+	$(C2) $* Z
+	#$(AS) $*.as L
+
+.s.o:
+	$(AS) $*.s L
+
+##### End of standardized section #####
+
+PROGS = dump88.bin toobj88.bin
+
+all: $(PROGS)
+
+dump88.bin: DUMPO.o
+	$(LD) $^ -Odump88 -Pdump88.lst -_
+	cp dump88.bin /root/ddump88
+
+toobj88.bin: TOOBJ.o
+	$(LD) $^ -Otoobj88 -Ptoobj88.lst -_ -S7FFE
+	cp toobj88.bin /root/dtoobj88
+
+clean:
+	rm -f *.i *.as *.o *.a *.lst $(PROGS)

@@ -16,9 +16,12 @@
 /*	TOOBJ.C		converter from .O to .OBJ format for C88	*/
 
 /* --- ELKS changes --- */
+#if __ia16__
 #define char        unsigned char
-#define HEAP        32766
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
+#endif
+
+#define HEAP        32766
 /* ------------------- */
 
 #define IBM		1			/*	true if creating BIND for MS-DOS	*/
@@ -41,6 +44,7 @@
 #define INPTR4	5
 
 #define CONTZ	26  //FIXME
+
 	char inbuf[1024*10+200],*inin,*endin;
 	char coderec[1000],*incode,codefix[1000],datafix[1000],esegfix[1000];
 	char datarec[1000],esegrec[1000],*indata,inname[65],outname[65];
