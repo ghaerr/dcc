@@ -3,7 +3,7 @@
 #
 MAKE = make
 
-DIRS = libc C GEN
+DIRS = libc C GEN NBIND
 
 all:
 	for DIR in $(DIRS); do cd $$DIR; $(MAKE) all || exit 1; cd ..; done

@@ -31,6 +31,9 @@ LD=$(BIN)link88
 LIB=misc.a
 LIBOBJS=        \
     atol.o      \
+    lcmp.o      \
+    lcpy.o      \
+    lmov.o      \
     lmove.o     \
     ltoa.o      \
     memchr.o    \

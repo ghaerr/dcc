@@ -11,6 +11,7 @@ rm -rf $DEST
 mkdir -p $DEST
 mkdir -p $DEST/C
 mkdir -p $DEST/GEN
+mkdir -p $DEST/NBIND
 mkdir -p $DEST/libc
 mkdir -p $DEST/libc/system
 mkdir -p $DEST/libc/builtin
@@ -36,6 +37,10 @@ cp -p GEN/GEN5.C                $DEST/GEN/GEN5.c
 cp -p GEN/GEN6.C                $DEST/GEN/GEN6.c
 cp -p GEN/*.H                   $DEST/GEN
 cp -p GEN/Makefile.elks         $DEST/GEN/Makefile
+
+cp -p NBIND/NBIND.C             $DEST/NBIND/NBIND.c
+cp -p NBIND/*.H                 $DEST/NBIND
+cp -p NBIND/Makefile.elks       $DEST/NBIND/Makefile
 
 cp -p libc/Makefile             $DEST/libc
 cp -p libc/system/*             $DEST/libc/system

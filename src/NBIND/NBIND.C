@@ -19,8 +19,8 @@
 /*	BIND.C		binder for ASM88 and C88	*/
 
 /* --- ELKS changes --- */
+#if __ia16__
 #define char        unsigned char
-#define HEAP        32766
 
 #define FP_SEG(fp)       ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
 #define FP_OFF(fp)       ((unsigned)(unsigned long)(void __far *)(fp))
@@ -30,6 +30,9 @@
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 #define _move(num,from,to)          memmove((char *)(to), (char *)(from), num)
 #define _showds()                   (FP_SEG(inbuf))
+#endif
+
+#define HEAP        32766
 /* ------------------- */
 
 #define IBM		0			/*	true if creating BIND for MS-DOS	*/
@@ -173,6 +176,7 @@ init(argc,argv)
 #if	IBM==0
 	//incode=&codebuf[128];
 	//indata=&databuf[256];
+
 #endif
 
 	inext=memory=sbrk(HEAP);
@@ -341,6 +345,7 @@ nextpass(pass)
 #else
 	//over_offs[0][0]=256;
 	over_offs[0][0]=0;  //FIXME?
+
 #endif
 	over_offs[0][1]=0;
 
@@ -751,6 +756,7 @@ between() {
 	//hptr=codebuf;
 	//for (i=0; i< 110; i++)
 		//hptr->rest[i]=0;
+
 #endif
 
 	/*	allocate reserved in order so public reserved's are in order */
@@ -869,6 +875,7 @@ between() {
 	while (incode < &codebuf[32])
 		*incode++=*pfrom++;
 	codetot+=32;    //FIXME?
+
 #if 0
 	hptr->cform=1;
 	hptr->cbase=hptr->dbase=0;
@@ -1583,7 +1590,7 @@ xputc(int c, int fd)
 }
 
 
-int _fmemalloc(unsigned paras, unsigned short *pseg);
+int _fmemalloc(unsigned paras, unsigned *pseg);
 
 xalloc(bytes)
     unsigned bytes; {
@@ -1592,11 +1599,14 @@ xalloc(bytes)
     if (bytes == 0)      // alloc 64K
         bytes = 0x1000;
     else bytes = (bytes + 15) >> 4;
-    if (_fmemalloc(bytes, &seg))
+    if (_fmemalloc(bytes, &seg)) {
+        write(1, "*** _fmemalloc FAIL\n", 20);
         return 0;
+    }
     return seg;
 }
 
+#if __ia16__
 /* following routines are in DCC ASM on target */
 int _lmov(count, from_offset, from_segment, to_offset, to_segment)
     unsigned count, from_offset, from_segment, to_offset, to_segment; {
@@ -1642,3 +1652,4 @@ _poke(val, off, seg)
 
     *(char __far *)MK_FP(seg, off) = val;
 }
+#endif
