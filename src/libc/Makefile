@@ -12,6 +12,7 @@ all:
 	cp cstdio.a /root/test/C
 	cp cstdio.a /root/test/GEN
 	cp cstdio.a /root/test/NBIND
+	cp cstdio.a /root/test/LIB88
 
 clean:
 	for DIR in $(DIRS); do cd $$DIR $(MAKE) clean || exit 1; cd ..; done

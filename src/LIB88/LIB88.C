@@ -19,9 +19,12 @@
 /*		Librarian for ASM88 and C88	*/
 
 /* --- ELKS changes --- */
+#if __ia16__
 #define char        unsigned char
-#define HEAP        32766
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
+#endif
+
+#define HEAP        32766
 /* ------------------- */
 
 #include "OBJ.H"

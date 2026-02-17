@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 #
-# copyc866sh - copy native ELKS C88 toolchain, header files and examples to ELKS
+# copyc866sh - copy C88 sources to ELKS for self-compilation and building libc
+#   ELKS Usage: cd test; make
 #
 set -e
 
+# NOTE: Change this to ELKS repo top directory
 TOPDIR=/Users/greg/net/elks-gh
+
 DEST=$TOPDIR/elkscmd/rootfs_template/root/test
 
 rm -rf $DEST
@@ -12,6 +15,7 @@ mkdir -p $DEST
 mkdir -p $DEST/C
 mkdir -p $DEST/GEN
 mkdir -p $DEST/NBIND
+mkdir -p $DEST/LIB88
 mkdir -p $DEST/libc
 mkdir -p $DEST/libc/system
 mkdir -p $DEST/libc/builtin
@@ -41,6 +45,10 @@ cp -p GEN/Makefile.elks         $DEST/GEN/Makefile
 cp -p NBIND/NBIND.C             $DEST/NBIND/NBIND.c
 cp -p NBIND/*.H                 $DEST/NBIND
 cp -p NBIND/Makefile.elks       $DEST/NBIND/Makefile
+
+cp -p LIB88/LIB88.C             $DEST/LIB88/LIB88.c
+cp -p LIB88/*.H                 $DEST/LIB88
+cp -p LIB88/Makefile.elks       $DEST/LIB88/Makefile
 
 cp -p libc/Makefile             $DEST/libc
 cp -p libc/system/*             $DEST/libc/system
