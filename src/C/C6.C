@@ -353,7 +353,6 @@ addnest() {
 		 nlen=cur-tokat;
 	char narg, inquote, plevel;
 #define STMAX   80  //FIXME was 1024
-
 	char *argfrom[MAXNEST],
 		  argstk[STMAX],
 		  *ap, *sp;
@@ -458,7 +457,6 @@ xpand:	if (narg != m_defined(defat)->dargs) {
 		return;
 #ifdef __DESMET__
 	_setsp(ap-1);       //FIXME hopefully not needed in GCC compile?
-
 #endif
 	nestfrom[nested]=cur;
 	if (nested+1 >= MAXNEST) { 
@@ -575,7 +573,6 @@ xpand:	if (narg != m_defined(defat)->dargs) {
 			}
 		}
 	cur=nestfrom[nested]; //FIXME was nested and macros didn't work!
-
 #ifdef MacHiWater
 	if(macxp > MacHiWaterP) MacHiWaterP=macxp;
 #endif
@@ -750,7 +747,7 @@ whitesp() {
 			cur++;
 		else if (*cur == '/' && WORD(cur+1)->byte == '/') {
 			cur=lineEnd-1;
-			dolf(1);
+			continue;
 			}
 		else if (*cur == '/' && WORD(cur+1)->byte == '*') {
 			cur+=2;
@@ -759,7 +756,7 @@ whitesp() {
 				while (ch != LF && ch != '*' && ch != 26)
 					ch=*++cur;
 				if (ch == LF) dolf(1);
-				else if (ch == 26) {    //FIXME
+				else if (ch == 26) {
 					cur--;
 					xitoa(bline, &eoferr[37], 10);
 					error(eoferr);

@@ -167,11 +167,13 @@ struct savearea{
 
 #define	SAVSIZE	sizeof(struct savearea)
 
-struct area { //FIXME the order of the following must be the same as the struct above
+struct area { //FIXME this struct is used to order variables, parser depends on it
     char name[65];
-    char *cur,*lineBeg,*lineEnd,*bufEnd,*eofptr;    //FIXME reordered cur
+    char *cur,*lineBeg,*lineEnd,*bufEnd,*eofptr;
     unsigned cline, lineinc, file;
-    char lineBuf[512],fileBuf[2048],savEnd[2];
+    char lineBuf[512],fileBuf[2048];
+    char savEnd[2];
+    char macExp[2048],macEnd[1],*macxp;
 } area;
 #define name area.name
 #define cur area.cur
@@ -185,8 +187,9 @@ struct area { //FIXME the order of the following must be the same as the struct 
 #define lineBuf area.lineBuf
 #define fileBuf area.fileBuf
 #define savEnd area.savEnd
-
-char macExp[2048],macEnd[1],*macxp;
+#define macExp area.macExp
+#define macEnd area.macEnd
+#define macxp area.macxp
 
 char trigraphs;
 unsigned lastline;
@@ -217,9 +220,7 @@ unsigned lastline;
 	unsigned incPara[MAXINC];
 	unsigned incnext;
 
-//#define MAXNEST 60
-
-#define MAXNEST 5   /*FIXME*/
+#define MAXNEST 5   /* FIXME was 60 */
 	int  nestfrom[MAXNEST];
 
 	struct stag {char cstype, *stat; int staglen;} stagat;
