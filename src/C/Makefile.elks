@@ -26,7 +26,7 @@ LD=$(BIN)link88
 
 ##### End of standardized section #####
 
-PROG=c88bin
+PROG=c88
 OBJS=       \
     C88.o   \
     C2.o    \
