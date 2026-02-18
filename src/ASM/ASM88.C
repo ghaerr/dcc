@@ -487,7 +487,7 @@ endit() {
 #if LIMITED
 	os("\n");
 #endif
-#if 0
+#if MSDOS
 	if (nerr == 0 && mopt) {
 		if (nextpgm[0] != 'Z') _chain(nextpgm);	/* execute toobj	*/
 		else _chain(&nextpgm[2]);

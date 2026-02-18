@@ -110,11 +110,11 @@ dolf(int skipit) {
 			lineBeg=&fileBuf[lineBeg-bufEnd];
 			if(addparm)addparm=&fileBuf[-lsiz];
 			else if(addproto)addproto=&fileBuf[-lsiz];
-#if 0
+#if MSDOS
 			if (see_exit && incnext == 0) bufEnd = fileBuf + see_call(0,fileBuf,2048);
 			else 
 #endif
-			bufEnd = fileBuf + read(file, fileBuf, 2048);
+			    bufEnd = fileBuf + read(file, fileBuf, 2048);
 			if(bufEnd < fileBuf)
 				error("file read error");
 			if(bufEnd < savEnd) {
@@ -492,7 +492,7 @@ add_define() {
 	mfree=newdef+1;
 	}
 
-#if 0
+#if MSDOS
 xsetblock(){
 #asm
 	dseg
@@ -877,7 +877,7 @@ findfile(filename, target_buf, envname)
 	}
 
 
-#if 0
+#if MSDOS
 /*  ENVIRON.C	*/
 
 /*

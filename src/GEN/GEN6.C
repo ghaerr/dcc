@@ -80,7 +80,7 @@ asm_init() {
 	else tempname6+=2;
 
 	if (copt) {
-		if ((obj=open(objname, 02|0100, 0666)) == 0) {     //FIXME was fopen(..., "a")
+		if ((obj=open(objname, 02|0100, 0666)) == 0) { //FIXME was fopen(..., "a")
 			os("cannot create ");
 			error(objname);
 			}
@@ -1406,7 +1406,7 @@ dummyb(byt)
 	char byt; {
 	if (indummy == &dbuf[2048]) {
 		if (ndummy == 0) {
-			if ((dummy=open(tempname, 02|0100, 0666)) == -1)    //FIXME open r/w
+			if ((dummy=open(tempname, 02|0100, 0666)) == -1) //FIXME open r/w
 				error("cannot create CTEMP3");
 			}
 		if(write(dummy,dbuf,2048) == -1) {

@@ -441,7 +441,7 @@ endit() {
 			close(tree);
 
 /*	if x option is off, use _chain to trigger gen.	*/
-#if 0
+#if MSDOS
 			if (xopt == 0) {
 				if (have_asm == 0 && aopt == 0) {
 					strcat(nextpgm," Z");

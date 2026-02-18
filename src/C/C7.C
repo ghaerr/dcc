@@ -162,7 +162,7 @@ see_hex(ptrptr)
 
 /*	SEE_CALL  --	SEE interface routine.	*/
 
-#if 0
+#if MSDOS
 see_call(p1,p2,p3)
 	int p1,p2,p3; {
 #asm
@@ -180,7 +180,7 @@ see_call(p1,p2,p3)
 real_exit(cc)
 	int  cc; {
 
-#if 0
+#if MSDOS
 	if (see_exit) {
 		see_call(2);
 		if (cc) {
@@ -330,7 +330,7 @@ listtype() {
 oc(ch)
 	char ch; {
 
-#if 0
+#if MSDOS
 	if (see_exit) {
 		if (see_index < 78 && ch != '\n') see_msg[see_index++]=ch;
 		}

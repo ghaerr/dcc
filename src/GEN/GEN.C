@@ -224,7 +224,7 @@ initopt(argc,argv)
 
 		while (ch=toupper(*optat++)) {
 			switch (ch) {
-#if 0
+#if MSDOS
 				case '@':	see_addr(optat);
 							*optat=0;
 							break;
@@ -347,7 +347,7 @@ endit() {
 	current %utilization number.	*/
 
 
-#if 0
+#if MSDOS
 	if (aopt == 0 && zopt == 0) {
 		nextpgm[22]+=util/10;
 		nextpgm[23]+=util%10;
@@ -360,14 +360,14 @@ endit() {
 	os("     ");
 	ounum(util);
 	os("% Utilization   \n");
-#if 0
+#if MSDOS
 	if (mopt && zopt) {
 		if (nextpgm[0] != 'Z') _chain(nextpgm);	/* execute toobj	*/
 		else _chain(&nextpgm[2]);
 		}
 #endif
 	//real_exit(warn ? 1:0);        //FIXME allow warnings
-        real_exit(0);
+	real_exit(0);
 	}
 
 addfun() {
@@ -876,7 +876,7 @@ oc(ch)
 			*inout++=ch;
 			}
 		else {
-#if 0
+#if MSDOS
 			if (see_exit) {
 				if (see_index < 78 && ch != '\n') see_msg[see_index++]=ch;
 				}
@@ -1007,7 +1007,7 @@ olong(lnum)
 
 /*	stuff for SEE interface.	*/
 
-#if 0
+#if MSDOS
 see_addr(ptr)
 	char *ptr; {
 
@@ -1054,7 +1054,7 @@ see_call(p1,p2,p3)
 real_exit(cc)
 	int  cc; {
 
-#if 0
+#if MSDOS
 	if (see_exit) {
 		see_call(2);
 		if (cc) {

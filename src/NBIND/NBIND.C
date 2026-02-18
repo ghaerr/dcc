@@ -117,9 +117,10 @@ Sym * hash[32];
 			hilo,regss,regsp,csum,regip,regcs,firstr,zero[243];}
 			ihead={0x5a4d,0,1,0,32,0,0xffff,0,0,0,0,0,0};
 
+#elif CMD
+	struct {char cform; int clen,cbase,cmin,cmax;
+			char dform; int dlen,dbase,dmin,dmax; char rest[110]; };
 #else
-	//struct {char cform; int clen,cbase,cmin,cmax;
-			//char dform; int dlen,dbase,dmin,dmax; char rest[110]; };
     struct exehdr {
         unsigned    hdr1, hdr2;     // 0x0301, 0x0430
         char        hlen;           // 0x20
@@ -173,10 +174,9 @@ init(argc,argv)
 	int  nin,i,ffile;
 	//char * _showds();
 
-#if	IBM==0
-	//incode=&codebuf[128];
-	//indata=&databuf[256];
-
+#if	CMD
+	incode=&codebuf[128];
+	indata=&databuf[256];
 #endif
 
 	inext=memory=sbrk(HEAP);
@@ -306,9 +306,8 @@ cmdname(name)
 		}
 #if	IBM
 	strcpy(&outname[i],".exe");
-#else
-	//strcpy(&outname[i],".cmd");
-
+#elif CMD
+	strcpy(&outname[i],".cmd");
 #endif
 	strcpy(&ovname[i],".ov");
 	strcpy(&chkname[i],".chk");
@@ -343,10 +342,10 @@ nextpass(pass)
 		}
 #if	IBM
 	over_offs[0][0]=0;
+#elif CMD
+	over_offs[0][0]=256;
 #else
-	//over_offs[0][0]=256;
-	over_offs[0][0]=0;  //FIXME?
-
+	over_offs[0][0]=0;
 #endif
 	over_offs[0][1]=0;
 
@@ -745,6 +744,18 @@ between() {
 			}
 		codetot=(codetot+sizeof(ovlen)+511) & 0xffe00;
 		}
+#elif CMD
+	datatot=((long)over_offs[0][0]+127)&0xfff80;
+	codetot=((long)over_offs[0][1]+maxof(1)+127)&0xfff80;
+	if (mopt) {
+		for (i=1; i <= maxover; i++) {
+			codetot+=over_offs[i][1];
+			}
+		codetot=(codetot+15) & 0xffff0;
+		}
+	hptr=codebuf;
+	for (i=0; i< 110; i++)
+		hptr->rest[i]=0;
 #else
 	datatot=((long)over_offs[0][0]+15)&0xffff0;
 	codetot=((long)over_offs[0][1]+maxof(1)+15)&0xffff0;
@@ -754,10 +765,6 @@ between() {
 			}
 		codetot=(codetot+15) & 0xffff0;
 		}
-	//hptr=codebuf;
-	//for (i=0; i< 110; i++)
-		//hptr->rest[i]=0;
-
 #endif
 
 	/*	allocate reserved in order so public reserved's are in order */
@@ -860,7 +867,22 @@ between() {
 		*incode++=*pfrom++;
 	while (incode < &codebuf[512])
 		*incode++=0;
+#elif CMD
+	hptr->cform=1;
+	hptr->cbase=hptr->dbase=0;
+	hptr->clen=hptr->cmin=hptr->cmax=codetot>>4;
+	codetot+=128;
+	hptr->dform=2;
+	hptr->dlen=datatot>>4;
+	hptr->dmin=(alldata+16)>>4;
 
+	/*	if stack not specified, make it the maximum	*/
+	if (stacklen) hptr->dmax=hptr->dmin+(stacklen>>4);
+	else hptr->dmax=0xfff;
+	if (hopt) hptr->dmax+=0x4000;
+
+	for (i=0; i < 256; i++)
+		databuf[i]=0;
 #else
     ihead.tseg=codetot;
     ihead.dseg=datatot;
@@ -875,28 +897,7 @@ between() {
 	indata=databuf;
 	while (incode < &codebuf[32])
 		*incode++=*pfrom++;
-	codetot+=32;    //FIXME?
-
-#if 0
-	hptr->cform=1;
-	hptr->cbase=hptr->dbase=0;
-	hptr->clen=hptr->cmin=hptr->cmax=codetot>>4;
-	codetot+=128;
-	hptr->dform=2;
-	hptr->dlen=datatot>>4;
-
-
-	hptr->dmin=(alldata+16)>>4;
-
-	/*	if stack not specified, make it the maximum	*/
-
-	if (stacklen) hptr->dmax=hptr->dmin+(stacklen>>4);
-	else hptr->dmax=0xfff;
-	if (hopt) hptr->dmax+=0x4000;
-
-	for (i=0; i < 256; i++)
-		databuf[i]=0;
-#endif
+	codetot+=32;
 #endif
 
 	next=&initobj[42];

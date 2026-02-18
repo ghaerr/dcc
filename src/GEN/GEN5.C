@@ -1175,7 +1175,7 @@ olow(reg)
 	os(reglow[reg]);
 	}
 
-#if 0
+#if UNUSED
 ohigh(reg)      //FIXME not used
 	char reg; {
 	os(reghigh[reg]);
