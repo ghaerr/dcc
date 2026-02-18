@@ -1,7 +1,7 @@
 # C88 libc Makefile
 #
 MAKE = make
-AR = /root/lib88
+AR = $(BIN)lib88
 
 DIRS = system builtin misc
 
@@ -17,5 +17,5 @@ all:
 	cp cstdio.a /root/test/OTHER
 
 clean:
-	for DIR in $(DIRS); do cd $$DIR $(MAKE) clean || exit 1; cd ..; done
+	for DIR in $(DIRS); do cd $$DIR; $(MAKE) clean || exit 1; cd ..; done
 

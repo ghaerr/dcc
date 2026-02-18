@@ -307,10 +307,11 @@ cmdname(name)
 #if	IBM
 	strcpy(&outname[i],".exe");
 #else
-	strcpy(&outname[i],".bin");
+	//strcpy(&outname[i],".cmd");
+
 #endif
-	strcpy(&ovname[i],".OV");
-	strcpy(&chkname[i],".CHK");
+	strcpy(&ovname[i],".ov");
+	strcpy(&chkname[i],".chk");
 	}
 
 
@@ -902,7 +903,7 @@ between() {
 	*next++=over_offs[0][0];
 	*next++=alldata-over_offs[0][0];
 	*next=ovbase;	
-	if ((outfile=creat(outname, 0666)) == -1)
+	if ((outfile=creat(outname, 0777)) == -1)
 		ferror("cannot create",outname);
 	thisout=outfile;
 	thisname=outname;

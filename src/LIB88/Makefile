@@ -1,5 +1,5 @@
 #
-# DeSmet LIB88 for ELKS Makefile
+# Host LIB88 for ELKS Makefile
 #
 
 ############# Standard Section for Host C ##############
@@ -40,7 +40,7 @@ all: $(PROG)
 $(PROG):
 	$(CC) -x c -c $(CFLAGS) $(SRCS)
 	$(LD) $(LDFLAGS) -o $(PROG) $(OBJS)
-	@cp $(PROG) ~greg/net/elks-gh/elkscmd/rootfs_template/root
+	@cp $(PROG) ~greg/net/elks-gh/elkscmd/rootfs_template/root/bin
 	@echo SUCCESS
 
 clean:

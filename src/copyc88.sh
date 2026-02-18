@@ -12,6 +12,8 @@ DEST=$TOPDIR/elkscmd/rootfs_template/root/test
 
 rm -rf $DEST
 mkdir -p $DEST
+mkdir -p $DEST/bin
+mkdir -p $DEST/bin2
 mkdir -p $DEST/C
 mkdir -p $DEST/GEN
 mkdir -p $DEST/ASM

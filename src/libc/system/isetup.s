@@ -1,8 +1,7 @@
-; ELKS system call library and startup code for DCC C88 (DeSmet C)
-; Must be kept synchronized with elks/arch/i86/kernel/syscall.dat
-; PART I
+; startup code for DCC C88 (DeSmet C)
+; ELKS system calls part 1
 ;
-; 23 Nov 24 Greg Haerr
+; 23 Nov 24 Greg Haerr for C86
 ; 26 Dec 24 Added C startup code for argc/argv and exit return
 ; 14 Feb 26 Ported C86 syscall.s to C88 isetup.s
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,7 +21,7 @@ __stacklow_:dw      0
         ;.comm   __program_filename_,2
 
         CSEG                    ; first text seg
-        ;nop                     ; prevent text having address 0 for SIG_DFL,SIG_IGN
+        ;nop                    ; prevent text having address 0 for SIG_DFL,SIG_IGN
         ;nop
         ;nop
         ;nop
@@ -52,11 +51,6 @@ L1:     cmp     WORD [bx],1
         call    main_
         push    ax              ; pass return value to exit
         call    _exit_          ; no return
-
-
-        public  _showds_
-_showds_:mov    ax,ds           ;ds (and ss) value
-        ret
 
 
         PUBLIC  callsys

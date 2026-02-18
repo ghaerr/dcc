@@ -1,7 +1,6 @@
 # C88 builtin Makefile
 #
 
-BIN=/root/
 #INCLUDES=-I/usr/include -I/usr/include/c86
 #DEFINES=
 #CPPFLAGS=-0 $(INCLUDES) $(DEFINES)

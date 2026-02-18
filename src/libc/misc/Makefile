@@ -1,7 +1,6 @@
 # C88 misc Makefile
 #
 
-BIN=/root/
 INCLUDES=/root/libc/include
 #INCLUDES=-I/usr/include -I/usr/include/c86
 #DEFINES=

@@ -456,7 +456,10 @@ xpand:	if (narg != m_defined(defat)->dargs) {
 		}
 	if(m_defined(defat)->dval == DEFEND)
 		return;
-	//_setsp(ap-1);       //FIXME hopefully not needed
+#ifdef __DESMET__
+	_setsp(ap-1);       //FIXME hopefully not needed in GCC compile?
+
+#endif
 	nestfrom[nested]=cur;
 	if (nested+1 >= MAXNEST) { 
 		error("define too deep");

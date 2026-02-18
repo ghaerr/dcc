@@ -1,7 +1,6 @@
 # C88 system Makefile
 #
 
-BIN=/root/
 #INCLUDES=-I/usr/include -I/usr/include/c86
 #DEFINES=
 #CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
@@ -34,6 +33,7 @@ LIBOBJS=        \
     isetup.o    \
     lseek.o     \
     sbrk.o      \
+    stackreg.o  \
 
 all: $(LIB)
 

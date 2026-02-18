@@ -25,11 +25,6 @@
 #define MK_FP(seg,off)   ((void __far *)((((unsigned long)(seg)) << 16) | \
                                            ((unsigned int)(off))))
 #define _showds()        (FP_SEG(lineBuf))
-#define _setsp(newsp)                   \
-        asm volatile ("movw %%ax,%%sp"  \
-            : /* no output */           \
-            :"a" ((newsp))    \
-            :"memory")
 #endif
 
 #define HEAP        32766

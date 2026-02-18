@@ -1,7 +1,6 @@
 # GEN88 Makefile
 #
 
-BIN=/root/
 #INCLUDES=-I/usr/include -I/usr/include/c86
 #DEFINES=
 #CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
@@ -27,7 +26,7 @@ LD=$(BIN)link88
 
 ##### End of standardized section #####
 
-PROG=gen88.bin
+PROG=gen88
 OBJS=       \
     GEN.o   \
     GEN2.o    \
@@ -40,7 +39,7 @@ all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
 	$(LD) $^ -Ogen88 -Pgen88.lst -_
-	cp gen88.bin /root/dgen88
+	cp gen88 /root/bin2
 
 clean:
 	rm -f *.i *.as *.o *.a *.lst $(PROG)

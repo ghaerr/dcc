@@ -1,5 +1,5 @@
 #
-# DeSmet OTHER for ELKS Makefile (dump88, toobj88)
+# Host OTHER for ELKS Makefile (dump88, toobj88)
 #
 
 ############# Standard Section for Host C ##############
@@ -39,12 +39,12 @@ all: $(PROGS)
 dump88:
 	$(CC) -x c -c $(CFLAGS) DUMPO.C
 	$(LD) $(LDFLAGS) -o dump88 DUMPO.o
-	@cp dump88 ~greg/net/elks-gh/elkscmd/rootfs_template/root
+	@cp dump88 ~greg/net/elks-gh/elkscmd/rootfs_template/root/bin
 
 toobj88:
 	$(CC) -x c -c $(CFLAGS) TOOBJ.C
 	$(LD) $(LDFLAGS) -maout-heap=32766 -maout-stack=4096 -o toobj88 TOOBJ.o
-	@cp toobj88 ~greg/net/elks-gh/elkscmd/rootfs_template/root
+	@cp toobj88 ~greg/net/elks-gh/elkscmd/rootfs_template/root/bin
 
 clean:
 	rm -f $(PROGS) *.o

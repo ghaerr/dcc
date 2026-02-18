@@ -1,7 +1,6 @@
 # C88 Makefile
 #
 
-BIN=/root/
 #INCLUDES=-I/usr/include -I/usr/include/c86
 #DEFINES=
 #CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
@@ -27,7 +26,7 @@ LD=$(BIN)link88
 
 ##### End of standardized section #####
 
-PROG=c88.bin
+PROG=c88bin
 OBJS=       \
     C88.o   \
     C2.o    \
@@ -41,7 +40,7 @@ all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
 	$(LD) $^ -Oc88 -Pc88.lst -_ -S7FFE
-	cp c88.bin /root/dc88
+	cp c88 /root/bin2
 
 clean:
 	rm -f *.i *.as *.o *.a *.lst $(PROG)

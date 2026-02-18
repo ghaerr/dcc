@@ -24,7 +24,7 @@
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 #endif
 
-#define HEAP        32766
+#define HEAP        32600
 /* ------------------- */
 
 #include "OBJ.H"
