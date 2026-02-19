@@ -2,7 +2,7 @@
 # DCC Makefile on host
 #
 
-DIRS = C GEN ASM LIB88 NBIND OTHER
+DIRS = C GEN ASM LIB88 NBIND OTHER make
 
 all:
 	for DIR in $(DIRS); do $(MAKE) -C $$DIR all || exit 1; done

@@ -20,7 +20,10 @@ mkdir -p $DEST/ASM
 mkdir -p $DEST/NBIND
 mkdir -p $DEST/LIB88
 mkdir -p $DEST/OTHER
+mkdir -p $DEST/make
 mkdir -p $DEST/libc
+mkdir -p $DEST/libc/include
+mkdir -p $DEST/libc/include/sys
 mkdir -p $DEST/libc/system
 mkdir -p $DEST/libc/builtin
 mkdir -p $DEST/libc/misc
@@ -68,9 +71,15 @@ cp -p OTHER/*.H                 $DEST/OTHER
 cp -p OTHER/Makefile.elks       $DEST/OTHER/Makefile
 
 cp -p libc/Makefile             $DEST/libc
+cp -p libc/include/*.h          $DEST/libc/include
+cp -p libc/include/sys/*.h      $DEST/libc/include/sys
 cp -p libc/system/*             $DEST/libc/system
 cp -p libc/builtin/*            $DEST/libc/builtin
 cp -p libc/misc/*               $DEST/libc/misc
+
+cp -p make/*.c                  $DEST/make
+cp -p make/*.h                  $DEST/make
+cp -p make/Makefile.elks        $DEST/make/Makefile
 
 #cp -p libc/libc86.a                         $DEST/lib
 

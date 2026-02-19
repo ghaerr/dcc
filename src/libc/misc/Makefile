@@ -1,7 +1,7 @@
 # C88 misc Makefile
 #
 
-INCLUDES=/root/libc/include
+#INCLUDES=/root/libc/include
 #INCLUDES=-I/usr/include -I/usr/include/c86
 #DEFINES=
 #CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
@@ -9,7 +9,7 @@ INCLUDES=/root/libc/include
 
 ##### Standardized section of Makefile #####
 
-CC=INCLUDE=$(INCLUDES) $(BIN)c88
+CC=$(BIN)c88
 C2=$(BIN)gen88
 AS=$(BIN)asm88
 AR=$(BIN)lib88
