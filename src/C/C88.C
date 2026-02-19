@@ -463,7 +463,7 @@ endit() {
 			}
 		os("Number of Errors = ");
 		onum(nerr);
-        ocrlf();
+		ocrlf();
 		real_exit(2);
 		}
 	else real_exit(0);

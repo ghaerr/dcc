@@ -172,9 +172,8 @@ init(argc,argv)
 	char *argv[]; {
 	char *argat,*_memory();
 	int  nin,i,ffile;
-	//char * _showds();
 
-#if	CMD
+#if CMD
 	incode=&codebuf[128];
 	indata=&databuf[256];
 #endif
@@ -184,7 +183,6 @@ init(argc,argv)
 	memlast=memory+HEAP;
 	//nseg = _showds() + 0x1000;
 	nseg = xalloc(0);       // 64K
-	//__dprintf("nseg %04x DS %x\n", nseg, _showds());
 
 	util=argc*3;
 	pname="/dev/console";
@@ -751,7 +749,7 @@ between() {
 		for (i=1; i <= maxover; i++) {
 			codetot+=over_offs[i][1];
 			}
-		codetot=(codetot+15) & 0xffff0;
+		codetot=(codetot+127) & 0xfff80;
 		}
 	hptr=codebuf;
 	for (i=0; i< 110; i++)

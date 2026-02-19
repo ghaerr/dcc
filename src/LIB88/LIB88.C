@@ -114,7 +114,7 @@ init(argc,argv)
 
 	inext=memory=sbrk(HEAP);
 	//memlast=_showsp()-512;
-    memlast=memory+HEAP;
+	memlast=memory+HEAP;
 
 	util=argc*3;
 	pname="/dev/console";

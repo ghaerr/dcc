@@ -439,7 +439,7 @@ compound(oldfree,isproc)
 		list[0]=LST+n;
 		value=treev(n+1,list);
 		}
-	if ( mfree > oldfree) {
+	if (mfree > oldfree) {
 		if (mfree >= maxmem) {
 			error("out of memory");
 			real_exit(2);

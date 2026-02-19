@@ -589,7 +589,7 @@ inc_nest:
 		}
 
 /*	if MS-DOS V2.0 and use include= to find file */
-	if (inc_search /*&& _msdos2*/) {
+	if (inc_search) {
 		if (!findfile(string, inctemp, "DSINC"))
 			findfile(string, inctemp, "INCLUDE");
 		strcpy(string,inctemp);

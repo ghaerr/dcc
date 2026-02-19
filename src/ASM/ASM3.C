@@ -576,7 +576,9 @@ outb(ch)
 
 	if (ch == CR) {
 		curcol=0;
-		//*inpipe++=ch;
+#if MSDOS
+		*inpipe++=ch;
+#endif
 		}
 	else if (ch == LF) {
 		curcol=0;
