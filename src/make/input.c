@@ -126,6 +126,7 @@ struct cmd *newcmd(char *str, struct cmd *cp)
  */
 void newline(struct name *np, struct depend *dp, struct cmd *cp, int flag)
 {
+    ; //FIXME
 	bool hascmds = FALSE; /*  Target has commands  */
 	struct line * rp;
 	struct line * rrp;

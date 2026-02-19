@@ -57,6 +57,7 @@ static int dosh(char *string, char *shell)
  */
 static void docmds1(struct name *np, struct line *lp)
 {
+    ; //FIXME
     bool            ssilent;
     bool            signore;
     int         estat;
