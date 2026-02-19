@@ -229,8 +229,8 @@ tokone() {
 /*	if reserved, set bvalue to rvalue. */
 
 
-find(int macOK) { /* FIXME 'int a' required after this ???*/
-int a;
+find(int macOK) { /* FIXME ';' required after this or 'undefined var: cur' */
+;
 	cur--;
 	i=hashno=0;
 	while ((ltype[*cur] <= DIGIT) && i < 31) {
