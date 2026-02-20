@@ -869,12 +869,16 @@ fill() {
 	}
 
 doinc() {
+	char inctemp[65];
+
 	if (incfile) { error("nested include"); return;}
 	tokit();
 	if (heir != DSTRING) { error("bad include"); return; }
 	lastinc=&savein;
 	endline();
 	while (cur < lastch) *lastinc++=*cur++;
+	findfile(string, inctemp, "DSINC");
+	strcpy(string, inctemp);
 	if ((incfile=open(string,0)) == -1) {
 		os("cannot open ");
 		ferror(string);
@@ -1015,4 +1019,46 @@ match(str1,str2)
 		}
 	if (ltype[*str1] == SPACE || *str1 == CR || *str1 == CONTZ) return 1;
 	else return 0;
+	}
+
+findfile(filename, target_buf, envname)
+	char *filename, *target_buf, *envname; {
+	int fid;
+	char *p_ptr, *t_ptr, *p;
+	char *getenv();
+
+	/* first check in the local directory */
+	strcpy(target_buf, filename);
+	fid = open(target_buf, 0);
+	if (fid >= 0)  {				/* got it */
+		close(fid);
+		return (1);
+		}
+	p = getenv(envname);
+	if (p == 0) return 0;
+	p_ptr = p;
+
+	while (*p_ptr != 0) {
+		/* copy the directory name */
+		t_ptr = target_buf;
+		while (*p_ptr != ';' && *p_ptr != 0) {
+			*t_ptr++ = *p_ptr++;
+			}
+		if (*(t_ptr-1) != '/'
+#if MSDOS
+		 && *(t_ptr-1) != '\\'
+#endif
+		)
+			*t_ptr++ = '/';
+		*t_ptr = 0;
+		if (*p_ptr) p_ptr++;		/* beyond the ';' */
+		strcat(target_buf, filename);
+		fid = open(target_buf, 0);
+		if (fid >= 0)  {				/* got it */
+			close(fid);
+			return (1);
+			}
+		}
+	strcpy(target_buf, filename);
+	return (0);							/* can't find one */
 	}
