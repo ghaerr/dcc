@@ -288,8 +288,10 @@ init(argc,argv)
 		chkat=chkbuf;
 		}
 /*	if MS-DOS V2.0 and no -L option, use path to find cstdio.a */
-	if (/*_msdos2 &&*/ libname[6] == '.')
-		findfile("cstdio.a", libname, "PATH");
+	if (libname[6] == '.') {
+		if (!findfile("cstdio.a", libname, "DSLIB"))
+			findfile("cstdio.a", libname, "PATH");
+		}
 	}
 
 cmdname(name)
@@ -1562,7 +1564,11 @@ findfile(filename, target_buf, envname)
 		while (*p_ptr != ';' && *p_ptr != 0) {
 			*t_ptr++ = *p_ptr++;
 			}
-		if (*(t_ptr-1) != '/' /*&& *(t_ptr-1) != '\\'*/)
+		if (*(t_ptr-1) != '/' 
+#if MSDOS
+		 && *(t_ptr-1) != '\\'
+#endif
+		)
 			*t_ptr++ = '/';
 		*t_ptr = 0;
 		if (*p_ptr) p_ptr++;		/* beyond the ';' */
