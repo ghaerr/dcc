@@ -21,7 +21,6 @@
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 #endif
 
-#define HEAP        32766
 char *mstart;
 /* ------------------- */
 

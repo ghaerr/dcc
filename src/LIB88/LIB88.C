@@ -23,8 +23,6 @@
 #define char        unsigned char
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 #endif
-
-#define HEAP        32600
 /* ------------------- */
 
 #include "OBJ.H"
@@ -112,9 +110,9 @@ init(argc,argv)
 	int  nin,i,ffile;
 
 
-	inext=memory=sbrk(HEAP);
+	inext=memory=_memory();
+	memlast=memory+_memsize();
 	//memlast=_showsp()-512;
-	memlast=memory+HEAP;
 
 	util=argc*3;
 	pname="/dev/console";
@@ -701,4 +699,25 @@ xputs(char *str, int fd)
 xputc(int c, int fd)
 {
     write(fd, &c, 1);
+}
+
+static unsigned heapsize;
+
+/* allocate max memory from heap */
+_memory() {
+    unsigned curbrk, newbrk;
+    extern unsigned __stacklow;
+
+    curbrk = sbrk(0);
+    newbrk = __stacklow - 512;
+    heapsize = newbrk - curbrk;
+    if (_brk(newbrk)) {
+        write(1, "No heap mem\n", 12);
+        _exit(1);
+    }
+    return curbrk;
+}
+
+_memsize() {
+    return heapsize;
 }

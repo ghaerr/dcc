@@ -31,8 +31,6 @@
 #define _move(num,from,to)          memmove((char *)(to), (char *)(from), num)
 #define _showds()                   (FP_SEG(inbuf))
 #endif
-
-#define HEAP        32766
 /* ------------------- */
 
 #define IBM		0			/*	true if creating BIND for MS-DOS	*/
@@ -170,7 +168,7 @@ main(argc,argv)
 init(argc,argv)
 	int  argc;
 	char *argv[]; {
-	char *argat,*_memory();
+	char *argat;
 	int  nin,i,ffile;
 
 #if CMD
@@ -178,11 +176,11 @@ init(argc,argv)
 	indata=&databuf[256];
 #endif
 
-	inext=memory=sbrk(HEAP);
+	inext=memory=_memory();
+	memlast=memory+_memsize();
 	//memlast=_showsp()-512;
-	memlast=memory+HEAP;
-	//nseg = _showds() + 0x1000;
 	nseg = xalloc(0);       // 64K
+	//nseg = _showds() + 0x1000;
 
 	util=argc*3;
 	pname="/dev/console";
@@ -1610,6 +1608,27 @@ xalloc(bytes)
         return 0;
     }
     return seg;
+}
+
+static unsigned heapsize;
+
+/* allocate max memory from heap */
+_memory() {
+    unsigned curbrk, newbrk;
+    extern unsigned __stacklow;
+
+    curbrk = sbrk(0);
+    newbrk = __stacklow - 512;
+    heapsize = newbrk - curbrk;
+    if (_brk(newbrk)) {
+        write(1, "No heap mem\n", 12);
+        _exit(1);
+    }
+    return curbrk;
+}
+
+_memsize() {
+    return heapsize;
 }
 
 #if __ia16__

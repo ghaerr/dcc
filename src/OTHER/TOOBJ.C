@@ -21,7 +21,6 @@
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 #endif
 
-#define HEAP        32766
 /* ------------------- */
 
 #define IBM		1			/*	true if creating BIND for MS-DOS	*/
@@ -89,10 +88,9 @@ init(argc,argv)
 	char *argat,gotdot; //FIXME i removed
 	int  nin,i,ffile;
 
-	inext=memory=sbrk(HEAP);
-	memlast=memory+HEAP;
+	inext=memory=_memory();
+	memlast=memory+_memsize();
 	//memlast=_showsp()-512;
-
 
 	argat=argv[1];
 	if (*(argat+1) == ':') argat+=2;		/* see if input is CTEMP6 */
@@ -1080,4 +1078,27 @@ xputs(char *str, int fd)
 xputc(int c, int fd)
 {
     write(fd, &c, 1);
+}
+
+/* --------- ELKS ---------- */
+
+static unsigned heapsize;
+
+/* allocate max memory from heap */
+_memory() {
+    unsigned curbrk, newbrk;
+    extern unsigned __stacklow;
+
+    curbrk = sbrk(0);
+    newbrk = __stacklow - 512;
+    heapsize = newbrk - curbrk;
+    if (_brk(newbrk)) {
+        write(1, "No heap mem\n", 12);
+        _exit(1);
+    }
+    return curbrk;
+}
+
+_memsize() {
+    return heapsize;
 }

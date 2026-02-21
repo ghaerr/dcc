@@ -127,10 +127,9 @@ init(argc,argv)
 		}
 	not_done=1;
 	errline=-1;
-	//freem=_memory();
+	mstart=freem=_memory();
+	memend=freem+_memsize();
 	//memend=_showsp()-512;
-	mstart=freem=sbrk(HEAP);    //FIXME needs dynamic grow heap to max function
-	memend=freem+HEAP;
 	curseg=ODSEG;				/* first stuff is in DSEG */
 	inpipe=pipe;				/* pipe is empty */
 	codeat=0;					/* points to code fragment (if last)in pipe*/
@@ -1062,3 +1061,26 @@ findfile(filename, target_buf, envname)
 	strcpy(target_buf, filename);
 	return (0);							/* can't find one */
 	}
+
+/* --------- ELKS ---------- */
+
+static unsigned heapsize;
+
+/* allocate max memory from heap */
+_memory() {
+    unsigned curbrk, newbrk;
+    extern unsigned __stacklow;
+
+    curbrk = sbrk(0);
+    newbrk = __stacklow - 512;
+    heapsize = newbrk - curbrk;
+    if (_brk(newbrk)) {
+        write(1, "No heap mem\n", 12);
+        _exit(1);
+    }
+    return curbrk;
+}
+
+_memsize() {
+    return heapsize;
+}

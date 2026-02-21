@@ -118,6 +118,11 @@ _sbrk_:
         mov     ax,SYS_sbrk
         jmp     callsys
 
+        PUBLIC  _brk_
+_brk_:
+        mov     ax,SYS_brk
+        jmp     callsys
+
         PUBLIC  _fmemalloc_
 _fmemalloc_:
         mov     ax,SYS_fmemalloc

@@ -27,7 +27,6 @@
 #define _showds()        (FP_SEG(lineBuf))
 #endif
 
-#define HEAP        32766
 char *mstart;
 char *xitoa();
 #define FIX(node)   (*(char *)(node))

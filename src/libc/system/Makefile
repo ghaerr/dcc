@@ -35,6 +35,7 @@ LIBOBJS=        \
     isetup.o    \
     lseek.o     \
     malloc.o    \
+    memory.o    \
     sbrk.o      \
     stackreg.o  \
     system.o    \

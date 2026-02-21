@@ -5,10 +5,8 @@ int increment;
 {
     char *new_brk;
 
-    if (_sbrk (increment, &new_brk)) {
-        write(1, "*** _sbrk FAIL\n", 15);
+    if (_sbrk (increment, &new_brk))
         return (char *) -1;
-    }
     return new_brk;
 }
 

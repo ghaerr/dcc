@@ -115,8 +115,8 @@ init(argc,argv)
 		}
 /*	install the reserved words	*/
 
-	mstart=mfree=sbrk(HEAP);    //FIXME needs dynamic grow heap to max function
-	maxmem=mfree+HEAP;
+	mstart=mfree=_memory();
+	maxmem=mfree+_memsize();
 	//maxmem=_showsp()-1224;
 
 	addres(0,"auto.break.case.char.const.continue.default.do.double.else.");
@@ -1285,11 +1285,30 @@ xalloc(bytes)
     if (bytes == 0)      // alloc 64K
         bytes = 0x1000;
     else bytes = (bytes + 15) >> 4;
-    if (_fmemalloc(bytes, &seg)) {
-        write(1, "*** _fmemalloc FAIL\n", 20);
+    if (_fmemalloc(bytes, &seg))
         return 0;
-    }
     return seg;
+}
+
+static unsigned heapsize;
+
+/* allocate max memory from heap */
+_memory() {
+    unsigned curbrk, newbrk;
+    extern unsigned __stacklow;
+
+    curbrk = sbrk(0);
+    newbrk = __stacklow - 512;
+    heapsize = newbrk - curbrk;
+    if (_brk(newbrk)) {
+        write(1, "No heap mem\n", 12);
+        _exit(1);
+    }
+    return curbrk;
+}
+
+_memsize() {
+    return heapsize;
 }
 
 #if __ia16__
