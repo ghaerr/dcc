@@ -152,6 +152,11 @@ VMORE:
 #define _FXCH		24
 #define _FCLEAR		25
 #define _MOVE		26
+#define _CMP4U		27
+#define _SHR4		28
+#define _MUL4U		29
+#define _DIV4U		30
+#define _MOD4U		31
 
 
 /* globals for pass2 of Medium C Compiler  */
@@ -165,8 +170,8 @@ int  funord,treelen,pstart,pbytes,level;
 int  namet[8],namen[64];
 #endif
 int jumps[11],regname[12],reglow[8];    //FIXME reghigh[4];
-int  *regat[13],bltname[27],numfloat;
-char regused[9],is_big,bltused[27];
+int  *regat[13],bltname[32],numfloat;
+char regused[9],is_big,bltused[32];
 unsigned util,locoff,curoff,line_num;
 
 #define MAXFOR	16

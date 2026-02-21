@@ -225,6 +225,7 @@ next_arg:;
 	int_type[0]=CINT;
 	u_type[0]=CUNSG;
 	l_type[0]=CLONG;
+	ul_type[0]=CULONG;
 	ff_type[0]=CFLOAT;
 	fd_type[0]=CDOUBLE;
 	p_type[0]=PTRTO; p_type[1]=CCHAR;
@@ -617,7 +618,9 @@ eliparg:		oldfree=mfree=pp;
 						m_operand(addat)->noff=poff+4+(is_big+is_big); /* 4 or 6 bytes from bp */
 						atype(addtype);
 						poff+=2;
-						if (m_operand(addat)->ntype[0] == CLONG) poff+=2;
+						if (m_operand(addat)->ntype[0] == CLONG || m_operand(addat)->ntype[0] == CULONG) {
+							poff+=2;
+							}
 
 /*	could be a structure	*/
 						else if (m_operand(addat)->ntype[0] == CSTRUCT) {
@@ -704,7 +707,9 @@ doparms() {
 /*	if parm is not 2 bytes long, must adjust offsets	*/
 
 			bigger=0;
-			if (m_operand(addat)->ntype[0] == CLONG) bigger=2;
+			if (m_operand(addat)->ntype[0] == CLONG || m_operand(addat)->ntype[0] == CULONG) {
+				bigger=2;
+				}
 
 /*	could be a structure	*/
 			else if (m_operand(addat)->ntype[0] == CSTRUCT) {
@@ -831,15 +836,17 @@ specs(defstor)
 				case RCHAR:		if(addtype != CSCHAR) addtype=CCHAR;
 								break;
 				case RSHORT:
-				case RINT:		if(addtype != CUNSG && addtype != CLONG) addtype = CINT;
+				case RINT:		if(addtype != CUNSG &&
+									addtype != CLONG &&
+									addtype != CULONG) addtype = CINT;
 								break;
 				case RSIGNED:	addtype=CSCHAR;
 								break;
-				case RLONG:		if (addtype == CUNSG) error("illegal type");
-								addtype=CLONG;
+				case RLONG:		if (addtype == CUNSG) addtype = CULONG;
+								else addtype=CLONG;
 								break;
-				case RUNSIGNED:	if (addtype == CLONG) error("illegal type");
-								addtype=CUNSG;
+				case RUNSIGNED:	if (addtype == CLONG) addtype = CULONG;
+								else addtype=CUNSG;
 								break;
 				case RFLOAT:	addtype=addtype==CLONG ? CDOUBLE: CFLOAT;
 								break;

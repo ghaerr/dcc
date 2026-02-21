@@ -114,7 +114,7 @@ unsigned dsize(ptr)
 		return (tot*dsize(ptr+3));
 		}
 	if (*ptr == CCHAR || *ptr == CSCHAR) tot=1;
-	else if (*ptr == CLONG || *ptr == CFLOAT) tot=4;
+	else if (*ptr == CLONG || *ptr == CULONG || *ptr == CFLOAT) tot=4;
 	else if (*ptr == CDOUBLE) tot=8;
 	else if (*ptr == CSTRUCT) {
 		wp=ptr+1;
@@ -298,6 +298,8 @@ listtype() {
 			case CUNSG:		os("CUNSG");
 							break;
 			case CLONG:		os("CLONG");
+							break;
+			case CULONG:	os("CULONG");
 							break;
 			case CFLOAT:	os("CFLOAT");
 							break;

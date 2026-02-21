@@ -142,6 +142,18 @@ heir24(node)				/* operater is prefix (* & - ! ++ --) */
 					heir24(node);
 					return 0;
 					}
+				else if (heir == UCONSTANT) {
+					dvalue=0-(long)wvalue;
+					heir=LCONSTANT;
+					heir24(node);
+					return 0;
+					}
+				else if (heir == ULCONSTANT) {
+					dvalue=-dvalue;
+					heir=LCONSTANT;
+					heir24(node);
+					return 0;
+					}
 				else if (heir == FFCONSTANT) {
 					fvalue[1] ^=0x8000;
 					heir24(node);
@@ -531,8 +543,14 @@ nowop:	nodeo[1]=nodeo[2]=nodeo[3]=0;
 		return 0;
 		}
 	if (heir == CONSTANT) {
-		node[0]=oconst(wvalue);
-		node[1]=wvalue > 255 ? int_type: c_type;
+		node[0]=oconst2(wvalue, CINT);
+		node[1]=int_type;
+		tokit();
+		return 0;
+		}
+	if (heir == UCONSTANT) {
+		node[0]=oconst2(wvalue, CUNSG);
+		node[1]=u_type;
 		tokit();
 		return 0;
 		}
@@ -542,6 +560,15 @@ nowop:	nodeo[1]=nodeo[2]=nodeo[3]=0;
 		nodeo[2]=LONG(&dvalue)->hiword;
 		node[0]=tree3(nodeo);
 		node[1]=l_type;
+		tokit();
+		return 0;
+		}
+	if (heir == ULCONSTANT) {
+		nodeo[0]=CONST+(CULONG<<8);
+		nodeo[1]=dvalue;
+		nodeo[2]=LONG(&dvalue)->hiword;
+		node[0]=tree3(nodeo);
+		node[1]=ul_type;
 		tokit();
 		return 0;
 		}
@@ -679,6 +706,15 @@ oconst(con)
 	int  nodeo[2];
 	if (con > 255) nodeo[0]=CONST+(CINT<<8);
 	else nodeo[0]=CONST+(CCHAR<<8);
+	nodeo[1]=con;
+	return tree2(nodeo);
+	}
+
+oconst2(con, typ)
+	char *con;
+	int typ; {
+	int  nodeo[2];
+	nodeo[0]=CONST+(typ<<8);
 	nodeo[1]=con;
 	return tree2(nodeo);
 	}

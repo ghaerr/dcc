@@ -78,10 +78,12 @@ char *xitoa();
 /*	named heir values */
 
 #define CONSTANT	27
-#define	LCONSTANT	28
-#define FFCONSTANT	29
-#define FDCONSTANT	30
-#define STRNG		31
+#define UCONSTANT	28
+#define	LCONSTANT	29
+#define	ULCONSTANT	30
+#define FFCONSTANT	31
+#define FDCONSTANT	32
+#define STRNG		33
 #define UNDEF		99
 #define	STREF		100
 
@@ -201,7 +203,7 @@ unsigned lastline;
 	int  ordinal;
 	int  pbytes,wvalue;
 	char curch,*tokat,heir,bvalue,*funname,*original,*mfree,*hash[33];
-	char c_type[1],int_type[1],u_type[1],l_type[1],ff_type[1],fd_type[1],p_type[2];
+	char c_type[1],int_type[1],u_type[1],l_type[1],ul_type[1],ff_type[1],fd_type[1],p_type[2];
 	char treebuf[512],ctlbuf[512];
 	char string[257],nested,*bptr,i,j,ininit,was_ext;
 	char *addat,*addtype,addstor,*addloc,*addparm,*addproto,hashno,defhash,laststmt;

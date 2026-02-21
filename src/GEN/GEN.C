@@ -106,7 +106,7 @@ init() {
 	initst(&bltname[7],"_FLOADD _FLOADE _FLOADL _FSTORED _FSTOREE ");
 	initst(&bltname[12],"_FSTOREL _FADD _FSUB _FMUL _FDIV _FCMP _FNEG ");
 	initst(&bltname[19],"_FIS _FNOT _FDEC _FINC _FPUSH _FXCH _FCLEAR ");
-	initst(&bltname[26],"_MOVE_ ");
+	initst(&bltname[26],"_MOVE_ _CMP4U _SHR4 _MUL4U _DIV4U _MOD4U ");
 
 #if DEBUG
 	initch(namet,"CHAR  INT   UNSG  LONG  LABEL STRUCTBITS  ");
@@ -618,7 +618,8 @@ addext(nested)
 														}
 													}
 												break;
-									case CLONG:	if (vtype[VIS] != CONSTV)
+									case CLONG:
+									case CULONG: if (vtype[VIS] != CONSTV)
 													ierror();
 												else {
 													forcel(vtype);
@@ -637,7 +638,7 @@ addext(nested)
 													ierror();
 												if (vtype[VT] == CDOUBLE)
 													; //FIXME cvt.flt=CVT1((char *)(&vtype[VVAL]))->dbl;
-												else if (vtype[VT] == CLONG)
+												else if (vtype[VT] == CLONG || vtype[VT] == CULONG)
 													; //FIXME cvt.flt=CVT1((char *)(&vtype[VVAL]))->lng;
 												else ; //FIXME cvt.flt=vtype[VVAL];
 												asm_dw();
@@ -866,7 +867,9 @@ oc(ch)
 #if OPT
 	if (perfect || xopt) {
 #endif
-		//if (ch == LF) oc(CR);
+#if MSDOS
+		if (ch == LF) oc(CR);
+#endif
 		if (inout) {
 			if (inout == &outbuf[BUFSIZE]) {
 				if (write(output,outbuf,BUFSIZE) == -1)
@@ -1185,7 +1188,7 @@ genopnd(node,vtype)
 		vtype[VIS]=CONSTV;
 		vtype[VVAL]=tree[node+1];
 		vtype[VNAME]=0;
-		if (dtype == CLONG) vtype[VNAME]=tree[node+2];
+		if (dtype == CLONG || dtype == CULONG) vtype[VNAME]=tree[node+2];
 		else if (dtype == CDOUBLE) {
 			vtype[VNAME]=tree[node+2];
 			vtype[VOFF]=tree[node+3];
@@ -1195,15 +1198,18 @@ genopnd(node,vtype)
 		break;
 
 	  case CAST:
-		if ((dtype == CINT || dtype == CUNSG) && (tree[tree[node+1]] == 
-			(CLONG << 8)+OPND || tree[tree[node+1]] == (PTRTO << 8)+OPND))
+		if ((dtype == CINT || dtype == CUNSG) && (
+			tree[tree[node+1]] == (CLONG << 8)+OPND ||
+			tree[tree[node+1]] == (CULONG << 8)+OPND ||
+			tree[tree[node+1]] == (PTRTO << 8)+OPND))
 				tree[tree[node+1]]=(CUNSG << 8)+OPND;
 		getval(tree[node+1],vtype);
 		switch (dtype) {
 			case CSCHAR:
 			case CCHAR:		forcebyt(vtype);
 							break;
-			case CLONG:		forcel(vtype);
+			case CLONG:
+			case CULONG:	forcel(vtype);
 							break;
 			case CFLOAT:	{
 								union un_cvt2 {float flt; double dbl; long lng;};
@@ -1212,7 +1218,7 @@ genopnd(node,vtype)
 								if (vtype[VIS] == CONSTV) {
 									if (vtype[VT] == CDOUBLE)
 										; //FIXME CVT2((char *)(&vtype[VVAL]))->flt=CVT2((char *)(&vtype[VVAL]))->dbl;
-									else if (vtype[VT] == CLONG)
+									else if (vtype[VT] == CLONG || vtype[VT] == CULONG)
 										; //FIXME CVT2((char *)(&vtype[VVAL]))->flt=CVT2((char *)(&vtype[VVAL]))->lng;
 									else ; //FIXME CVT2((char *)(&vtype[VVAL]))->flt=vtype[VVAL];
 									vtype[VT]=CFLOAT;
@@ -1222,7 +1228,7 @@ genopnd(node,vtype)
 							break;
 			case CDOUBLE:	forcef(vtype);
 							break;
-			case CSTRUCT:	if (vtype[VT] == CLONG) forceint(vtype);
+			case CSTRUCT:	if (vtype[VT] == CLONG || vtype[VT] == CULONG) forceint(vtype);
 							vtype[VT]=CSTRUCT;
 							break;
 			case FUNCTION:

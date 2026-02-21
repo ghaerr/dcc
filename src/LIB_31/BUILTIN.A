@@ -85,6 +85,16 @@ cmp4r:  _ret
 
         split
 
+;       _cmp4u   set flags for   cmp     dx ax,bx cx
+
+        public  _CMP4U
+_CMP4U: cmp     dx,bx           ;compare high words
+        jnz     cmp4ru          ;done if different
+        cmp     ax,cx           ;break tie with low words
+cmp4ru: _ret
+
+        split
+
 ;       _SAR4   shift right     sar     dx ax,cl
 
         public  _SAR4,_SHL4
@@ -94,6 +104,17 @@ sr_lp:  sar     dx,1            ;low bit in carry
         rcr     ax,1            ;now high in ax
         loop    sr_lp
 sar4r:  _ret
+
+
+;       _SHR4   shift right     shr     dx ax,cl
+
+        public  _SHR4
+_SHR4:  mov     ch,0            ;need count in cx
+        jcxz    shr4r
+shr_lp: shr     dx,1            ;low bit in carry
+        rcr     ax,1            ;now high in ax
+        loop    shr_lp
+shr4r:  _ret
 
 
 ;       _SHL4   shift left      shl     dx ax,cl

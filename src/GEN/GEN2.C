@@ -694,7 +694,7 @@ test_change(oldfrom,olddirty)
 /*	WHILE_REGS  --	see if can load any registers for a while loop */
 
 while_regs(node)
-	int node; {
+	int node; {
 	int  i,reg,vtype[7],onode;
 	char type;
 

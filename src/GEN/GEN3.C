@@ -70,7 +70,7 @@ genunary(node,vtype)
 			asm_add(OR86,vtype,vtype);
 			asm_move_noopt(vtype,tocon(0));
 			asm_jump(JNZ86,++nextlab);
-			if (vtype[VT] == CLONG) {
+			if (vtype[VT] == CLONG || vtype[VT] == CULONG) {
 				reg2=vtype[VVAL]+2;
 				asm_add(OR86,toreg(reg2),toreg(reg2));
 				asm_jump(JNZ86,nextlab);
@@ -80,7 +80,7 @@ genunary(node,vtype)
 			asm_inc(INC86,vtype);
 			genlab(nextlab);
 			}
-		else if (vtype[VT] == CLONG) {
+		else if (vtype[VT] == CLONG || vtype[VT] == CULONG) {
 			reg2=vtype[VVAL]+2;
 			asm_not(NOT86,toreg(reg2));
 			if (type == COMP) {
@@ -165,19 +165,19 @@ iord(pretype,vtype,by)
 		}
 	if (is_big) forcees(vtype);
 	if (pretype == PREI) {
-		if (by == 1 && vtype[VT] != CLONG) {
+		if (by == 1 && vtype[VT] != CLONG && vtype[VT] != CULONG) {
 			asm_inc(INC86,vtype);
 			}
 		else {
 			asm_add(ADD86,vtype,tocon(by));
 			}
-		if (vtype[VT] == CLONG) {
+		if (vtype[VT] == CLONG || vtype[VT] == CULONG ) {
 			asm_add(ADC86,tormh(vtype),tocon(0));
 			}
 		}
 
 	else {
-		if (by == 1 && vtype[VT] != CLONG) {
+		if (by == 1 && vtype[VT] != CLONG && vtype[VT] != CULONG) {
 			alterv(vtype);
 			asm_inc(DEC86,vtype);
 			}
@@ -185,7 +185,7 @@ iord(pretype,vtype,by)
 			alterv(vtype);
 			asm_add(SUB86,vtype,tocon(by));
 			}
-		if (vtype[VT] == CLONG) {
+		if (vtype[VT] == CLONG || vtype[VT] == CULONG) {
 			asm_add(SBB86,tormh(vtype),tocon(0));
 			}
 		}
@@ -204,7 +204,7 @@ genfcal(node,vtype)
 		needes();
 		}
 	else needax();
-	if (rettype == CLONG) need(DXPAT);
+	if (rettype == CLONG || rettype == CULONG) need(DXPAT);
 
 	/* if returning a structure, reserve stack space and point to area
 		as first argument	*/
@@ -334,7 +334,7 @@ genfcal(node,vtype)
 		else {
 			vtype[VVAL]=AX;
 			regat[AX]=vtype;
-			if (rettype == CLONG) regat[DX]=vtype;
+			if (rettype == CLONG || rettype == CULONG) regat[DX]=vtype;
 			}
 		vtype[VT]=rettype;
 		}
@@ -376,7 +376,7 @@ getargs(node)
 			/*	clear off any temporaries */
 			if (curoff != cur_loc) {
 				if (vtype[VIS] == VARV & vtype[VVAL] == 6) {
-					if (vtype[VT] == CDOUBLE || vtype[VT] == CFLOAT)
+					if (vtype[VT] == CDOUBLE || vtype[VT] == CFLOAT) //FIXME was vtype
 						loadf(vtype);
 					else forcereg(vtype);
 					}
@@ -438,7 +438,7 @@ genasgn(node,vtype)
 		}
 	if (floater(vtype)) forcel(vtype);
 	if (vtype[VIS] == CONSTV) {
-		if (lnode[VT] == CLONG || lnode[VT] == PTRTO) forcel(vtype);
+		if (lnode[VT] == CLONG || lnode[VT] == CULONG || lnode[VT] == PTRTO) forcel(vtype);
 		else vtype[VT]=lnode[VT];
 		}
 	if (lnode[VT] == CCHAR || lnode[VT] == CSCHAR) {
@@ -452,12 +452,12 @@ genasgn(node,vtype)
 		forceint(vtype);
 		vtype[VT]=CINT;
 		}
-	if (lnode[VT] == CLONG && (vtype[VT] == CINT || vtype[VT] == PTRTO))
+	if ((lnode[VT] == CLONG || lnode[VT] == CULONG) && (vtype[VT] == CINT || vtype[VT] == PTRTO))
 		forcel(vtype);
 
 	if (is_big)  {
 		if (lnode[VT] == PTRTO  && type == ASGN && vtype[VT] != PTRTO) {
-			if (vtype[VT] != CLONG) error("illegal assignment");
+			if (vtype[VT] != CLONG && vtype[VT] != CULONG) error("illegal assignment");
 			}
 		forcees(lnode);
 		}
@@ -482,10 +482,10 @@ genasgn(node,vtype)
 		else abandon(reg);
 		}
 #endif
-	if (lnode[VT] == CLONG || (type == ASGN && lnode[VT] == PTRTO && 
-		(vtype[VT] == PTRTO || vtype[VT] == CLONG))) {
+	if (lnode[VT] == CLONG || lnode[VT] == CULONG || (type == ASGN && lnode[VT] == PTRTO && 
+		(vtype[VT] == PTRTO || vtype[VT] == CLONG || vtype[VT] == CULONG))) {
 		is_zero=0;
-		if (vtype[VT] == CLONG || vtype[VT] == PTRTO) {
+		if (vtype[VT] == CLONG || vtype[VT] == CULONG || vtype[VT] == PTRTO) {
 			if (vtype[VT] == PTRTO && vtype[VMORE] == NEED_ES) {
 				rm2=toseg(vtype[VNAME]);
 				}
@@ -506,7 +506,7 @@ genasgn(node,vtype)
 						break;
 			case AXOR:	asm_add(XOR86,tormh(lnode),rm2);
 						break;
-			default:	if (is_zero && lnode[VIS] == REGV && lnode[VT] == CLONG)
+			default:	if (is_zero && lnode[VIS] == REGV && (lnode[VT] == CLONG || lnode[VT] == CULONG))
 							asm_add(XOR86,tormh(lnode),tormh(lnode));
 						else asm_move(tormh(lnode),rm2);
 			}
@@ -576,9 +576,13 @@ compare(node)
 		return (type-EQ);
 		}
 
-	if (lnode[VT] == CLONG || lnode[VT] == PTRTO) {
+	if (lnode[VT] == CLONG || lnode[VT] == CULONG || lnode[VT] == PTRTO) {
 		forceacx(lnode,vtype);
-		builtin(_CMP4);				/* call _CMP4 */
+		if (lnode[VT] == CLONG) builtin(_CMP4);
+		else {
+			builtin(_CMP4U);
+			if (type > NE) type=type+4;  /* unsigned comparison */
+			}
 		freev(lnode);
 		freev(vtype);
 		return (type-EQ);
@@ -615,10 +619,15 @@ genshift(node,vtype)
 	type=tree[node];
 	get2(node,vtype,sby);
 
-	if (vtype[VT] == CLONG) {
+	if (vtype[VT] == CLONG || vtype[VT] == CULONG) {
 		force(sby,CXPAT);
 		force(vtype,AXPAT);
-		if (type == SHR) builtin(_SAR4); /* call _SAR4 */
+		if (type == SHR)
+			if (vtype[VT] == CLONG) {
+				builtin(_SAR4);
+				} else {
+				builtin(_SHR4);
+				}
 		else builtin(_SHL4);			 /* call _SHL4 */
 		freev(sby);
 		}
@@ -644,7 +653,7 @@ genshift(node,vtype)
 		else {
 			only1=0;
 			force(sby,CXPAT);
-			if (sby[VT] == CLONG) regat[BX]=0;
+			if (sby[VT] == CLONG || sby[VT] == CULONG) regat[BX]=0;
 			sby[VT]=CCHAR;
 			}
 		if (type == SHL) forceint(vtype);

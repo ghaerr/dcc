@@ -128,7 +128,8 @@ long heir25c() {				/*	must have constant or left parenthesis	*/
 		return value;
 		}
 	value=wvalue;
-	if (heir != CONSTANT && heir != LCONSTANT)
+	if (heir != CONSTANT && heir != UCONSTANT &&
+		heir != LCONSTANT && heir != ULCONSTANT)
 		if(mactokn) {
 			toknlf();
 			return 0;

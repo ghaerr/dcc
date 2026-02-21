@@ -572,7 +572,7 @@ xpand:	if (narg != m_defined(defat)->dargs) {
 			macOp=DEFPARM;
 			}
 		}
-	cur=nestfrom[nested]; //FIXME was nested and macros didn't work!
+	cur=nestfrom[nested];
 #ifdef MacHiWater
 	if(macxp > MacHiWaterP) MacHiWaterP=macxp;
 #endif
@@ -588,8 +588,10 @@ skipp() {
 
 number() {
 	char ch,n;
+	unsigned long accum;
 	double strtod();
 	heir=CONSTANT;
+	accum=0;
 	dvalue=0;
 	if (curch == '0' && (ch = toupper(*cur)) != 'L' && ch != 'U' && ch != '.') {
 		if (ch == 'X') {
@@ -600,9 +602,11 @@ number() {
 				if (ch >='A' && ch <= 'F') ch-='7';
 				else if (ltype[ch] == DIGIT) ch-='0';
 				else break;
-				dvalue=(dvalue<<4)+ch;
+				accum=(accum<<4)+ch;
+				dvalue=accum;
 				if (n++ == 7) *((long *)(&fvalue)+1) = dvalue;
 				}
+			/* a 16-digit (64-bit) hex constant is punned to double */
 			if (n > 8 && n != 16) error("illegal double constant");
 			else if (n == 16) {
 				*((long *)(&fvalue)) = dvalue;
@@ -613,16 +617,22 @@ number() {
 		else {
 			while ((ch=*cur-'0') < 10) {
 				cur++;
-				dvalue=(dvalue<<3)+ch;
+				accum=(accum<<3)+ch;
+				dvalue=accum;
 				}
 			}
-		if (dvalue > 65535 || dvalue < 0) heir=LCONSTANT;
+		/* unsuffixed (so far) octal or hex integer constant */
+		if (accum > 0x7fffffff) heir=ULCONSTANT;
+		else if (accum > 0xffff) heir=LCONSTANT;
+		else if (accum > 0x7fff) heir=UCONSTANT;
 		}
 	else {
 		if (*tokat == '.') cur=tokat;
-		dvalue=curch-'0';
+		accum=curch-'0';
+		dvalue=accum;
 		while ((ch=*cur-'0') <= 9) {
-			dvalue=dvalue*10+ch;
+			accum=accum*10+ch;
+			dvalue=accum;
 			cur++;
 			}
 		if ((*cur == '.' && *(cur+1) != '.') || *cur == 'e' || *cur == 'E') {
@@ -638,13 +648,22 @@ number() {
 				}
 			return;
 			}
-		if (dvalue > 32767) heir=LCONSTANT;
+		/* unsuffixed (so far) decimal integer constant */
+		if (accum > 0x7fffffff) heir=ULCONSTANT;
+		else if (accum > 0x7fff) {
+			heir = LCONSTANT;
+			if (accum <= 0xffff && toupper(*cur) == 'U')
+				heir = UCONSTANT;
+			}
 		}
 	while ((ch = toupper(*cur)) == 'L' || ch == 'U') {
 		if(ch == 'L')
-			heir=LCONSTANT;
+			heir=(heir==UCONSTANT)? ULCONSTANT : LCONSTANT;
+		else if (ch == 'U')
+			heir=(heir==LCONSTANT)? ULCONSTANT : UCONSTANT;
 		cur++;
 		}
+	/* only relevant for 16-bit constants */
 	wvalue=dvalue;
 	}
 

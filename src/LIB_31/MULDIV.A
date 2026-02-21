@@ -21,12 +21,27 @@ sign    db      0
 
         cseg
         public  _MUL4,_DIV4,_MOD4
+        public  _MUL4U,_DIV4U,_MOD4U
+
 
 ;       _MOD4  --  dx:ax = dx:ax % bx:cx.
 
 _MOD4:  push    si                      ;save si,di
         push    di
         _call   xdiv4
+        mov     dx,si
+        mov     ax,bx
+        pop     di
+        pop     si
+        _ret
+
+
+;       _MOD4U  --  dx:ax = dx:ax % bx:cx.
+
+_MOD4U: push    si                      ;save si,di
+        push    di
+        mov     sign,0
+        _call   xdiv4u
         mov     dx,si
         mov     ax,bx
         pop     di
@@ -43,10 +58,21 @@ _DIV4:  push    si                      ;save si and di
         pop     si
         _ret
 
+
+;       _DIV4U  --  dx:ax = dx:ax / bx:cx. remainder = si:bx.
+
+_DIV4U: push    si                      ;save si and di
+        push    di
+        mov     sign,0
+        _call   xdiv4u
+        pop     di
+        pop     si
+        _ret
+
 ;       do the real work of division
 
 xdiv4:  _call   set_sign
-        or bx,bx
+xdiv4u: or bx,bx
         jnz dword_dword_div
         cmp cx,dx
         jbe dword_word_long
@@ -122,18 +148,14 @@ dxpos:  or      bx,bx                   ;is bx:cx positive ?
         sbb     bx,-1
 bxpos:  _ret
 
-
-
-
 ;       _MUL4  --  dx:ax = dx:ax * bx:cx.
-
 
 _MUL4:  push    si
         push    di
         _call   set_sign
-        mov di,ax
+xmul4u: mov di,ax
         mov ax,dx
-        mul cx
+        mul cx 
         mov si,ax
         mov ax,bx
         mul di
@@ -145,6 +167,12 @@ _MUL4:  push    si
         pop     di
         pop     si
         _ret
+
+;       _MUL4U  --  dx:ax = dx:ax * bx:cx.
+_MUL4U: push    si
+        push    di
+        mov     sign,0
+        jmp     xmul4u
 
         public  LABS_
 LABS_:  push    bp
