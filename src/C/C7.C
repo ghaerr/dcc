@@ -128,6 +128,7 @@ unsigned dsize(ptr)
 	return tot;
 	}
 
+#if MSDOS
 /*	stuff for SEE interface.	*/
 
 static unsigned see_off,see_seg,see_ret,see_bp;
@@ -162,7 +163,6 @@ see_hex(ptrptr)
 
 /*	SEE_CALL  --	SEE interface routine.	*/
 
-#if MSDOS
 see_call(p1,p2,p3)
 	int p1,p2,p3; {
 #asm

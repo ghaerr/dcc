@@ -157,9 +157,13 @@ init(argc,argv)
 		do {
 			cur++;
 			switch (option) {
+#if MSDOS
 				case '@':	see_addr(cur);
 							*cur=0;
 							break;
+				case 'N':	nextpgm[0]=toupper(*cur++); /* NOTE: was -D */
+							break;
+#endif
 				case 'A':	aopt=1;
 							break;
 				case 'B':	is_big=1;
@@ -168,8 +172,6 @@ init(argc,argv)
 							add_define(cur="__LARGE__");
 							break;
 				case 'C':	copt=1;
-							break;
-				case 'D':	nextpgm[0]=toupper(*cur++);
 							break;
 				case 'E':	cppopt=1;
 							break;
@@ -180,7 +182,7 @@ init(argc,argv)
 								}
 							*cur=0;
 							break;
-				case 'N':	add_define();
+				case 'D':	add_define();               /* NOTE: was -N */
 							goto next_arg;
 							break;
 				case 'O':	strcpy(objname,cur);

@@ -29,7 +29,7 @@ CFLAGS = $(CLBASE) $(WARNINGS) $(LOCALFLAGS)
 ##### End of standardized section #####
 
 PROG=make
-LOCALFLAGS = -Nunix
+LOCALFLAGS = -Dunix
 LIBC = ../libc/cstdio.a
 OBJS = check.o input.o macro.o main.o make.o reader.o rules.o
 

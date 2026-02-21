@@ -466,7 +466,7 @@ cleanup:
 
 
 
-/*	add_define  --  add a 'n' option from command tail- a define.	*/
+/*	add_define  --  add a -D option from command tail- a define.	*/
 
 add_define() {
 	char *defat,*newdef;
@@ -483,7 +483,7 @@ add_define() {
 		}
 	else if (*cur == '=') while (*++cur) *newdef++=*cur;
 	else {
-		os("illegal N option ");
+		os("illegal -D option ");
 		real_exit(2);
 		}
 
