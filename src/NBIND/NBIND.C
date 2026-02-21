@@ -75,7 +75,7 @@
 	char *labat[NUMLAB],*public_patch[NUMLAB/2];
 	long  dataout,datatot,codeout,codetot,ovbase;
 	long  dataout_root,datatot_root,codeout_root,codetot_root;
-	unsigned util,stacklen;
+	unsigned util,stacklen, heaplen;
 	unsigned len,num,nummod;
 	char copt,aopt,hopt,mopt,under_opt,*found,islib,libname[65]="cstdio.a";
 	char *pname,numover[NUMARG],gotover,*fileat[NUMARG],ovnum,lastov;
@@ -224,8 +224,12 @@ init(argc,argv)
 			isopen[filen]=FOPT;
 			i=toupper(*++argat);
 			switch (i) {
+#if MSDOS
 				case '@':	see_exit=1;
 							break;
+				case 'H':	hopt=1;         /* NOTE: replaced by heap option below */
+							break;
+#endif
 				case 'P':	if (*++argat) pname=argat;
 							if ((pfile=creat(pname, 0666)) == -1)
 								ferror("cannot open ",pname);
@@ -233,8 +237,6 @@ init(argc,argv)
 				case 'A':	aopt=1;
 							break;
 				case 'C':	copt=1;
-							break;
-				case 'H':	hopt=1;
 							break;
 				case 'L':	strcpy(libname,argat+1);
 							if (strlen(libname) == 1) strcat(libname,":");
@@ -253,6 +255,14 @@ init(argc,argv)
 								else ferror("bad Stack option","");
 								stacklen<<=4;
 								stacklen+=i;
+								}
+							break;
+				case 'H':	while (i=toupper(*++argat)) {   /* NOTE: new option */
+								if (i >= '0' && i <= '9') i-='0';
+								else if (i >= 'A' && i <= 'Z') i-='A'-10;
+								else ferror("bad Heap option","");
+								heaplen<<=4;
+								heaplen+=i;
 								}
 							break;
 				case 'M':	mopt=1;
@@ -885,8 +895,8 @@ between() {
     ihead.tseg=codetot;
     ihead.dseg=datatot;
     ihead.bseg=alldata-datatot;
-    ihead.chmem = stacklen; //FIXME use -S stacksize for heap
-    ihead.minstack = 4096;
+    ihead.chmem = heaplen;
+    ihead.minstack = stacklen;
     //ihead.entry = 0;      //FIXME always generates near jump to _CSETUP from 0
     //__dprintf("cseg %x dseg %x bseg %x\n", ihead.tseg, ihead.dseg, ihead.bseg);
 

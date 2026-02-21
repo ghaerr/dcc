@@ -33,7 +33,7 @@ OBJS=       \
 all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $^ -Olink88 -Plink88.lst -_ -SFFFF
+	$(LD) $^ -Olink88 -Plink88.lst -_ -HFFFF
 	cp link88 /root/bin2
 
 clean:

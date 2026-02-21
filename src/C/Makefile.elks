@@ -39,7 +39,7 @@ OBJS=       \
 all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $^ -Oc88 -Pc88.lst -_ -SFFFF
+	$(LD) $^ -Oc88 -Pc88.lst -_ -HFFFF
 	cp c88 /root/bin2
 
 clean:

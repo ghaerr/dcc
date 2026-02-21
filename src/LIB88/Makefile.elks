@@ -33,7 +33,7 @@ OBJS=       \
 all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $^ -Olib88 -Plib88.lst -_ -SFFFF
+	$(LD) $^ -Olib88 -Plib88.lst -_ -HFFFF
 	cp lib88 /root/bin2
 
 clean:

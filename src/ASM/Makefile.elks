@@ -37,7 +37,7 @@ OBJS=       \
 all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $^ -Oasm88 -Pasm88.lst -_ -SFFFF
+	$(LD) $^ -Oasm88 -Pasm88.lst -_ -HFFFF
 	cp asm88 /root/bin2
 
 clean:

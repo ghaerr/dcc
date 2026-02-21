@@ -35,7 +35,7 @@ dump88: DUMPO.o
 	cp dump88 /root/bin2
 
 toobj88: TOOBJ.o
-	$(LD) $^ -Otoobj88 -Ptoobj88.lst -_ -SFFFF
+	$(LD) $^ -Otoobj88 -Ptoobj88.lst -_ -HFFFF
 	cp toobj88 /root/bin2
 
 clean:

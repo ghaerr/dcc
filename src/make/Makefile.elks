@@ -36,7 +36,7 @@ OBJS = check.o input.o macro.o main.o make.o reader.o rules.o
 all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $^ $(LIBC) -O$(PROG) -P$(PROG).lst -_ -S4000
+	$(LD) $^ $(LIBC) -O$(PROG) -P$(PROG).lst -_ -H4000
 	cp $(PROG) /root/bin2
 
 clean:
