@@ -127,3 +127,35 @@ _fmemalloc_:
 unlink_:
         mov     ax,SYS_unlink
         jmp     callsys
+;
+; for 'make'
+;
+        PUBLIC  time_
+time_:
+        mov     ax,SYS_time
+        jmp     callsys
+
+        PUBLIC  utime_
+utime_:
+        mov     ax,SYS_utime
+        jmp     callsys
+
+        PUBLIC  stat_
+stat_:
+        mov     ax,SYS_stat
+        jmp     callsys
+
+        PUBLIC  fork_
+fork_:
+        mov     ax,SYS_fork
+        jmp     callsys
+
+        PUBLIC  _execve_
+_execve_:
+        mov     ax,SYS_execve
+        jmp     callsys
+
+        PUBLIC  wait4_
+wait4_:
+        mov     ax,SYS_wait4
+        jmp     callsys

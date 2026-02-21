@@ -29,11 +29,14 @@ LD=$(BIN)link88
 LIB=system.a
 LIBOBJS=        \
     creat.o     \
+    execl.o     \
+    execve.o    \
     isatty.o    \
     isetup.o    \
     lseek.o     \
     sbrk.o      \
     stackreg.o  \
+    system.o    \
 
 all: $(LIB)
 

@@ -14,10 +14,12 @@ AS=$(BIN)asm88
 AR=$(BIN)lib88
 LD=$(BIN)link88
 
+CFLAGS = $(CLBASE) $(WARNINGS) $(LOCALFLAGS)
+
 # Automated rules for C88 toolchain
 .c.o:
 	#$(CPP) $(CPPFLAGS) $*.c -o $*.i
-	$(CC) $*.c PW
+	$(CC) $*.c PW $(CFLAGS)
 	$(C2) $* Z
 	#$(AS) $*.as L
 
@@ -27,12 +29,14 @@ LD=$(BIN)link88
 ##### End of standardized section #####
 
 PROG=make
+LOCALFLAGS = -Nunix
+LIBC = ../libc/cstdio.a
 OBJS = check.o input.o macro.o main.o make.o reader.o rules.o
 
 all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $^ -O$(PROG) -P$(PROG).lst -_ -S4000
+	$(LD) $^ $(LIBC) -O$(PROG) -P$(PROG).lst -_ -S4000
 	cp $(PROG) /root/bin2
 
 clean:

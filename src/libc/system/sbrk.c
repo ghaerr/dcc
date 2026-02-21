@@ -1,4 +1,4 @@
-int _sbrk(int increment, char **pnewbrk);
+#include <unistd.h>
 
 char *sbrk(increment)
 int increment;

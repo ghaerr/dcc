@@ -1,4 +1,4 @@
-int _lseek(int fd, long *posn, int where);
+#include <unistd.h>
 
 long
 lseek(fd, posn, where)

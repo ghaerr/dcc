@@ -19,4 +19,6 @@
 #define EDOM	33
 #define ERANGE	34
 
+#define ENOMEM  12
+
 extern int errno;
