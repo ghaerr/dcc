@@ -37,6 +37,7 @@ LIBOBJS=        \
     malloc.o    \
     memory.o    \
     sbrk.o      \
+    setjmp.o    \
     stackreg.o  \
     system.o    \
 
