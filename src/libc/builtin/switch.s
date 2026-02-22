@@ -18,8 +18,6 @@
         include "config.h"
         cseg
 
-        public  _SWITCH
-
 ;       _SWITCH         dispatch for a c switch statement
 ;                       bx has the switch value.
 ;                       table follows call. default is 0x8000 and is
@@ -28,6 +26,7 @@
 ;                               word,word       value,label.
 ; for big model,recall that switch only works in current segment
 
+        public  _SWITCH
 _SWITCH:if      LARGE_CASE == 0
         mov     si,cs
         mov     es,si           ;set es to segment of call
@@ -60,69 +59,3 @@ sw_mat: if      LARGE_CASE
         lret
         endif
         jmp     word es:[si+2]  ;found a matching label
-
-        split
-
-
-;       _cmp4   set flags for   cmp     dx ax,bx cx
-
-        public  _CMP4
-_CMP4:  cmp     dx,bx           ;compare high words
-        jnz     cmp4r           ;done if different
-        jns     norev
-        cmp     ax,cx           ;flip usiigned result into signed
-        jz      cmp4r
-        mov     al,1
-        jb      isg
-isl:    cmp     al,2
-        _ret
-norev:  cmp     ax,cx           ;break tie with low words
-        jz      cmp4r
-        mov     al,1
-        jb      isl
-isg:    cmp     al,0
-cmp4r:  _ret
-
-        split
-
-;       _cmp4u   set flags for   cmp     dx ax,bx cx
-
-        public  _CMP4U
-_CMP4U: cmp     dx,bx           ;compare high words
-        jnz     cmp4ru          ;done if different
-        cmp     ax,cx           ;break tie with low words
-cmp4ru: _ret
-
-        split
-
-;       _SAR4   shift right     sar     dx ax,cl
-
-        public  _SAR4,_SHL4
-_SAR4:  mov     ch,0            ;need count in cx
-        jcxz    sar4r
-sr_lp:  sar     dx,1            ;low bit in carry
-        rcr     ax,1            ;now high in ax
-        loop    sr_lp
-sar4r:  _ret
-
-
-;       _SHR4   shift right     shr     dx ax,cl
-
-        public  _SHR4
-_SHR4:  mov     ch,0            ;need count in cx
-        jcxz    shr4r
-shr_lp: shr     dx,1            ;low bit in carry
-        rcr     ax,1            ;now high in ax
-        loop    shr_lp
-shr4r:  _ret
-
-
-;       _SHL4   shift left      shl     dx ax,cl
-
-_SHL4:  mov     ch,0            ;need count in cx
-        jcxz    shl4r
-sl_lp:  shl     ax,1            ;high bit in carry
-        rcl     dx,1            ;now is the low in ax
-        loop    sl_lp
-shl4r:  _ret
-

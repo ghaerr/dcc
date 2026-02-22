@@ -9,6 +9,7 @@ fflush(FILE *fp)
    unsigned char * bstart;
 
    //__LINK_SYMBOL(__stdio_init);
+#if UNUSED
    if (fp == NULL)		/* On NULL flush the lot. */
    {
       if (fflush(stdin))
@@ -24,6 +25,7 @@ fflush(FILE *fp)
 
       return 0;
    }
+#endif
 
    /*
     * Immediately error out if this is a fake FILE from snprintf etc.  Do

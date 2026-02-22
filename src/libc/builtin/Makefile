@@ -28,7 +28,12 @@ LD=$(BIN)link88
 
 LIB=builtin.a
 LIBOBJS=        \
-    builtin.o   \
+    cmp4.o      \
+    cmp4u.o     \
+    sar4.o      \
+    shl4.o      \
+    shr4.o      \
+    switch.o    \
     muldiv.o    \
     umuldiv.o   \
 
