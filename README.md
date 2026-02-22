@@ -5,7 +5,7 @@ ported to [ELKS](https://github.com/ghaerr/elks).
 A work in progress. The goal is to produce an ANSI C capable compiler toolchain that can compile itself
 on 8086 systems.
 This could then be used for creating self-reproducing systems based on the 8086, including
-[ELKS](https://github.com/ghaerr/elks) or
+ELKS or
 [UnixV6-8086](https://github.com/ghaerr/UnixV6-8086).
 
 DCC is now able to compile itself and run under ELKS, but still requires a bit of setup
@@ -55,17 +55,17 @@ Now, finally, we're ready to actually build DCC. Boot the hd32-minix.img in the
 last step above, and login as root. Then execute the following to bootstrap the
 DCC compiler:
 ```
-$ . pass1   (sets build to use /root/bin directory for DCC compiled by ia16-elf-gcc)
-$ cd test
-$ make      (builds DCC using gcc-built DCC into /bin2)
-$           (DCC should now be built in /bin2)
-$ cd
-$ . pass2   (sets built to use just-built DCC to build DCC again using itself)
-$ cd test
-$ make clean
-$ make      (DCC is now built by DCC in /bin2)
-$ make clean
-$ make      (DCC is now fully bootstrapped in /bin2, having built itself by itself)
+# . pass1   (sets build to use /root/bin directory for DCC compiled by ia16-elf-gcc)
+# cd test
+# make      (builds DCC using gcc-built DCC into /bin2)
+#           (DCC should now be built in /bin2)
+# cd
+# . pass2   (sets built to use just-built DCC to build DCC again using itself)
+# cd test
+# make clean
+# make      (DCC is now built by DCC in /bin2)
+# make clean
+# make      (DCC is now fully bootstrapped in /bin2, having built itself by itself)
 ```
 
 Original code located at www.desmet-c.com and [OpenDC](https://github.com/the-grue/OpenDC).
