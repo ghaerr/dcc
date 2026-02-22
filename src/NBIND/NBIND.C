@@ -31,6 +31,8 @@
 #define _move(num,from,to)          memmove((char *)(to), (char *)(from), num)
 #define _showds()                   (FP_SEG(inbuf))
 #endif
+
+#define O_RDONLY    0
 /* ------------------- */
 
 #define IBM		0			/*	true if creating BIND for MS-DOS	*/
@@ -194,7 +196,7 @@ init(argc,argv)
 
 /*	-ffile options means arguments are also in the file.	*/
 		if (*argat == '-' && toupper(*(argat+1)) == 'F') {
-			if ((ffile=open(argat+2,0)) == -1) ferror("cannot open ",argat+2);
+			if ((ffile=open(argat+2, O_RDONLY)) == -1) ferror("cannot open ",argat+2);
 			if ((nin=read(ffile,&argbuf[numab],ABSIZE-numab)) == ABSIZE-numab)
 				ferror("too many filenames","");
 			close(ffile);
@@ -393,7 +395,7 @@ nextpass(pass)
 				isopen[i]=FCLOSED;
 				}
 			else numopen++;
-			if ((infile[filen]=open(inname,0)) == -1)
+			if ((infile[filen]=open(inname, O_RDONLY)) == -1)
 				ferror("cannot open ",inname);
 			isopen[filen]=FOPEN;
 			inin=endin=&inbuf[4096];
@@ -1557,7 +1559,7 @@ findfile(filename, target_buf, envname)
 
 	/* first check in the local directory */
 	strcpy(target_buf, filename);
-	fid = open(target_buf, 0);
+	fid = open(target_buf, O_RDONLY);
 	if (fid >= 0)  {				/* got it */
 		close(fid);
 		return (1);
@@ -1581,7 +1583,7 @@ findfile(filename, target_buf, envname)
 		*t_ptr = 0;
 		if (*p_ptr) p_ptr++;		/* beyond the ';' */
 		strcat(target_buf, filename);
-		fid = open(target_buf, 0);
+		fid = open(target_buf, O_RDONLY);
 		if (fid >= 0)  {				/* got it */
 			close(fid);
 			return (1);

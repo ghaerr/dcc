@@ -594,7 +594,7 @@ inc_nest:
 			findfile(string, inctemp, "INCLUDE");
 		strcpy(string,inctemp);
 		}
-	if ((ifd=open(string,0)) == -1) {
+	if ((ifd=open(string, O_RDONLY)) == -1) {
 		os("cannot open ");
 		os(string);
 		ocrlf();
@@ -846,7 +846,7 @@ findfile(filename, target_buf, envname)
 
 	/* first check in the local directory */
 	strcpy(target_buf, filename);
-	fid = open(target_buf, 0);
+	fid = open(target_buf, O_RDONLY);
 	if (fid >= 0)  {				/* got it */
 		close(fid);
 		return (1);
@@ -870,7 +870,7 @@ findfile(filename, target_buf, envname)
 		*t_ptr = 0;
 		if (*p_ptr) p_ptr++;		/* beyond the ';' */
 		strcat(target_buf, filename);
-		fid = open(target_buf, 0);
+		fid = open(target_buf, O_RDONLY);
 		if (fid >= 0)  {				/* got it */
 			close(fid);
 			return (1);

@@ -23,6 +23,8 @@
 #define char        unsigned char
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 #endif
+
+#define O_RDONLY    0
 /* ------------------- */
 
 #include "OBJ.H"
@@ -125,7 +127,7 @@ init(argc,argv)
 
 /*	-ffile options means arguments are also in the file.	*/
 		if (*argat == '-' && toupper(*(argat+1)) == 'F') {
-			if ((ffile=open(argat+2,0)) == -1) ferror("cannot open ",argat+2);
+			if ((ffile=open(argat+2, O_RDONLY)) == -1) ferror("cannot open ",argat+2);
 			if ((nin=read(ffile,&argbuf[numab],ABSIZE-numab)) == ABSIZE-numab)
 				ferror("over 100 arguments #1","");
 			close(ffile);
@@ -239,7 +241,7 @@ nextpass(pass)
 				isopen[i]=FCLOSED;
 				}
 			else numopen++;
-			if ((infile[filen]=open(inname,0)) == -1)
+			if ((infile[filen]=open(inname, O_RDONLY)) == -1)
 				ferror("cannot open ",inname);
 			isopen[filen]=FOPEN;
 			inin=endin=&inbuf[4096];

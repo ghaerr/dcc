@@ -21,6 +21,7 @@
 #define _setmem(addr,count,byte)    memset(addr,byte,count)
 #endif
 
+#define O_RDONLY    0
 /* ------------------- */
 
 #define IBM		1			/*	true if creating BIND for MS-DOS	*/
@@ -172,7 +173,7 @@ nextpass(pass)
 	int  i;
 
 	if (numread == 0) {		/* file is still closed	*/
-		if ((infile=open(inname,0)) == -1)
+		if ((infile=open(inname, O_RDONLY)) == -1)
 			ferror("cannot open ",inname);
 		inin=endin=&inbuf[1024*10];
 		}

@@ -1,6 +1,4 @@
-#define O_WRONLY        01
-#define O_CREAT       0100
-#define O_TRUNC      01000
+#include <fcntl.h>
 
 int
 creat(file, mode)

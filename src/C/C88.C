@@ -253,7 +253,7 @@ next_arg:;
 				}
 			if (name[i] == '.' && name[i+1] != '.') break;
 			}
-		if ((file=open(name,0)) == -1) {
+		if ((file=open(name,O_RDONLY)) == -1) {
 			os("cannot open ");
 			os(argv[1]);
 			real_exit(2);

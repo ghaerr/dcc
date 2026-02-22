@@ -63,14 +63,14 @@ init() {
 	intname="A:CTEMP2";
 	if (topt) *intname=topt;
 	else intname+=2;
-	if ((treef=open(intname,0))==-1) 
+	if ((treef=open(intname, O_RDONLY))==-1) 
 		error("Cannot Open CTEMP2");
 	intree=&treebuf[BUFSIZE];
 
 	intname="A:CTEMP1";
 	if (topt) *intname=topt;
 	else intname+=2;
-	if ((control=open(intname,0))==-1)
+	if ((control=open(intname, O_RDONLY))==-1)
 		error("Cannot Open CTEMP1");
 	if (read(control,ctlbuf,BUFSIZE) == -1)
 		error("Cannot Read CTEMP1");

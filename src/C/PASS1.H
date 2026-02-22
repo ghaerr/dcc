@@ -32,6 +32,10 @@ char *xitoa();
 #define FIX(node)   (*(char *)(node))
 #define OS(str)     os(str)
 
+#define O_RDONLY       00
+#define O_WRONLY       01
+#define O_RDWR         02
+#define O_CREAT      0100
 /* ------------------- */
 
 #define	CHECK	1			/*	true if generating checkout compiler */

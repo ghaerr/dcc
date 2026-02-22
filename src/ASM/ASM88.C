@@ -243,7 +243,7 @@ init(argc,argv)
 		i++;
 		}
 	//if (name[i] == 0 && killopt == 0) strcat(name,".a");
-	if ((infile=open(name,0)) == -1) {
+	if ((infile=open(name, O_RDONLY)) == -1) {
 		os("cannot open ");
 		ferror(name);
 		}
@@ -283,7 +283,7 @@ init(argc,argv)
 		i=0;
 		while (lstname[++i]) ;
 		lstname[i-1]='5';
-		if ((lst=open(lstname, 02|0100, 0666)) == -1) { //FIXME
+		if ((lst=open(lstname, O_RDWR|O_CREAT, 0666)) == -1) {
 			os("cannot create ");
 			ferror(lstname);
 			}
@@ -292,7 +292,7 @@ init(argc,argv)
 
 #if CHECK
 	if (copt) {
-		if ((obj=open(objname, 02|0100, 0666)) == 0) {  //FIXME was fopen(..., "a")
+		if ((obj=open(objname, O_RDWR|O_CREAT, 0666)) == 0) {  //FIXME was fopen(..., "a")
 			os("cannot create ");
 			ferror(objname);
 			}
@@ -878,7 +878,7 @@ doinc() {
 	while (cur < lastch) *lastinc++=*cur++;
 	findfile(string, inctemp, "DSINC");
 	strcpy(string, inctemp);
-	if ((incfile=open(string,0)) == -1) {
+	if ((incfile=open(string, O_RDONLY)) == -1) {
 		os("cannot open ");
 		ferror(string);
 		}
@@ -1028,7 +1028,7 @@ findfile(filename, target_buf, envname)
 
 	/* first check in the local directory */
 	strcpy(target_buf, filename);
-	fid = open(target_buf, 0);
+	fid = open(target_buf, O_RDONLY);
 	if (fid >= 0)  {				/* got it */
 		close(fid);
 		return (1);
@@ -1052,7 +1052,7 @@ findfile(filename, target_buf, envname)
 		*t_ptr = 0;
 		if (*p_ptr) p_ptr++;		/* beyond the ';' */
 		strcat(target_buf, filename);
-		fid = open(target_buf, 0);
+		fid = open(target_buf, O_RDONLY);
 		if (fid >= 0)  {				/* got it */
 			close(fid);
 			return (1);

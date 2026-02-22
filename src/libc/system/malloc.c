@@ -137,7 +137,7 @@ malloc(unsigned nbytes)
             return(NULL);
         }
 #endif
-        q = (NPTR)sbrk(temp*WORD);
+        q = (NPTR)sbrk((int)(temp*WORD));
         if((INT)q == -1) {
             errno = ENOMEM;
             return(NULL);

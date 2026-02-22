@@ -2,6 +2,7 @@
 
 /* --- ELKS changes --- */
 #define char        unsigned char
+#define O_RDONLY    0
 /* ------------------- */
 
 #define MODEL	1
@@ -37,7 +38,7 @@ doopen(file)
 	while (*file && *file != '.')
 		name[i++]=*file++;
 	if (*file != '.') strcpy(&name[i],".o");
-	if ((infile=open(name,0)) == -1) {
+	if ((infile=open(name, O_RDONLY)) == -1) {
 		os("Cannot open ");
 		os(name);
 		ocrlf();

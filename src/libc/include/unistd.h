@@ -3,8 +3,8 @@
 extern char **environ;
 extern unsigned __stacklow;
 
-int read(int fd, void *buf, unsigned nbytes);
-int write(int fd, void *buf, unsigned n);
+int read(int fd, void *buf, int nbytes);
+int write(int fd, void *buf, int n);
 int close(int fildes);
 
 int isatty(int fd);

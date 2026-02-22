@@ -19,6 +19,11 @@
 #define char        unsigned char
 #define _move(num,from,to)  memmove((char *)(to), (char *)(from), num)
 #endif
+
+#define O_RDONLY       00
+#define O_WRONLY       01
+#define O_RDWR         02
+#define O_CREAT      0100
 /* ------------------- */
 
 #define	OPT		0		/*	on if want optimize code	*/
