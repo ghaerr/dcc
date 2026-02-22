@@ -27,6 +27,7 @@ mkdir -p $DEST/libc/include/sys
 mkdir -p $DEST/libc/system
 mkdir -p $DEST/libc/builtin
 mkdir -p $DEST/libc/misc
+mkdir -p $DEST/libc/stdio
 
 cp -p Makefile.elks             $DEST/Makefile
 
@@ -76,6 +77,7 @@ cp -p libc/include/sys/*.h      $DEST/libc/include/sys
 cp -p libc/system/*             $DEST/libc/system
 cp -p libc/builtin/*            $DEST/libc/builtin
 cp -p libc/misc/*               $DEST/libc/misc
+cp -p libc/stdio/*              $DEST/libc/stdio
 
 cp -p make/*.c                  $DEST/make
 cp -p make/*.h                  $DEST/make
