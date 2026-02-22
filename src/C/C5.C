@@ -472,7 +472,7 @@ heir26(node)					/* operand or constant or string */
 #endif
 			}
 		else {			/* must be a local integer */
-			warning("undefined variable");
+			error("undefined variable");        // FIXME was warning
 			m_operand(nameat)->nstor=SAUTO;
 			locoff-=2;
 			m_operand(nameat)->noff=locoff;
