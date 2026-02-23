@@ -62,6 +62,7 @@ extern FILE stdin[1];
 extern FILE stdout[1];
 extern FILE stderr[1];
 
+#if UNUSED
 #define putc(c, stream) \
     (((stream)->bufpos >= (stream)->bufwrite) ? fputc((c), (stream))    \
                           : (unsigned char) (*(stream)->bufpos++ = (c)) )
@@ -69,6 +70,10 @@ extern FILE stderr[1];
 #define getc(stream)    \
   (((stream)->bufpos >= (stream)->bufread) ? fgetc(stream):             \
     (*(stream)->bufpos++))
+#endif
+
+#define putc(c,stream)  fputc(c, stream)
+#define getc(stream)    fgetc(stream)
 
 #define putchar(c)      fputc((c), stdout)
 #define getchar()       fgetc(stdin)
@@ -91,7 +96,7 @@ int fputc(int, FILE*);
 
 int fclose(FILE*);
 int fflush(FILE*);
-char *fgets(char*, size_t, FILE*);
+char *fgets(char*, int, FILE*);
 
 FILE *fopen(const char*, const char*);
 FILE *fdopen(int, const char*);
