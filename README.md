@@ -8,23 +8,7 @@ This could then be used for creating self-reproducing systems based on the 8086,
 ELKS or
 [UnixV6-8086](https://github.com/ghaerr/UnixV6-8086).
 
-DCC is now able to compile itself and run under ELKS, but still requires a bit of setup
-since 'make' has not yet been ported to DCC. The instructions that follow are currently
-a bit complicated but will be automated when possible.
-
-To setup to build DCC on ELKS, first ensure that the separate
-[8086-toolchain](https://github.com/ghaerr/8086-toolchain) `make` is prebuilt
-and in the ELKS hd32-minix.img:
-```
-$ cd /path/to/ELKS
-$ make
-[ensure OpenWatcom v2 installed and WATCOM= set]
-$ ./buildext.sh 8086-toolchain
-$ cd images
-$ make hd32-minix
-```
-This will produce a 32MB ELKS image with the 8086-toolchain installed. Only the `make` program is currently required, which should now be in /bin.
-
+DCC is now able to compile itself and run under ELKS.
 The next steps will bootstrap the DCC toolchain by compiling on the host system,
 after which the DCC source will be copied to the ELKS /root/test directory:
 ```
@@ -35,7 +19,7 @@ $ make
 [edit copyc88.sh and change TOPDIR= to TOPDIR value set above in env.sh)
 $ ./copyc88.sh
 ```
-The DCC source should now be in the /root/test template for the next HD32 image
+The DCC source should now be in the /root/test template for the 32MB HDD image
 to be built on ELKS. A few final environment variables need to be setup on
 the target ELKS /root directory:
 ```
@@ -51,7 +35,7 @@ export DSLIB=/root/test/libc
 $ cd image
 $ make hd32-minix
 ```
-Now, finally, we're ready to actually build DCC. Boot the hd32-minix.img in the
+Now we're ready to actually build DCC on ELKS. Boot the hd32-minix.img in the
 last step above, and login as root. Then execute the following to bootstrap the
 DCC compiler:
 ```
