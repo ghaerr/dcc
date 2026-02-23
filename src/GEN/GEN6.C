@@ -80,7 +80,7 @@ asm_init() {
 	else tempname6+=2;
 
 	if (copt) {
-		if ((obj=open(objname, O_RDWR|O_CREAT, 0666)) == 0) { //FIXME was fopen(..., "a")
+		if ((obj=open(objname, O_RDWR|O_CREAT|O_APPEND, 0666)) == 0) {
 			os("cannot create ");
 			error(objname);
 			}

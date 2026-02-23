@@ -318,6 +318,8 @@ cmdname(name)
 	strcpy(&outname[i],".exe");
 #elif CMD
 	strcpy(&outname[i],".cmd");
+#else
+	strcpy(&outname[i],"");
 #endif
 	strcpy(&ovname[i],".ov");
 	strcpy(&chkname[i],".chk");
@@ -918,7 +920,11 @@ between() {
 		ferror("cannot create",outname);
 	thisout=outfile;
 	thisname=outname;
-	ovbase+=IBM ? 512: 128;
+#if IBM
+	ovbase+=512;
+#elif CMD
+	ovbase+=128;
+#endif
 	if (maxover) {
 		for (i=0; i < MAXOVER; i++) {
 			ovlen[i][0]=over_offs[i][0];
@@ -1367,7 +1373,7 @@ ocode(bytes)
 	int  num;
 
 	if (objat != codeout) {
-		if (lseek(thisout,codeout,0,0) == -1)
+		if (lseek(thisout,codeout,0) == -1)     //FIXME had 4 args
 			ferror("cannot seek ",thisname);
 		objat=codeout;
 		}

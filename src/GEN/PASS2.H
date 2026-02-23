@@ -24,6 +24,7 @@
 #define O_WRONLY       01
 #define O_RDWR         02
 #define O_CREAT      0100
+#define O_APPEND    02000
 /* ------------------- */
 
 #define	OPT		0		/*	on if want optimize code	*/
