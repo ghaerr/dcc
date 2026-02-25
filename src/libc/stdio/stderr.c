@@ -1,8 +1,6 @@
 #include <stdio.h>
 
-#ifndef buferr
-static unsigned char buferr[BUFSIZ];
-#endif
+unsigned char buferr[BUFSIZ];
 
 FILE  stderr[1] =
 {

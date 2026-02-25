@@ -177,7 +177,7 @@ init(argc,argv)
 				i=strlen(argat);
 				if (argat[i-2] != '.' || toupper(argat[i-1]) != 'a') 
 					cmdname(argat);
-				else strcpy(outname,"NUL");
+				else strcpy(outname,"NUL"); //FIXME
 				}
 			}
 		}

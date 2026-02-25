@@ -7,7 +7,7 @@ DIRS = stdio system builtin misc
 
 all:
 	for DIR in $(DIRS); do cd $$DIR; $(MAKE) all || exit 1; cd ..; done
-	$(AR) */*.a -Ocstdio
+	$(AR) */*.o -Ocstdio
 
 clean:
 	for DIR in $(DIRS); do cd $$DIR; $(MAKE) clean || exit 1; cd ..; done

@@ -769,7 +769,7 @@ between() {
 	for (i=0; i< 110; i++)
 		hptr->rest[i]=0;
 #else
-	datatot=((long)over_offs[0][0]+15)&0xffff0;
+	datatot=(long)over_offs[0][0];
 	codetot=((long)over_offs[0][1]+maxof(1)+15)&0xffff0;
 	if (mopt) {
 		for (i=1; i <= maxover; i++) {
@@ -972,12 +972,15 @@ between() {
 /*	print the CODE= message	*/
 	if (pfile != -1) {
 		xputs("\ncode=",pfile);
-		oh(allcode);
+		oh((int)allcode);
 		xputs("H  data=",pfile);
+		oh((int)datatot);
+		xputs("H  bss=",pfile);
+		oh(alldata-(unsigned)datatot);
+		xputs("H  total=",pfile);
 		oh(alldata);
-		xputs("H  stack and locals=",pfile);
-		if (stacklen) oh(stacklen);
-		else oh(0-alldata);
+		xputs("H  stack=",pfile);
+		oh(stacklen);
 		xputs("H\n",pfile);
 		}
 	}
@@ -1657,7 +1660,7 @@ int _lmov(count, from_offset, from_segment, to_offset, to_segment)
     char __far *src = MK_FP(from_segment, from_offset);
 
     for( ; count > 0; count--)
-        *((char __far *)dst++) = *((char __far*)src++);
+        *dst++ = *src++;
     return 0;
 }
 
@@ -1678,7 +1681,7 @@ int _lcmp(off1, seg1, off2, seg2, n)
     char c1 = 0, c2 = 0;
 
     while (n-- > 0) {
-        if ((c1 = *s1++) != (c2 = *s2++) || c1 == '\0')
+        if ((c1 = *s1++) != (c2 = *s2++))
             break;
     }
     return c1 - c2;

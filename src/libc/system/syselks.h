@@ -15,7 +15,7 @@ SYS_link           equ    9
 SYS_unlink         equ   10
 SYS_execve         equ   11
 SYS_chdir          equ   12
-SYS_time           equ   13
+;;SYS_time         equ   13
 SYS_mknod          equ   14
 SYS_chmod          equ   15
 SYS_chown          equ   16
@@ -28,7 +28,7 @@ SYS_umount         equ   22
 SYS_setuid         equ   23
 SYS_getuid         equ   24
 ;;SYS_stime        equ   25
-SYS_ptrace         equ   26
+;;SYS_ptrace       equ   26
 SYS_alarm          equ   27
 SYS_fstat          equ   28
 ;;SYS_pause        equ   29

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static unsigned char bufin[BUFSIZ];
+unsigned char bufin[BUFSIZ];
 
 FILE  stdin[1] =
 {

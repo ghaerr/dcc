@@ -8,7 +8,7 @@
 ;
 include "syselks.h"
 ;
-        DSEG                    ; first data seg
+        DSEG                    ; first data seg FIXME must force somehow
         dw      0,0             ; prevent data having address 0
         PUBLIC  errno_
         PUBLIC  environ_
@@ -135,9 +135,9 @@ unlink_:
 ;
 ; for 'make'
 ;
-        PUBLIC  time_
-time_:
-        mov     ax,SYS_time
+        PUBLIC  gettimeofday_
+gettimeofday_:
+        mov     ax,SYS_gettimeofday
         jmp     callsys
 
         PUBLIC  utime_

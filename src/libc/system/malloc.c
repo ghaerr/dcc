@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-#define DEBUG   0
+#define DEBUG   1
 
 /*  C storage allocator
  *  circular first-fit strategy
@@ -54,14 +54,16 @@ typedef union store *   NPTR;
 #define next(p)         ((p)->ptr)
 
 #define SIZE     2
-static  union store allocs[SIZE];
-static  NPTR allocp;   /*search ptr*/
-static  NPTR alloct;   /*arena top*/
-static  NPTR allocx;   /*for benefit of realloc*/
+union store *allocs;
+union store __allocs[SIZE+1];
+NPTR allocp;   /*search ptr*/
+NPTR alloct;   /*arena top*/
+NPTR allocx;   /*for benefit of realloc*/
 
 #if DEBUG
-#define ASSERT(p)   if(!(p))malloc_assert_fail(#p,__LINE__);else {}
 static void malloc_assert_fail(char *s, int);
+static int malloc_check_heap(void);
+#define ASSERT(p)   if(!(p))malloc_assert_fail("",__LINE__);else {}
 #else
 #define ASSERT(p)
 #endif
@@ -72,6 +74,10 @@ malloc(unsigned nbytes)
     NPTR p, q;
     unsigned int nw, temp;
 
+    if (allocs == 0) {  //FIXME add EVEN before declaration
+        allocs = __allocs;
+        if ((int)allocs & 1) allocs = (union store *)((int)allocs + 1);
+    }
     if (allocs[0].ptr == 0) {  /*first time*/
         allocs[0].ptr = setbusy(&allocs[1]);
         allocs[SIZE-1].ptr = setbusy(&allocs[0]);
@@ -86,11 +92,13 @@ malloc(unsigned nbytes)
     if (nbytes < MINALLOC)
         nbytes = MINALLOC;
 
+#if 0
     /* check INT overflow beyond 32762 (nbytes/WORD+2*WORD+(WORD-1) > 0xFFFF/WORD/WORD) */
     if (nbytes > ((unsigned)-1)/WORD-2*WORD-(WORD-1)) {
         errno = ENOMEM;
         return(NULL);
     }
+#endif
     nw = (nbytes+WORD+WORD-1)/WORD;          /* extra word for link ptr/size*/
 
     ASSERT(allocp>=allocs && allocp<=alloct);
@@ -114,6 +122,7 @@ malloc(unsigned nbytes)
                 ASSERT(p<=alloct);
             } else if(q!=alloct || p!=(NPTR)allocs) {
                 ASSERT(q==alloct&&p==(NPTR)allocs);
+                //printf("NO MEM %x %x\n", p, q);
                 errno = ENOMEM;
                 return(NULL);
             } else if(++temp>1)
@@ -126,17 +135,6 @@ malloc(unsigned nbytes)
         else
             temp = nw + 1; /* NOTE always allocates full req w/o looking at free at top */
 
-#if 0   /* not required and slow, initial break always even */
-        q = (NPTR)sbrk(0);
-        if((INT)q & (sizeof(union store) - 1))
-            sbrk(4 - ((INT)q & (sizeof(union store) - 1)));
-
-        /* check possible address wrap - performed in kernel */
-        if(q+temp+GRANULE < q) {
-            errno = ENOMEM;
-            return(NULL);
-        }
-#endif
         q = (NPTR)sbrk((int)(temp*WORD));
         if((INT)q == -1) {
             errno = ENOMEM;
@@ -230,12 +228,28 @@ realloc(void *ptr, unsigned nbytes)
     }
     return((void *)q);
 }
+#endif
 
 #if DEBUG
 static void malloc_assert_fail(char *s, int line)
 {
-    __dprintf("malloc assert fail: %s (line %d)\n", s, line);
-    abort();
+    printf("malloc assert fail: %s (line %d)\n", s, line);  //FIXME replace w/write
+    //abort();
 }
-#endif
+
+static int
+malloc_check_heap(void)
+{
+    NPTR p;
+    int x = 0;
+
+    for(p=(NPTR)&allocs[0]; clearbusy(next(p)) > p; p=clearbusy(next(p))) {
+        if(p==allocp)
+            x++;
+    }
+    if (p != alloct) printf("%04x %04x %04x\n",
+        (unsigned)p, (unsigned)alloct, (unsigned)next(p));
+    ASSERT(p==alloct);
+    return((x==1)|(p==allocp));
+}
 #endif

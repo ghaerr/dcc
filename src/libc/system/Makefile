@@ -40,6 +40,7 @@ LIBOBJS=        \
     setjmp.o    \
     stackreg.o  \
     system.o    \
+    time.o      \
 
 all: $(LIB)
 

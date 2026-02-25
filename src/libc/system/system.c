@@ -8,7 +8,7 @@ int system(char *command)
 
     if (command == 0) return 1;
 
-    if ((pid=fork()) < 0)
+    if ((pid = fork()) < 0)
         return -1;
     if (pid == 0) {
         execl("/bin/sh", "sh", "-c", command, 0);

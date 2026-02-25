@@ -32,7 +32,7 @@ OBJS = $(SRCS:.C=.o)
 
 SRCS = NBIND.C
 PROG = link88
-LDFLAGS += -maout-heap=32766 -maout-stack=4096
+LDFLAGS += -maout-heap=0xffff -maout-stack=4096
 
 all: $(PROG)
 

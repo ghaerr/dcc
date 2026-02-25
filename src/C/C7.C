@@ -367,7 +367,7 @@ ohb(bnum)
 	char temp;
 	temp=bnum;
 	temp>>=4;
-	oc(temp >= 10 ? temp+'A'-10 : temp+'0');
+	oc(temp >= 10 ? temp+'A'-10 : temp+'0');    //FIXME was temp+'7'
 	bnum&=15;
 	oc(bnum >= 10 ? bnum+'A'-10 : bnum+'0');
 	}

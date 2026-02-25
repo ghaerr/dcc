@@ -30,8 +30,11 @@ CFLAGS = $(CLBASE) $(WARNINGS) $(LOCALFLAGS)
 
 PROG=make
 LOCALFLAGS = -Dunix
-LIBC = ../libc/cstdio.a
+xLIBC = ../libc/stdio/fgetc.o ../libc/stdio/__fopen.o ../libc/misc/memcpy.o ../libc/builtin/cmp4.o ../libc/builtin/switch.o ../libc/builtin/muldiv.o
 OBJS = check.o input.o macro.o main.o make.o reader.o rules.o
+
+xLIBC = ../libc/*/*.a
+LIBC = ../libc/cstdio.a
 
 all: $(OBJS) $(PROG)
 
