@@ -14,6 +14,8 @@
 
 #define DEBUG   1
 
+#define outmsg(str)     write(1, str, sizeof(str) - 1)  /* FIXME NOT WORKING in C88! */
+
 /*  C storage allocator
  *  circular first-fit strategy
  *  works with noncontiguous, but monotonically linked, arena
@@ -56,9 +58,9 @@ typedef union store *   NPTR;
 #define SIZE     2
 union store *allocs;
 union store __allocs[SIZE+1];
-NPTR allocp;   /*search ptr*/
-NPTR alloct;   /*arena top*/
-NPTR allocx;   /*for benefit of realloc*/
+static NPTR allocp;   /*search ptr*/
+static NPTR alloct;   /*arena top*/
+static NPTR allocx;   /*for benefit of realloc*/
 
 #if DEBUG
 static void malloc_assert_fail(char *s, int);
@@ -122,7 +124,7 @@ malloc(unsigned nbytes)
                 ASSERT(p<=alloct);
             } else if(q!=alloct || p!=(NPTR)allocs) {
                 ASSERT(q==alloct&&p==(NPTR)allocs);
-                //printf("NO MEM %x %x\n", p, q);
+                write(1, "malloc: NO MEM\n", 15);
                 errno = ENOMEM;
                 return(NULL);
             } else if(++temp>1)
@@ -231,10 +233,22 @@ realloc(void *ptr, unsigned nbytes)
 #endif
 
 #if DEBUG
+static void outnum(int n)
+{
+    char c;
+
+    if (n > 9)
+        outnum(n / 10);
+    c = n % 10 + '0';
+    write(1, &c, 1);
+}
+
 static void malloc_assert_fail(char *s, int line)
 {
-    printf("malloc assert fail: %s (line %d)\n", s, line);  //FIXME replace w/write
-    //abort();
+    write(1, "malloc: ASSERT FAIL line ", 25);
+    outnum(line);
+    write(1, "\n", 1);
+    _exit(1);
 }
 
 static int
@@ -247,8 +261,8 @@ malloc_check_heap(void)
         if(p==allocp)
             x++;
     }
-    if (p != alloct) printf("%04x %04x %04x\n",
-        (unsigned)p, (unsigned)alloct, (unsigned)next(p));
+    /*if (p != alloct) printf("%04x %04x %04x\n",
+        (unsigned)p, (unsigned)alloct, (unsigned)next(p));*/
     ASSERT(p==alloct);
     return((x==1)|(p==allocp));
 }
