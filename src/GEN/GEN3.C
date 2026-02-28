@@ -376,7 +376,7 @@ getargs(node)
 			/*	clear off any temporaries */
 			if (curoff != cur_loc) {
 				if (vtype[VIS] == VARV & vtype[VVAL] == 6) {
-					if (vtype[VT] == CDOUBLE || vtype[VT] == CFLOAT) //FIXME was vtype
+					if (vtype[VT] == CDOUBLE || vtype[VT] == CFLOAT)
 						loadf(vtype);
 					else forcereg(vtype);
 					}

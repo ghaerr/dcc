@@ -1518,8 +1518,7 @@ error(str1,str2)
 	}
 
 ocrlf() {
-
-	xputc(10, 2);     //FIXME
+	xputc(10, 2);
 	}
 
 ohn(ch)

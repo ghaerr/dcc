@@ -108,7 +108,7 @@ main(argc,argv)
 init(argc,argv)
 	int  argc;
 	char *argv[]; {
-	char *argat;        //FIXME i removed
+	char *argat;
 	int  nin,i,ffile;
 
 

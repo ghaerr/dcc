@@ -86,7 +86,7 @@ main(argc,argv)
 init(argc,argv)
 	int  argc;
 	char *argv[]; {
-	char *argat,gotdot; //FIXME i removed
+	char *argat,gotdot;
 	int  nin,i,ffile;
 
 	inext=memory=_memory();

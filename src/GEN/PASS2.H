@@ -175,7 +175,7 @@ int  funord,treelen,pstart,pbytes,level;
 #if DEBUG
 int  namet[8],namen[64];
 #endif
-int jumps[11],regname[12],reglow[8];    //FIXME reghigh[4];
+int jumps[11],regname[12],reglow[8];
 int  *regat[13],bltname[32],numfloat;
 char regused[9],is_big,bltused[32];
 unsigned util,locoff,curoff,line_num;

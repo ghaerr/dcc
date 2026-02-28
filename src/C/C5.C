@@ -234,7 +234,7 @@ heir24(node)				/* operater is prefix (* & - ! ++ --) */
 heir25(node)					/* look for a primary */
 	int  node[]; {
 	char lval,*bptr,really_stru;
-	int  node2[2],nodeo[4],scal,struct_len; //FIXME was nodeo[3]
+	int  node2[2],nodeo[4],scal,struct_len;
 
 	lval=heir26(node);
 	if (heir == 25 && FIX(node[1]) == CSTRUCT) {	/* need offset of struct */
