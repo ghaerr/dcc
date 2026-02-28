@@ -267,7 +267,8 @@ oc(ch)
 
 /* --------- ELKS ---------- */
 
-xputc(int c, int fd)
-{
+xputc(c, fd)
+    int c; int fd; {
+
     write(fd, &c, 1);
 }

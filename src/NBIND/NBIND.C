@@ -1539,7 +1539,8 @@ oh(num)
 	}
 
 onum(nm, ffp)
-int nm, ffp; {
+        int nm, ffp; {
+
 	if (nm > 9) onum(nm/10, ffp);
 	xputc(nm%10+'0', ffp);
 	}
@@ -1604,13 +1605,15 @@ findfile(filename, target_buf, envname)
 
 /* --------- ELKS ---------- */
 
-xputs(char *str, int fd)
-{
+xputs(str, fd)
+    char *str; int fd; {
+
     return write(fd, str, strlen(str));
 }
 
-xputc(int c, int fd)
-{
+xputc(c, fd)
+    int c; int fd; {
+
     write(fd, &c, 1);
 }
 
@@ -1656,6 +1659,7 @@ _memsize() {
 /* following routines are in DCC ASM on target */
 int _lmov(count, from_offset, from_segment, to_offset, to_segment)
     unsigned count, from_offset, from_segment, to_offset, to_segment; {
+
     char __far *dst = MK_FP(to_segment, to_offset);
     char __far *src = MK_FP(from_segment, from_offset);
 
@@ -1666,6 +1670,7 @@ int _lmov(count, from_offset, from_segment, to_offset, to_segment)
 
 int _lcpy(doff, dseg, soff, sseg)
     unsigned doff, dseg, soff, sseg; {
+
     char __far *dst = MK_FP(dseg, doff);
     char __far *src = MK_FP(sseg, soff);
 
@@ -1676,6 +1681,7 @@ int _lcpy(doff, dseg, soff, sseg)
 
 int _lcmp(off1, seg1, off2, seg2, n)
     unsigned off1, seg1, off2, seg2, n; {
+
     char __far *s1 = MK_FP(seg1, off1);
     char __far *s2 = MK_FP(seg2, off2);
     char c1 = 0, c2 = 0;

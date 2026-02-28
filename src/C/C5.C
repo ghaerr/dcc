@@ -656,7 +656,8 @@ abstract(oldtype)
 	return (&m_operand(absat)->ntype[0]);
 	}
 
-getab(int lvl) {
+getab(lvl)
+	int lvl; {
 	char *otype;
 
 	while (1) {

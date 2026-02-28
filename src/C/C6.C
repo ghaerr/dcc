@@ -228,8 +228,9 @@ tokone() {
 /*	if reserved, set bvalue to rvalue. */
 
 
-find(int macOK) { /* FIXME ';' required after this or 'undefined var: cur' */
-;
+find(macOK)
+	int macOK; {
+
 	cur--;
 	i=hashno=0;
 	while ((ltype[*cur] <= DIGIT) && i < 31) {
@@ -247,7 +248,8 @@ find(int macOK) { /* FIXME ';' required after this or 'undefined var: cur' */
 	search(macOK);
 	}
 
-search(int macOK) {
+search(macOK)
+	int macOK; {
 
 	if(macOK) {
 		bptr=machash[hashno];
@@ -338,7 +340,8 @@ skipa() {
 	}
 
 
-static char *macmove(char * beg, char * end, char ** free) {
+static char *macmove(beg, end, free)
+        char *beg; char *end; char **free; {
 	int len = end - beg;
 
 	*free-=len;

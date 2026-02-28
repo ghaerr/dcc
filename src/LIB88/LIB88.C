@@ -686,6 +686,7 @@ oh(num)
 
 onum(num)
 	int  num; {
+
 	if (num > 9) onum(num/10);
 	xputc(num%10+'0', 1);
 	}
@@ -693,13 +694,15 @@ onum(num)
 
 /* --------- ELKS ---------- */
 
-xputs(char *str, int fd)
-{
+xputs(str, fd)
+    char *str; int fd; {
+
     return write(fd, str, strlen(str));
 }
 
-xputc(int c, int fd)
-{
+xputc(c, fd)
+    int c; int fd; {
+
     write(fd, &c, 1);
 }
 

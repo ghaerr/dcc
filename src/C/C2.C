@@ -21,7 +21,9 @@
 #include "OBJ.H"
 #endif
 
-dolf(int skipit) {
+dolf(skipit)
+	int skipit; {
+
 	char *memchr(), *mcp;
 	int lsiz;
 
@@ -128,7 +130,8 @@ dolf(int skipit) {
 		}
 	}
 
-pswitch(char *sw, int def) {
+pswitch(sw, def)
+        char *sw; int def; {
 	char c;
 
 	while(ltype[*cur] == LETTER) cur++;
@@ -254,7 +257,9 @@ ifproc:					mactokn=1;
 	error_l("bad control");
 	}
 
-skipsome(int elifOK) {
+skipsome(elifOK)
+	int elifOK; {
+
 	char ifnest, eltype;
 	ifnest=1;
 	while (ifnest) {
