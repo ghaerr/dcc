@@ -14,8 +14,6 @@
 
 #define DEBUG   1
 
-#define outmsg(str)     write(1, str, sizeof(str) - 1)  /* FIXME NOT WORKING in C88! */
-
 /*  C storage allocator
  *  circular first-fit strategy
  *  works with noncontiguous, but monotonically linked, arena

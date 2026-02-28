@@ -28,7 +28,6 @@ strngcpy(cp, qs)
 	char *cp;
 	int qs; {
 
-	OS("NESTED++ called"); //FIXME
 	whitesp();
 	nestfrom[nested++]=cur;
 	cur=macfrom[nested]=macxp;
@@ -242,7 +241,7 @@ find(int macOK) { /* FIXME ';' required after this or 'undefined var: cur' */
 	string[i]=0;
 	if (eopt) {
 		os(string);
-		oc(' ');
+		oc('\n');
 		}
 	hashno&=31;
 	search(macOK);

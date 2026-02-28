@@ -542,6 +542,7 @@ global() {
 			if (addproto) {
 				struct pargs *pp, **lp;
 
+				//strngcpy(";",0);    // FIXME kluge fix for macro at fn start
 				oldcur=cur;
 				oldch=curch;
 				wp=mfree;
@@ -567,7 +568,7 @@ global() {
 					addloc=pp->ptype;
 					specs(SUNSTOR);
 					getab(1);
-					if (addtype > 255) {
+					if (addtype > 255) {    //FIXME
 						char typb;
 
 						do {
@@ -640,7 +641,6 @@ eliparg:		oldfree=mfree=pp;
 voidspec:			notch(')');
 					notch('{');
 					}
-
 #if CHECK
 				if (copt && gotlname == 0) {	/* supply name for locals */
 					objb(OLNAME);
@@ -985,7 +985,7 @@ atype(addtype)			/* add type byte(s) to end of operand types */
 	char *addtype; {
 	char i,typb;
 
-	if (addtype > 255) {
+	if (addtype > 255) {    //FIXME
 		if (addstor == SPARM && *addtype==ARRAY && addloc==&m_operand(addat)->ntype[0]){
 			addtype+=3;
 			*addloc++=PTRTO;

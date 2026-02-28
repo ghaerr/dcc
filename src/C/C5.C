@@ -509,7 +509,6 @@ nowop:	nodeo[1]=nodeo[2]=nodeo[3]=0;
 			else {
 				if (*typad != ARRAY) break;
 				while (*cur == LF && cur > savEnd) {
-                    OS("--NESTED called");   //FIXME
 					cur=nestfrom[--nested];
 					whitesp();
 					}
