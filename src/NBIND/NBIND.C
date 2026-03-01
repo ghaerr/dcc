@@ -1425,7 +1425,7 @@ endup() {
 		if (close(chkfile) == -1) ferror("cannot close",chkname);
 		}
 
-	max=(inext-memory)/((memlast-memory)/100);
+	max=(inext-memory)/((memlast-memory)/100U); //FIXME pointer subtraction yields int
 	if (max > util) util=max;
 	nummod/=7;
 #if LIMITED == 0
@@ -1538,7 +1538,7 @@ oh(num)
 	}
 
 onum(nm, ffp)
-        int nm, ffp; {
+	int nm, ffp; {
 
 	if (nm > 9) onum(nm/10, ffp);
 	xputc(nm%10+'0', ffp);
