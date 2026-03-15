@@ -1,0 +1,5 @@
+export DSROOT=/usr/dcc
+export MAKE=/usr/dcc/bin/make
+export PATH=/usr/dcc/bin2:/bin
+export DSINC=/usr/dcc/libc/include
+export DSLIB=/usr/dcc/libc

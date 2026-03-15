@@ -40,7 +40,7 @@ all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
 	$(LD) $^ $(LIBC) -O$(PROG) -P$(PROG).lst -_ -H4000
-	cp $(PROG) /root/bin2
+	cp $(PROG) $(DSROOT)/bin2
 
 clean:
 	rm -f *.i *.as *.o *.a *.lst $(PROG)

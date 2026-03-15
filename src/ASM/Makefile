@@ -40,7 +40,7 @@ all: $(PROG)
 $(PROG):
 	$(CC) -x c -c $(CFLAGS) $(SRCS)
 	$(LD) $(LDFLAGS) -o $(PROG) $(OBJS)
-	@cp $(PROG) ~greg/net/elks-gh/elkscmd/rootfs_template/root/bin
+	#cp $(PROG) ~greg/net/elks-gh/elkscmd/rootfs_template/root/bin
 	@echo SUCCESS
 
 clean:

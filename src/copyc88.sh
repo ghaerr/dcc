@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 #
 # copyc866sh - copy C88 sources to ELKS for self-compilation and building libc
-#   ELKS Usage: cd test; make
+#   ELKS Usage: cd /usr/dcc; make
 #
 set -e
 
-# NOTE: Change this to ELKS repo top directory
-TOPDIR=/Users/greg/net/elks-gh
+if [ "$TOPDIR" = "" ]; then
+    echo "TOPDIR not defined, exiting."
+    exit 1
+fi
 
-DEST=$TOPDIR/elkscmd/rootfs_template/root/test
+DEST=$TOPDIR/elkscmd/rootfs_template/usr/dcc
 
 rm -rf $DEST
 mkdir -p $DEST
@@ -29,6 +31,17 @@ mkdir -p $DEST/libc/builtin
 mkdir -p $DEST/libc/misc
 mkdir -p $DEST/libc/stdio
 
+cp -p C/c88                     $DEST/bin
+cp -p GEN/gen88                 $DEST/bin
+cp -p ASM/asm88                 $DEST/bin
+cp -p NBIND/link88              $DEST/bin
+cp -p LIB88/lib88               $DEST/bin
+cp -p OTHER/dump88              $DEST/bin
+cp -p OTHER/toobj88             $DEST/bin
+cp -p make/make                 $DEST/bin
+
+cp -p pass1                     $DEST
+cp -p pass2                     $DEST
 cp -p Makefile.elks             $DEST/Makefile
 
 cp -p C/C88.C                   $DEST/C/C88.c
@@ -107,4 +120,4 @@ cp -p make/Makefile.elks        $DEST/make/Makefile
 #cp -p libc/include/sys/types.h              $DEST/include/sys
 #cp -p libc/include/c86/*.h                  $DEST/include/c86
 
-echo "Files copied"
+echo "Files copied to $DEST"

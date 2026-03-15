@@ -10,46 +10,33 @@ ELKS or
 
 DCC is now able to compile itself and run under ELKS.
 The next steps will bootstrap the DCC toolchain by compiling on the host system,
-after which the DCC source will be copied to the ELKS /root/test directory:
+after which the DCC source will be copied to the ELKS /usr/dcc directory:
 ```
 $ cd /path/to/ELKS
 $ . env.sh  (sets TOPDIR= and PATH= to ia16-elf-gcc toolchain)
 $ cd /path/to/DCC
 $ make
-[edit copyc88.sh and change TOPDIR= to TOPDIR value set above in env.sh)
 $ ./copyc88.sh
-```
-The DCC source should now be in the /root/test template for the 32MB HDD image
-to be built on ELKS. A few final environment variables need to be setup on
-the target ELKS /root directory:
-```
-$ cd $TOPDIR/elkscmd/rootfs_template/root
-(add the following lines to new file 'pass1`:
-export PATH=/root/bin:/bin
-export DSINC=/root/test/libc/include
-export DSLIB=/root/test/libc
-(add the following lines to new file 'pass2':
-export PATH=/root/bin2:/bin
-export DSINC=/root/test/libc/include
-export DSLIB=/root/test/libc
+$ cd /path/to/ELKS
 $ cd image
 $ make hd32-minix
 ```
+The DCC source should now be in the /usr/dcc directory for the 32MB HDD image
+just built on ELKS.
+
 Now we're ready to actually build DCC on ELKS. Boot the hd32-minix.img in the
-last step above, and login as root. Then execute the following to bootstrap the
+last step above, and login as root. Then execute the following to fully bootstrap the
 DCC compiler:
 ```
-# . pass1   (sets build to use /root/bin directory for DCC compiled by ia16-elf-gcc)
-# cd test
-# make      (builds DCC using gcc-built DCC into /bin2)
-#           (DCC should now be built in /bin2)
-# cd
-# . pass2   (sets built to use just-built DCC to build DCC again using itself)
-# cd test
-# make clean
-# make      (DCC is now built by DCC in /bin2)
-# make clean
-# make      (DCC is now fully bootstrapped in /bin2, having built itself by itself)
+# cd /usr/dcc
+# . pass1       (sets build to use /usr/dcc/bin directory for DCC compiled by ia16-elf-gcc)
+# make          (builds DCC using gcc-built DCC into /usr/dcc/bin2)
+#               (DCC should now be built in /usr/dcc/bin2)
+# . pass2       (sets build to use just-built DCC to build DCC again using itself)
+# bin/make clean
+# bin/make      (DCC is now built by DCC in /usr/dcc/bin2)
+# bin/make clean
+# bin/make      (DCC is now fully bootstrapped in usr/dcc/bin2, having built itself by itself)
 ```
 
-Original code located at www.desmet-c.com and [OpenDC](https://github.com/the-grue/OpenDC).
+Original 1989 source code located at www.desmet-c.com and [OpenDC](https://github.com/the-grue/OpenDC).

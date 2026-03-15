@@ -1,6 +1,5 @@
 # C88 libc Makefile
 #
-MAKE = make
 AR = $(BIN)lib88
 
 DIRS = stdio system builtin misc

@@ -32,11 +32,11 @@ all: $(PROGS)
 
 dump88: DUMPO.o
 	$(LD) $^ -Odump88 -Pdump88.lst -_
-	cp dump88 /root/bin2
+	cp dump88 $(DSROOT)/bin2
 
 toobj88: TOOBJ.o
 	$(LD) $^ -Otoobj88 -Ptoobj88.lst -_ -HFFFF
-	cp toobj88 /root/bin2
+	cp toobj88 $(DSROOT)/bin2
 
 clean:
 	rm -f *.i *.as *.o *.a *.lst $(PROGS)

@@ -1,7 +1,6 @@
 #
 # DCC Makefile on ELKS
 #
-MAKE = make
 
 DIRS = libc C GEN ASM NBIND LIB88 OTHER
 

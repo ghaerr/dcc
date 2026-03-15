@@ -34,7 +34,7 @@ all: $(OBJS) $(PROG)
 
 $(PROG): $(OBJS)
 	$(LD) $^ -Olib88 -Plib88.lst -_ -HFFFF
-	cp lib88 /root/bin2
+	cp lib88 $(DSROOT)/bin2
 
 clean:
 	rm -f *.i *.as *.o *.a *.lst $(PROG)

@@ -39,7 +39,7 @@ all: $(PROGS)
 dump88:
 	$(CC) -x c -c $(CFLAGS) DUMPO.C
 	$(LD) $(LDFLAGS) -o dump88 DUMPO.o
-	@cp dump88 ~greg/net/elks-gh/elkscmd/rootfs_template/root/bin
+	#cp dump88 ~greg/net/elks-gh/elkscmd/rootfs_template/root/bin
 
 toobj88:
 	$(CC) -x c -c $(CFLAGS) TOOBJ.C

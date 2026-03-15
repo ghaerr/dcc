@@ -5,6 +5,7 @@
 DIRS = C GEN ASM LIB88 NBIND OTHER make
 
 all:
+	echo root $(DSROOT)
 	for DIR in $(DIRS); do $(MAKE) -C $$DIR all || exit 1; done
 
 clean:
