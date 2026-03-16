@@ -10,7 +10,7 @@ if [ "$TOPDIR" = "" ]; then
     exit 1
 fi
 
-DEST=$TOPDIR/elkscmd/rootfs_template/usr/dcc
+DEST=$TOPDIR/target/usr/dcc
 
 rm -rf $DEST
 mkdir -p $DEST
