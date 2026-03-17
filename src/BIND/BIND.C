@@ -13,9 +13,6 @@
  *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
  *  for more details.
  */
-/*      the-grue - 20180823
- *      Added lines OpenBind header
- */
 /*	BIND.C		binder for ASM88 and C88	*/
 
 #define IBM		1			/*	true if creating BIND for MS-DOS	*/
@@ -111,9 +108,7 @@ main(argc,argv)
 	i=2;
 	while (i < argc) if (*(argv[i++]+1) == '@') see_exit=1;
 	if (see_exit == 0)
-	{
 		puts("Binder for C88 and ASM88     V2.0    (c) Mark DeSmet, 1982-87");
-	}
 #endif
 	init(argc,argv);
 	nextpass(1);

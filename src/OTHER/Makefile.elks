@@ -1,4 +1,4 @@
-# DUMP88 and TOOBJ88  Makefile
+# DUMP88, TOOBJ88 and SQUISH88  Makefile
 #
 
 #INCLUDES=-I/usr/include -I/usr/include/c86
@@ -26,7 +26,7 @@ LD=$(BIN)link88
 
 ##### End of standardized section #####
 
-PROGS = dump88 toobj88
+PROGS = dump88 toobj88 squish88
 
 all: $(PROGS)
 
@@ -37,6 +37,10 @@ dump88: DUMPO.o
 toobj88: TOOBJ.o
 	$(LD) $^ -Otoobj88 -Ptoobj88.lst -_ -HFFFF
 	cp toobj88 $(DSROOT)/bin2
+
+squish88: SQUISH.o
+	$(LD) $^ -Osquish88 -Psquish88.lst -_ -HFFFF
+	cp squish88 $(DSROOT)/bin2
 
 clean:
 	rm -f *.i *.as *.o *.a *.lst $(PROGS)

@@ -13,9 +13,6 @@
  *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
  *  for more details.
  */
-/*      the-grue - 20180828
- *      Add Opennbind header
- */
 /*	BIND.C		binder for ASM88 and C88	*/
 
 /* --- ELKS changes --- */

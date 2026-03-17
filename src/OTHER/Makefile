@@ -1,5 +1,5 @@
 #
-# Host OTHER for ELKS Makefile (dump88, toobj88)
+# Host OTHER for ELKS Makefile (dump88, toobj88, squish88)
 #
 
 ############# Standard Section for Host C ##############
@@ -30,7 +30,7 @@ OBJS = $(SRCS:.C=.o)
 
 ############# End of Standard Section ##############
 
-PROGS = dump88 toobj88
+PROGS = dump88 toobj88 squish88
 
 .PHONY: $(PROGS)
 all: $(PROGS)
@@ -45,6 +45,11 @@ toobj88:
 	$(CC) -x c -c $(CFLAGS) TOOBJ.C
 	$(LD) $(LDFLAGS) -maout-heap=0xffff -maout-stack=4096 -o toobj88 TOOBJ.o
 	#cp toobj88 ~greg/net/elks-gh/elkscmd/rootfs_template/root/bin
+
+squish88:
+	$(CC) -x c -c $(CFLAGS) SQUISH.C
+	$(LD) $(LDFLAGS) -maout-heap=0xffff -maout-stack=4096 -o squish88 SQUISH.o
+	#cp squish88 ~greg/net/elks-gh/elkscmd/rootfs_template/root/bin
 
 clean:
 	rm -f $(PROGS) *.o

@@ -13,10 +13,17 @@
  *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
  *  for more details.
  */
-/*      the-grue - 20180828
- *      Add OpenSquish header
- */
 /*	SQUISH.C		Object Squisher for C88	*/
+
+/* --- ELKS changes --- */
+#if __ia16__
+#define char        unsigned char
+#define _setmem(addr,count,byte)    memset(addr,byte,count)
+#define _move(num,from,to)          memmove((char *)(to), (char *)(from), num)
+#endif
+
+#define O_RDONLY    0
+/* ------------------- */
 
 #include "OBJ.H"
 
@@ -48,7 +55,8 @@
 	struct sym {int eseg; char edefn,enlen,eisext; int elen,eptr4_at; } *stable;
 	typedef struct sym *sp;
 
-	union {int word; char byte; };
+	union un_word {int word; char byte;};
+	#define WORD(v)		((union un_word *)(v))
 
 
 	char *memory,*memlast;
@@ -67,7 +75,7 @@ main(argc,argv)
 init(argc,argv)
 	int  argc;
 	char *argv[]; {
-	char *argat,i,gotdot;
+	char *argat,gotdot;
 	int  nin,i,endn,ffile;
 	char renname[65];
 
@@ -86,7 +94,7 @@ init(argc,argv)
 		}
 	strcpy(&inname[endn],"ctemp7");
 
-	if ((infile=open(inname,0)) == -1)
+	if ((infile=open(inname,O_RDONLY)) == -1)
 		ferror("cannot open ",inname);
 	inin=endin=&inbuf[1024*10];
 	if ((outfile=creat(outname)) == -1)
@@ -129,7 +137,7 @@ pass1() {
 							is_large=1;
 							break;
 			case OPUBLIC:	while(*inin++) ;
-							num=inin->word;
+							num=WORD(inin)->word;
 							inin+=2;
 							labis[num]=LPUBLIC;
 							copyit(0);
@@ -137,15 +145,15 @@ pass1() {
 			case OSTATIC:	while(*inin++) ;
 							inin+=2;
 							break;
-			case ORESERVE:	num=inin->word;
+			case ORESERVE:	num=WORD(inin)->word;
 							inin+=2;
 							labis[num]=LPUBLIC;
 							inin+=2;
 							copyit(0);
 							break;
-			case OLOCAL:	num=inin->word;
+			case OLOCAL:	num=WORD(inin)->word;
 							inin+=2;
-							len=inin->word;
+							len=WORD(inin)->word;
 							inin+=2;
 							if (curseg != INESEG) {
 								labat[num]=len;
@@ -165,20 +173,20 @@ pass1() {
 			case OESEG:		curseg=INESEG;
 							copyit(0);
 							break;
-			case ONAMEREL:	num=inin->word;
+			case ONAMEREL:	num=WORD(inin)->word;
 							inin+=2;
 							if (labseg[num]) {
-								(outat-2)->word+=labat[num];
+								WORD(outat-2)->word+=labat[num];
 								*outat++=labseg[num];
 								contents=0;
 								}
 							else copyit(0);
 							break;
 
-			case OJUMPREL:	num=inin->word;
+			case OJUMPREL:	num=WORD(inin)->word;
 							inin+=2;
 							if (labseg[num]) {
-								(outat-2)->word+=labat[num]-offs[curseg];
+								WORD(outat-2)->word+=labat[num]-offs[curseg];
 								}
 							else copyit(0);
 							break;

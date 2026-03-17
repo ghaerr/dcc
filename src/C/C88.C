@@ -13,9 +13,6 @@
  *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
  *  for more details.
  */
-/*      the-grue - 20180823
- *      Added lines to add OpenC88 header
- */
 /*	 C88 COMPILER			C88.C	*/
 
 #include "PASS1.H"

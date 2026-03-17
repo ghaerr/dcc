@@ -13,9 +13,6 @@
  *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
  *  for more details.
  */
-/*      the-grue - 20180823
- *      Added line add OpenLIB88 header
- */
 /*		Librarian for ASM88 and C88	*/
 
 /* --- ELKS changes --- */
@@ -469,6 +466,7 @@ check_mod() {
 					ptrb++;
 					if (m_mod(ptra)->got) {
 						if (m_mod(ptrb)->got) {
+							xputs("lib88: module dropped, use -N?\n", 1);
 							return 0;
 							}
 						add_depen(m_mod(ptrb)->mod_number,m_mod(ptra)->mod_number);

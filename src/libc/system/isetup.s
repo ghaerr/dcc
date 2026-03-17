@@ -133,6 +133,13 @@ unlink_:
         mov     ax,SYS_unlink
         jmp     callsys
 ;
+; for 'squish'
+;
+        PUBLIC  rename_
+rename_:
+        mov     ax,SYS_rename
+        jmp     callsys
+;
 ; for 'make'
 ;
         PUBLIC  gettimeofday_
