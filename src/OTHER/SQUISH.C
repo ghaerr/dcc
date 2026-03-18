@@ -79,7 +79,7 @@ init(argc,argv)
 	int  nin,i,endn,ffile;
 	char renname[65];
 
-	xputs("Squisher for C88 and ASM88     V1.0    (c) Mark DeSmet, 1986", 1);
+	xputs("Squisher for C88 and ASM88     V1.0    (c) Mark DeSmet, 1986\n", 1);
 	if (argc < 2) ferror("missing filename","");
 	strcpy(inname,argv[1]);
 	i=0;
@@ -269,7 +269,7 @@ endup() {
 	close(infile);
 	if (unlink(inname) == -1) ferror("cannot delete ",inname);
 	close(outfile);
-	xputs("end of SQUISH    ", 1);
+	xputs("end of SQUISH    \n", 1);
 	}
 	
 
