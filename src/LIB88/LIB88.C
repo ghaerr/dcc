@@ -343,6 +343,9 @@ pass1() {
 			case OSEGPTR:
 			case OPTR:		inin+=2;
 							break;
+			case ODFIX:
+			case OCFIX:
+							break;
 			default:		if (clen <= 128)
 								ferror("bad object file ",inname);
 							inin+=clen-128;
