@@ -180,9 +180,9 @@ type:
 								oc(*inin++);
 							inin++;
 							break;
-			case ODFIX:		os("ODFIX\n");
+			case ODFIX:		os("Dsegrel");
 							break;
-			case OCFIX:		os("OCFIX\n");
+			case OCFIX:		os("Csegrel");
 							break;
 
 			default:		len=*(inin-1);
