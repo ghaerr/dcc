@@ -79,7 +79,7 @@ init(argc,argv)
 	int  nin,i,endn,ffile;
 	char renname[65];
 
-	puts("Squisher for C88 and ASM88     V1.0    (c) Mark DeSmet, 1986");
+	xputs("Squisher for C88 and ASM88     V1.0    (c) Mark DeSmet, 1986", 1);
 	if (argc < 2) ferror("missing filename","");
 	strcpy(inname,argv[1]);
 	i=0;
@@ -269,16 +269,24 @@ endup() {
 	close(infile);
 	if (unlink(inname) == -1) ferror("cannot delete ",inname);
 	close(outfile);
-	puts("end of SQUISH    ");
+	xputs("end of SQUISH    ", 1);
 	}
 	
 
 ferror(str1,str2)
 	char *str1,*str2; {
 
-	puts("\n");
-	puts(str1);
-	puts(str2);
-	puts("     TOOBJ abandoned\n");
+	xputs("\n", 1);
+	xputs(str1, 1);
+	xputs(str2, 1);
+	xputs("     SQUISH abandoned\n", 1);
 	exit(2);
 	}
+
+/* --------- ELKS ---------- */
+
+xputs(str, fd)
+    char *str; int fd; {
+
+    return write(fd, str, strlen(str));
+}

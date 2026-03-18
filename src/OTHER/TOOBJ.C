@@ -1070,7 +1070,7 @@ onum(num)
 	}
 
 /* --------- ELKS ---------- */
-        
+
 xputs(str, fd)
     char *str; int fd; {
 
@@ -1082,8 +1082,6 @@ xputc(c, fd)
 
     write(fd, &c, 1);
 }
-
-/* --------- ELKS ---------- */
 
 static unsigned heapsize;
 
