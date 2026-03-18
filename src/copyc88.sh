@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# copyc866sh - copy C88 sources to ELKS for self-compilation and building libc
-#   ELKS Usage: cd /usr/dcc; make
+# copyc88.sh - copy C88 sources to ELKS for self-compilation and building libc
+#   to make on ELKS: cd /usr/dcc; . pass1; make
 #
 set -e
 
@@ -38,6 +38,7 @@ cp -p NBIND/link88              $DEST/bin
 cp -p LIB88/lib88               $DEST/bin
 cp -p OTHER/dump88              $DEST/bin
 cp -p OTHER/toobj88             $DEST/bin
+cp -p OTHER/squish88            $DEST/bin
 cp -p make/make                 $DEST/bin
 
 cp -p pass1                     $DEST
@@ -81,6 +82,7 @@ cp -p LIB88/Makefile.elks       $DEST/LIB88/Makefile
 
 cp -p OTHER/DUMPO.C             $DEST/OTHER/DUMPO.c
 cp -p OTHER/TOOBJ.C             $DEST/OTHER/TOOBJ.c
+cp -p OTHER/SQUISH.C            $DEST/OTHER/SQUISH.c
 cp -p OTHER/*.H                 $DEST/OTHER
 cp -p OTHER/Makefile.elks       $DEST/OTHER/Makefile
 
@@ -120,4 +122,4 @@ cp -p make/Makefile.elks        $DEST/make/Makefile
 #cp -p libc/include/sys/types.h              $DEST/include/sys
 #cp -p libc/include/c86/*.h                  $DEST/include/c86
 
-echo "Files copied to $DEST"
+echo "DCC files copied to $DEST"
