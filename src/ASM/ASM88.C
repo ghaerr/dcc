@@ -13,10 +13,6 @@
  *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
  *  for more details.
  */
-/*      the-grue - 20180809
- *      Changed lines 116-117 to add OpenASM88 header
- *      and changed lines 470 and 472 to conform to new compiler.
- */
 /*	ASM88	ASSEMBLER FOR 8088					ASM88.C	*/
 
 #include "ASM88.H"

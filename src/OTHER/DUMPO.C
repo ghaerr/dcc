@@ -22,7 +22,7 @@ main(argc,argv)
 	/*	P option means print publics only	*/
 	if (argc > 2) {
 		if (toupper(*argv[2]) == 'P' || toupper(*(argv[2]+1)) == 'P') popt=1;
-		else ofile=creat(argv[2]);
+		else ofile=creat(argv[2], 0666);
 		}
 	doopen(argv[1]);
 	dofile();
@@ -179,6 +179,10 @@ type:
 							while (*inin)
 								oc(*inin++);
 							inin++;
+							break;
+			case ODFIX:		os("ODFIX\n");
+							break;
+			case OCFIX:		os("OCFIX\n");
 							break;
 
 			default:		len=*(inin-1);

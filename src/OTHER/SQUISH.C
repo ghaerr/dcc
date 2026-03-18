@@ -97,7 +97,7 @@ init(argc,argv)
 	if ((infile=open(inname,O_RDONLY)) == -1)
 		ferror("cannot open ",inname);
 	inin=endin=&inbuf[1024*10];
-	if ((outfile=creat(outname)) == -1)
+	if ((outfile=creat(outname, 0666)) == -1)
 		ferror("cannot create",outname);
 	outat=outbuf;
 	}
